@@ -174,7 +174,7 @@ Error generating stack: `+o.message+`
   gap: 20px;
   flex-direction: column-reverse;
 
-  @media (min-width: 426px) {
+  @media (min-width: 480px) {
     flex-direction: row;
   }
 `,iP=C.video`
@@ -255,7 +255,7 @@ Error generating stack: `+o.message+`
   gap: 10px;
   flex-direction: column;
 
-  @media (max-width: 425px) {
+  @media (max-width: 480px) {
     flex-direction: row;
   }
 `,Fo=C(Ne.a)`
