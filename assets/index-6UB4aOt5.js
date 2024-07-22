@@ -692,7 +692,7 @@ display:flex;
   justify-content: space-between;
   background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 15px;
   transition: transform 0.3s ease;
   padding: 20px;
 
