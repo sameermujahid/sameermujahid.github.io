@@ -885,14 +885,26 @@ flex-direction:column;
     justify-content:center;
     @media (max-width: 768px) {
         margin-left: 0;
-        padding: 10px;
+        padding: 1px;
     }
 `,wT=k.form`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width:80%;
-    margin: 0 auto;
+    width: 80%;
+    padding: 0px; /* Default padding for larger screens */
+    
+    @media (max-width: 768px) {
+        width: 90%; /* Adjust width for tablet screens */
+        padding: 15px; /* Adjust padding for tablet screens */
+        font-size: 16px; /* Adjust font size for tablet screens */
+    }
+
+    @media (max-width: 480px) {
+        width: 95%; /* Adjust width for mobile screens */
+        padding: 10px; /* Adjust padding for mobile screens */
+        font-size: 14px; /* Adjust font size for mobile screens */
+    }
 `,im=k.input`
   padding: 15px;
   font-size: 1.1em;
