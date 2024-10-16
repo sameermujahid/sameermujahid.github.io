@@ -8,7 +8,8 @@ import {
   NavLink,
   Sidebar,
   SidebarLink,
-  MenuToggle
+  MenuToggle,
+  CloseButton
 } from '../styles'; // Import styles from the new file
 import PortfolioImage from '../assets/profile.jpg';
 
@@ -28,7 +29,7 @@ const TopBar = () => {
 
   useEffect(() => {
     const handleSetActiveLink = () => {
-      const sections = ['home', 'skills', 'projects', 'connect'];
+      const sections = ['home', 'skills', 'more', 'connect']; // Update here
       const scrollPosition = window.scrollY;
       const buffer = window.innerHeight / 2;
 
@@ -61,6 +62,7 @@ const TopBar = () => {
   };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const closeSidebar = () => setSidebarOpen(false);
 
   return (
     <>
@@ -72,7 +74,7 @@ const TopBar = () => {
         <NavLinks>
           <NavLink className={activeLink === 'home' ? 'active' : ''} onClick={handleNavClick('home')} href="#home">Home</NavLink>
           <NavLink className={activeLink === 'skills' ? 'active' : ''} onClick={handleNavClick('skills')} href="#skills">Skills</NavLink>
-          <NavLink className={activeLink === 'projects' ? 'active' : ''} onClick={handleNavClick('projects')} href="#projects">Projects</NavLink>
+          <NavLink className={activeLink === 'more' ? 'active' : ''} onClick={handleNavClick('more')} href="#more">More</NavLink> {/* Update here */}
           <NavLink className={activeLink === 'connect' ? 'active' : ''} onClick={handleNavClick('connect')} href="#connect">Let's Connect</NavLink>
         </NavLinks>
         <MenuToggle onClick={toggleSidebar}>
@@ -80,9 +82,10 @@ const TopBar = () => {
         </MenuToggle>
       </TopBarContainer>
       <Sidebar open={sidebarOpen}>
+        <CloseButton onClick={closeSidebar}>&times;</CloseButton>
         <SidebarLink className={activeLink === 'home' ? 'active' : ''} onClick={handleNavClick('home')} href="#home">Home</SidebarLink>
         <SidebarLink className={activeLink === 'skills' ? 'active' : ''} onClick={handleNavClick('skills')} href="#skills">Skills</SidebarLink>
-        <SidebarLink className={activeLink === 'projects' ? 'active' : ''} onClick={handleNavClick('projects')} href="#projects">Projects</SidebarLink>
+        <SidebarLink className={activeLink === 'more' ? 'active' : ''} onClick={handleNavClick('more')} href="#more">More</SidebarLink> {/* Update here */}
         <SidebarLink className={activeLink === 'connect' ? 'active' : ''} onClick={handleNavClick('connect')} href="#connect">Let's Connect</SidebarLink>
       </Sidebar>
     </>

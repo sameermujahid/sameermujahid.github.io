@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 // Import your certificate PDFs
-import mycCertificate from '../assets/myc-certificate.pdf';
-import arthashastraCertificate from '../assets/arthashastra-certificate.pdf';
+import mycCertificate from '../assets/myc_certificate.pdf';
+import arthashastraCertificate from '../assets/arthashastra_certificate.pdf';
 const colors = {
   richBlack: '#0d1b2aff',
   oxfordBlue: '#1b263bff',
@@ -13,29 +13,32 @@ const colors = {
 };
 const ExperienceSection = styled.div`
   padding: 50px 20px;
-  margin-top: 50px;
+  padding: 2rem 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
 
-  @media (max-width: 768px) {
-    padding: 30px 10px;
-    margin-top: 30px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 4rem 3rem;
   }
 `;
-const Title = styled.h2`
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  color: ${colors.platinum};
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
+const Title = styled.h1`
+    font-size: 3rem;
+    text-align: center;
+    font-family: "Bebas Neue", sans-serif;
+    color: ${colors.platinum};
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    transition: color 0.3s ease;
 
-  @media (max-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
+    @media (max-width: 768px) {
+        font-size: 2.5rem;
+=    }
 
-  @media (max-width: 480px) {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
+    @media (max-width: 480px) {
+        font-size: 2rem;
+=    }
 `;
 
 const ExperienceContainer = styled.div`
@@ -57,7 +60,7 @@ const ExperienceItem = styled.div`
   justify-content: space-between;
   background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease-in-out;
 
@@ -67,7 +70,6 @@ const ExperienceItem = styled.div`
 
   @media (max-width: 768px) {
     padding: 15px;
-    border-radius: 10px;
   }
 `;
 
@@ -133,7 +135,6 @@ const SkillList = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
-      justify-content: center;
 `;
 
 const Skill = styled.div`
@@ -152,34 +153,48 @@ const ButtonContainer = styled.div`
   display: flex;
   margin-top: 20px;
   gap: 10px;
-  flex-direction: row;
+  justify-content: center;
 
   @media (max-width: 768px) {
     flex-direction: row;
-    justify-content:center;
     gap: 10px;
   }
 `;
-
 const Button = styled.a`
-  background-color: #1b263b;
-  color: white;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #000;
+  font-weight: 600;
+  background-color: #fff;
   text-decoration: none;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 1em;
+  border: none; /* Removes border */
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
+  outline: none; /* Removes any outline on focus */
 
-  &:hover {
-    background-color: #e0e1dd;
-    color: #1b263b;
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
   }
 
-  @media (max-width: 768px) {
-    font-size: 0.9em;
-    padding: 8px 16px;
+  &:hover {
+    background-color: #0d1b2aff;
+    color: #fff;
+  }
+
+  &:focus {
+    outline: none; /* Ensures no outline appears on focus */
+  }
+
+  &:active {
+    transform: scale(0.98); /* Adds a subtle effect on click */
   }
 `;
 

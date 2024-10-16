@@ -1,4 +1,3 @@
-// src/components/Footer.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -40,8 +39,8 @@ const FooterContent = styled.div`
 
 const Section = styled.div`
     min-width: 200px;
-    justify-content:center;
-    align-items:center;
+    justify-content: center;
+    align-items: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     @media (max-width: 768px) {
@@ -129,11 +128,21 @@ const AccordionContent = styled.div`
     transition: max-height 0.5s ease, padding 0.5s ease;
 `;
 
-const Footer = () => {
+const Footer = ({ setActiveTab }) => {
     const [openSection, setOpenSection] = useState(null);
 
     const toggleSection = (section) => {
         setOpenSection(openSection === section ? null : section);
+    };
+
+    // Smooth scroll handler
+    const handleScrollToSection = (id, tabName) => {
+        const section = document.querySelector(id);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // Update active tab based on the link clicked
+        setActiveTab(tabName);
     };
 
     return (
@@ -141,20 +150,24 @@ const Footer = () => {
             <FooterContent>
                 <Section>
                     <SectionTitle>My Details</SectionTitle>
-                    <div>Name: Your Name</div>
-                    <div>Location: Your City, Country</div>
+                    <div>Name: Shaik Sameer Mujahid</div>
+                    <div>Email: sameermujahid7777@gmail.com</div>
+                    <div>Phone: +91 8317506633</div>
                 </Section>
                 <Section>
-                    <SectionTitle>Topics</SectionTitle>
-                    <NavLink href="#home">Home</NavLink>
-                    <NavLink href="#skills">Skills</NavLink>
-                    <NavLink href="#projects">Projects</NavLink>
+                    <SectionTitle>Sections</SectionTitle>
+                    <NavLink onClick={() => handleScrollToSection('#home', 'Home')}>Home</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#skills', 'Skills')}>Skills</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Projects')}>Projects</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Certificates')}>Certificates</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Education')}>Education</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Experience')}>Experience</NavLink>
                 </Section>
                 <Section>
                     <SectionTitle>Connect</SectionTitle>
                     <NavLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
                     <NavLink href="https://www.github.com" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
-                    <NavLink href="#connect">Let's Connect</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
                 </Section>
             </FooterContent>
             <AccordionContainer>
@@ -162,17 +175,21 @@ const Footer = () => {
                     My Details
                 </AccordionButton>
                 <AccordionContent isOpen={openSection === 'details'}>
-                    <div>Name: Your Name</div>
-                    <div>Location: Your City, Country</div>
+                    <div>Name: Shaik Sameer Mujahid</div>
+                    <div>Email: sameermujahid7777@gmail.com</div>
+                    <div>Phone: +91 8317506633</div>
                 </AccordionContent>
                 
                 <AccordionButton onClick={() => toggleSection('topics')}>
-                    Topics
+                Sections
                 </AccordionButton>
                 <AccordionContent isOpen={openSection === 'topics'}>
-                    <NavLink href="#home">Home</NavLink>
-                    <NavLink href="#skills">Skills</NavLink>
-                    <NavLink href="#projects">Projects</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#home', 'Home')}>Home</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#skills', 'Skills')}>Skills</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Projects')}>Projects</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Certificates')}>Certificates</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Education')}>Education</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#more', 'Experience')}>Experience</NavLink>
                 </AccordionContent>
 
                 <AccordionButton onClick={() => toggleSection('connect')}>
@@ -181,7 +198,7 @@ const Footer = () => {
                 <AccordionContent isOpen={openSection === 'connect'}>
                     <NavLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
                     <NavLink href="https://www.github.com" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
-                    <NavLink href="#connect">Let's Connect</NavLink>
+                    <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
                 </AccordionContent>
             </AccordionContainer>
         </FooterContainer>

@@ -44,7 +44,7 @@ const Letter = styled.div`
   width: 80%;
   height: 80%;
   background-color: white;
-  border-radius: 15px;
+  border-radius: 20px;
   z-index: 3;
   display: flex;
   justify-content: center;

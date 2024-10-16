@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import MailAnimation from './MailAnimation';
+import { RiTwitterXFill } from "react-icons/ri";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 
 const planeAnimation = keyframes`
     0% {
@@ -25,25 +28,21 @@ const ConnectContainer = styled.section`
     position: relative;
     overflow: hidden;
     z-index: 1;
-    margin-top: 50px;
 
-  @media (max-width: 425px) {
-    padding: 30px 10px;
-    margin-top: 30px;
-        justify-content:space-between;
-
-
-  }
+    @media (max-width: 480px) {
+        padding: 30px 10px;
+        justify-content: space-between;
+    }
 `;
 
 const Container = styled.section`
     color: #e0e1ddff; /* platinum */
-    display:flex;
-    gap:30px;
-      @media (max-width: 425px) {
-   flex-direction:column;
+    display: flex;
+    gap: 30px;
 
-  }
+    @media (max-width: 480px) {
+        flex-direction: column;
+    }
 `;
 
 const LeftSection = styled.div`
@@ -91,12 +90,21 @@ const SVGContainer = styled.div`
     }
 `;
 
-const Title = styled.h2`
-    font-size: 2em;
-    margin: 20px 0;
-    position: relative;
-    z-index: 2;
-    transition: font-size 0.3s ease;
+const Title = styled.h1`
+    font-size: 3rem;
+    text-align: center;
+    font-family: "Bebas Neue", sans-serif;
+    color: #e0e1ddff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    transition: color 0.3s ease;
+
+    @media (max-width: 768px) {
+        font-size: 2.5rem;
+=    }
+
+    @media (max-width: 480px) {
+        font-size: 2rem;
+=    }
 `;
 
 const Paragraph = styled.p`
@@ -134,23 +142,26 @@ const IconContainer = styled.div`
 `;
 
 const Icon = styled.a`
+  font-size: 1.75em;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: #778da9ff; /* silver lake blue */
+    color:#000;
+    background-color: #415a77ff; /* silver lake blue */
     border-radius: 50%;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #415a77ff; /* yinmn blue */
+        background-color: #0d1b2aff; /* yinmn blue */
+            color:#fff;
+
     }
 
     svg {
         width: 60%;
         height: 60%;
-        fill: #e0e1ddff; /* platinum */
     }
 `;
 
@@ -158,14 +169,17 @@ const FormContainer = styled.div`
     flex: 1;
     padding: 40px;
     background-color: #1b263bff; /* oxford blue */
-    border-radius: 15px;
+    border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 2;
-
+flex-direction:column;
+ display:flex;
+    align-items:center;
+    justify-content:center;
     @media (max-width: 768px) {
         margin-left: 0;
-        padding: 10px;
+        padding: 1px;
     }
 `;
 
@@ -173,8 +187,20 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    max-width: 500px;
-    margin: 0 auto;
+    width: 80%;
+    padding: 0px; /* Default padding for larger screens */
+    
+    @media (max-width: 768px) {
+        width: 90%; /* Adjust width for tablet screens */
+        padding: 15px; /* Adjust padding for tablet screens */
+        font-size: 16px; /* Adjust font size for tablet screens */
+    }
+
+    @media (max-width: 480px) {
+        width: 95%; /* Adjust width for mobile screens */
+        padding: 10px; /* Adjust padding for mobile screens */
+        font-size: 14px; /* Adjust font size for mobile screens */
+    }
 `;
 
 const Input = styled.input`
@@ -259,23 +285,51 @@ const Button = styled.button`
   }
 `;
 
-const ConfirmationMessage = styled.p`
-    margin-top: 20px;
-    color: #e0e1ddff; /* platinum */
-    font-size: 1.2em;
+const fadeIn = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+const CircleTickIcon = styled.div`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Size of the circle */
+    height: 40px; /* Size of the circle */
+    background-color: #28a745; /* Circle background color */
+    border-radius: 50%; /* Makes it circular */
+    margin-right: 10px; /* Space between the icon and text */
 `;
 
-const LinkedInIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
-        <path fill='#000' d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,17,11,15.87,11,14.47z M39,39h-6c0,0,0-9.26,0-10 c0-2-1-4-3.5-4.04h-0.08C27,24.96,26,27.02,26,29c0,0.91,0,10,0,10h-6V20h6v2.63c0.85-1.3,2.1-3.21,5.25-3.21C37.66,19.42,39,22.42,39,27 C39,30.74,39,39,39,39z"></path>
-    </svg>
+const Tick = () => (
+    <CircleTickIcon>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill="#ffffff">
+            <path d="M20.285 5.293a1 1 0 00-1.414 0L9 14.586 5.707 11.293a1 1 0 00-1.414 1.414l4.293 4.293a1 1 0 001.414 0l11-11a1 1 0 000-1.414z" />
+        </svg>
+    </CircleTickIcon>
 );
 
-const GitHubIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
-        <path fill='#000' d="M25,0C11.19,0,0,11.19,0,25c0,11.16,7.29,20.68,17.5,24.04c1.28,0.24,1.75-0.55,1.75-1.23c0-0.61-0.02-2.22-0.03-4.36 c-7.14,1.55-8.64-3.45-8.64-3.45c-1.17-2.95-2.85-3.74-2.85-3.74c-2.32-1.59,0.17-1.56,0.17-1.56c2.56,0.18,3.91,2.64,3.91,2.64 c2.27,3.89,5.97,2.77,7.43,2.12c0.23-1.64,0.89-2.77,1.62-3.41c-5.72-0.65-11.75-2.86-11.75-12.71c0-2.8,1-5.1,2.66-6.9 c-0.27-0.65-1.16-3.29,0.25-6.87c0,0,2.17-0.69,7.14,2.64c2.08-0.58,4.31-0.87,6.54-0.87c2.22,0,4.45,0.29,6.54,0.87 c4.97-3.33,7.14-2.64,7.14-2.64c1.41,3.58,0.52,6.22,0.25,6.87c1.66,1.8,2.66,4.1,2.66,6.9c0,9.86-6.04,12.06-11.78,12.68 c0.92,0.79,1.74,2.34,1.74,4.72c0,3.41-0.03,6.15-0.03,6.97c0,0.69,0.47,1.48,1.76,1.22C41.71,45.68,49,36.16,49,25 C49,11.19,37.81,0,25,0z"></path>
-    </svg>
-);
+const ConfirmationMessage = styled.div`
+    animation: ${fadeIn} 0.5s ease forwards; /* Animation effect */
+    color: #fff; /* Dark teal text */
+    border: 2px solid #fff; /* Darker border */
+    border-radius: 20px; /* Rounded corners */
+    padding: 20px;
+    width:80%;
+    margin-top: 20px; /* Space above the message */
+    text-align: center; /* Center align text */
+    font-size: 1.2em; /* Larger font size */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+`;
+
 
 const Contact = () => {
     const [submitted, setSubmitted] = useState(false);
@@ -284,9 +338,21 @@ const Contact = () => {
         e.preventDefault();
         const form = e.target;
 
-        axios.post('/api/contact', new FormData(form))
+        // Log the form submission action to the console
+        console.log('Submit button clicked!');
+
+        // Prepare form data
+        const formData = new FormData(form);
+        formData.append("access_key", "9ee753a6-c053-4819-9996-56a1043ba7f4"); // Add your Web3Forms Access Key
+
+        // Submit to Web3Forms
+        axios.post('https://api.web3forms.com/submit', formData)
             .then(response => {
-                setSubmitted(true);
+                if (response.data.success) {
+                    setSubmitted(true);
+                } else {
+                    alert('There was an error. Please try again.');
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -295,7 +361,8 @@ const Contact = () => {
     };
 
     return (
-        <ConnectContainer>
+        <ConnectContainer id="connect">
+            <Title>Let's Connect</Title>
             <Container>
                 <LeftSection>
                     <SVGContainer>
@@ -304,15 +371,21 @@ const Contact = () => {
                     <Title>Contact Me</Title>
                     <Paragraph>If you have any questions or just want to say hello, feel free to reach out!</Paragraph>
                     <ContactInfo>
-                        <Email>Email: example@example.com</Email>
-                        <Phone>Phone: +123 456 7890</Phone>
+                        <Email>Email: sameermujahid7777@gmail.com</Email>
+                        <Phone>Phone: +91 8317506633</Phone>
                     </ContactInfo>
                     <IconContainer>
-                        <Icon href="https://www.linkedin.com/in/yourprofile" target="_blank">
-                            <LinkedInIcon />
+                        <Icon href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank" aria-label="LinkedIn Profile">
+                            <FiLinkedin />
                         </Icon>
-                        <Icon href="https://github.com/yourprofile" target="_blank">
-                            <GitHubIcon />
+                        <Icon href="https://github.com/sameermujahid" target="_blank" aria-label="GitHub Profile">
+                            <FiGithub />
+                        </Icon>
+                        <Icon href="https://www.instagram.com/sameer.mujahid/" target="_blank" aria-label="Instagram Profile">
+                            <IoLogoInstagram />
+                        </Icon>
+                        <Icon href="https://x.com/sameer__mujahid" target="_blank" aria-label="Twitter Profile">
+                            <RiTwitterXFill />
                         </Icon>
                     </IconContainer>
                 </LeftSection>
@@ -323,7 +396,7 @@ const Contact = () => {
                         <Textarea name="message" placeholder="Your Message" required></Textarea>
                         <Button type="submit">Send Message</Button>
                     </Form>
-                    {submitted && <ConfirmationMessage>Thank you for your message! I'll get back to you soon.</ConfirmationMessage>}
+                    {submitted && <ConfirmationMessage><Tick/>Thank you for your message! I'll get back to you soon.</ConfirmationMessage>}
                 </FormContainer>
             </Container>
         </ConnectContainer>

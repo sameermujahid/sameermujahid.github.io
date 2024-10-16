@@ -11,6 +11,9 @@ import Certificates from './components/Certificates';
 import Education from './components/Education';
 import Experience from './components/Experience';
 import Chatbot from './components/Chatbot';
+import Tabs from './components/Tabs';
+import CustomCursor from './components/CustomCursor';
+import AboutMe from './components/AboutMe';
 
 const AppContainer = styled.div`
     font-family: Arial, sans-serif;
@@ -18,14 +21,17 @@ const AppContainer = styled.div`
 
 const App = () => (
     <AppContainer>
+        {/* <CustomCursor/> */}
         <TopBar />
         <Hero />
+        <AboutMe/>
         <Chatbot />
         <Skills />
-        <Certificates />
+        <Tabs/>
+        {/* <Certificates />
         <Education />
         <Experience />
-        <Projects />
+        <Projects /> */}
         <Connect />
         <Footer />
     </AppContainer>

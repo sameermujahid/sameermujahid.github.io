@@ -3,31 +3,39 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://sameermujahid.github.io",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "framer-motion": "^11.3.8",
+    "framer-motion": "^11.9.0",
+    "gasp": "^0.0.2",
+    "gsap": "^3.12.5",
     "ldrs": "^1.0.2",
     "leven": "^4.0.0",
     "node": "^18.20.4",
     "nodemailer": "^6.9.14",
     "openai-node": "^1.0.5",
+    "pdfjs-dist": "^4.4.168",
     "react": "^18.3.1",
     "react-calendar-timeline": "^0.28.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
     "react-responsive-carousel": "^3.2.23",
-    "react-timeline": "^0.0.9",
+    "react-timeline-component": "^0.0.3",
     "react-typed": "^2.0.12",
     "react-vertical-timeline-component": "^3.6.0",
-    "styled-components": "^6.1.11",
+    "styled-components": "^6.1.13",
     "swiper": "^11.1.5",
     "typewriter-effect": "^2.21.0"
   },
@@ -39,6 +47,7 @@
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "gh-pages": "^6.1.1",
     "vite": "^5.3.1"
   }
 }

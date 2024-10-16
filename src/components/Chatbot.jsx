@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { FaRobot } from 'react-icons/fa';
 import resumeData from './resumeData';
 import leven from 'leven';
+import { MdFindInPage } from "react-icons/md";
 
 const colors = {
   richBlack: '#0d1b2aff',
@@ -71,7 +71,7 @@ const ChatbotWindow = styled.div`
   width: 500px;
   height: 500px;
   background: linear-gradient(145deg, ${colors.richBlack}, ${colors.oxfordBlue});
-  border-radius: 15px;
+  border-radius: 20px;
   display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
   flex-direction: column;
   overflow: hidden;
@@ -306,7 +306,7 @@ const Chatbot = () => {
     }
 
     if (greetings.includes(userInput.toLowerCase())) {
-      return `**Hello!** How can I assist you today?`;
+      return `Hello! How can I assist you today?`;
     }
 
     const keywords = ['name', 'education', 'skills', 'projects', 'contact', 'resume', 'experience', 'internship', 'summary'];
@@ -315,7 +315,7 @@ const Chatbot = () => {
     if (matchedKeyword) {
       switch (matchedKeyword) {
         case 'name':
-          return `My name is **${resumeData.name}**.`;
+          return `My name is ${resumeData.name}.`;
         case 'education':
           return formatEducation();
         case 'skills':
@@ -323,7 +323,7 @@ const Chatbot = () => {
         case 'projects':
           return formatProjects();
         case 'contact':
-          return `You can contact me via email at **${resumeData.contact.email}** or connect with me on LinkedIn at **${resumeData.contact.linkedin}**.`;
+          return `You can contact me via email at ${resumeData.contact.email} or connect with me on LinkedIn at ${resumeData.contact.linkedin}.`;
         case 'resume':
           downloadResume();
           return "Downloading resume...";
@@ -398,21 +398,21 @@ const Chatbot = () => {
 
   const formatProjects = () => {
     const projectsList = resumeData.projects.map(project => {
-      return `**${project.name}**:\n${project.description}`;
+      return `${project.name}:\n${project.description}`;
     }).join('\n\n');
-    return `**Projects:**\n${projectsList}`;
+    return `Projects:\n${projectsList}`;
   };
 
   const formatExperience = () => {
     const experienceList = resumeData.internship_experience.map(exp => {
-      return `**${exp.company}** (${exp.role}, ${exp.duration ? exp.duration : 'Intern'})\n- ${exp.responsibilities}`;
+      return `${exp.company} (${exp.role}, ${exp.duration ? exp.duration : 'Intern'})\n- ${exp.responsibilities}`;
     }).join('\n\n');
-    return `**Internship Experience:**\n${experienceList}`;
+    return `Internship Experience:\n${experienceList}`;
   };
 
   const generateSummary = () => {
     const { name, education, skills, projects, contact } = resumeData;
-    return `**${name}** is a student with skills in **${skills.programming_languages.join(', ')}** and experience in projects like **${projects[0].name}**. Contact **${contact.email}** for more information.`;
+    return `${name} is a student with skills in ${skills.programming_languages.join(', ')} and experience in projects like ${projects[0].name}. Contact ${contact.email} for more information.`;
   };
 
   const handleKeywordClick = (keyword) => {
@@ -435,7 +435,7 @@ const Chatbot = () => {
   return (
     <ChatbotContainer>
       <ChatbotIcon onClick={() => setIsChatbotVisible(!isChatbotVisible)}>
-        <FaRobot size={28} />
+        <MdFindInPage size={28} />
       </ChatbotIcon>
       <ChatbotWindow isVisible={isChatbotVisible}>
         <ChatHeader>Know about me</ChatHeader>

@@ -1,87 +1,110 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 
 // Color palette
 const colors = {
-    richBlack: '#0d1b2aff',
-    oxfordBlue: '#1b263bff',
-    yinmnBlue: '#415a77ff',
-    silverLakeBlue: '#778da9ff',
-    platinum: '#e0e1ddff',
+    richBlack: '#0d1b2a',
+    oxfordBlue: '#1b263b',
+    yinmnBlue: '#415a77',
+    silverLakeBlue: '#778da9',
+    platinum: '#e0e1dd',
 };
 
-// Styled components
-const Title = styled.h1`
-    font-size: 3rem;
-    text-align: center;
-    font-family: "Bebas Neue", sans-serif;
-    color: ${colors.platinum};
-    margin-bottom: 2.5rem;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-
-    @media (max-width: 768px) {
-        font-size: 2.5rem;
+// Global styles to disable animation
+const GlobalStyle = createGlobalStyle`
+    .vertical-timeline-element {
+        transition: none !important;
     }
 
-    @media (max-width: 480px) {
-        font-size: 2rem;
+    .vertical-timeline-element-content {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    .vertical-timeline-element-content-arrow {
+        transition: none !important;
+        animation: none !important;
     }
 `;
 
-const TimelineContent = styled.div`
-    background: linear-gradient(135deg, ${colors.oxfordBlue} 30%, ${colors.yinmnBlue} 100%);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4), 0 0.75rem 2rem rgba(0, 0, 0, 0.3);
-    padding: 2rem;
-    border-radius: 20px;
+const EducationContainer = styled.div`
     color: ${colors.platinum};
+    padding: 1.5rem 1rem;
+    
+    @media (min-width: 768px) {
+        padding: 2rem 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        padding: 3rem 2rem;
+    }
+`;
+
+// Styled components
+const Title = styled.h1`
+    font-size: 2.5rem;
+    text-align: center;
+    font-family: "Bebas Neue", sans-serif;
+    color: ${colors.platinum};
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    transition: color 0.3s ease;
+
+    @media (max-width: 768px) {
+        font-size: 2rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.75rem;
+    }
+`;
+
+const NumberIcon = styled.div`
+    background: ${colors.yinmnBlue};
+    color: ${colors.platinum};
+    border-radius: 50%;
+    font-size: 2.5rem; // Reduced font size
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; // Reduced width
+    height: 100%; // Reduced height
     font-family: "Montserrat", sans-serif;
-    position: relative;
-    transition: transform 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    transition: background 0.4s ease, transform 0.4s ease;
 
     &:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5), 0 1.5rem 3rem rgba(0, 0, 0, 0.4);
+        background: ${colors.richBlack};
+        transform: rotate(360deg) scale(1.1); // Slightly smaller scale
     }
 
-    h3 {
-        font-size: 1.8rem;
-        margin-bottom: 0.5rem;
-
-        @media (max-width: 768px) {
-            font-size: 1.6rem;
-        }
-
-        @media (max-width: 480px) {
-            font-size: 1.4rem;
-        }
+    @media (max-width: 1024px) {
+        font-size: 2rem;
+        width: 100%; // Reduced width
+    height: 100%; // Reduced height
     }
 
-    h5 {
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
-
-        @media (max-width: 768px) {
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 480px) {
-            font-size: 1rem;
-        }
+    @media (max-width: 768px) {
+        font-size: 1.75rem;
+        width: 100%; // Reduced width
+    height: 100%; // Reduced height
     }
 
-    p {
-        margin: 1rem 0;
-        line-height: 1.8;
+    @media (max-width: 480px) {
+        font-size: 1.5rem;
+        width: 100%; // Reduced width
+    height: 100%; // Reduced height
     }
 `;
 
 const Date = styled.div`
-    color: #ffffff; /* White color */
-    font-size: 1.1rem;
-    font-weight: bold; /* Bold text */
+    color: ${colors.platinum};
+    font-size: 1.1rem; // Reduced font size
+    font-weight: bold;
     margin-bottom: 0.5rem;
+    border-bottom: 1px solid ${colors.silverLakeBlue};
+    padding-bottom: 0.5rem;
 
     @media (max-width: 768px) {
         font-size: 1rem;
@@ -92,82 +115,121 @@ const Date = styled.div`
     }
 `;
 
-const Button = styled.a`
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
+const TimelineContent = styled.div`
+    background: linear-gradient(135deg, ${colors.oxfordBlue} 30%, ${colors.yinmnBlue} 100%);
     color: ${colors.platinum};
-    background-color: ${props => props.primary ? colors.yinmnBlue : colors.silverLakeBlue};
-    font-size: 1rem;
-    display: inline-block;
-    margin-top: 1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 1rem; // Reduced padding
+    border-radius: 20px; // Reduced border radius
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    border: 1px solid ${colors.silverLakeBlue};
+    position: relative;
+display:flex;
+flex-direction:column;
+gap:5px;
+    &:before {
+        content: '';
+        position: absolute;
+        top: -15px; // Adjusted for smaller content
+        left: -15px; // Adjusted for smaller content
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+        background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, transparent 100%);
+        border-radius: 20px;
+        z-index: -1;
+    }
+
+    h3 {
+        font-size: 1.5rem; // Reduced font size
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+
+        @media (max-width: 768px) {
+            font-size: 1.4rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1.2rem;
+        }
+    }
+
+    h5 {
+        font-size: 1.2rem; // Reduced font size
+        margin-bottom: 1rem;
+        font-weight: 500;
+
+        @media (max-width: 768px) {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1rem;
+        }
+    }
+
+    p {
+        margin: 0;
+        line-height: 1.5; // Adjusted line height
+    }
 
     &:hover {
-        background-color: ${props => props.primary ? '#0ac593' : '#f3bc3c'};
-        transform: scale(1.05);
-    }
-
-    @media (max-width: 768px) {
-        padding: 0.7rem 1.3rem;
-        font-size: 0.9rem;
-    }
-
-    @media (max-width: 480px) {
-        padding: 0.6rem 1.1rem;
-        font-size: 0.8rem;
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6);
     }
 `;
 
-const Icon = styled.div`
-    background: ${colors.yinmnBlue};
+const GPAWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+`;
+
+const GPADot = styled.div`
+    width: 15px; // Reduced size
+    height: 15px; // Reduced size
+    border-radius: 50%;
+    background: ${props => props.isFilled ? colors.platinum : colors.yinmnBlue};
+    margin-right: 0.5rem;
+    transition: background 0.4s ease;
+    
+    @media (max-width: 480px) {
+        width: 8px; // Reduced size
+        height: 8px; // Reduced size
+    }
+`;
+
+const GPAText = styled.span`
     color: ${colors.platinum};
-    border-radius: 50%;
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    font-family: "Montserrat", sans-serif;
-
-    @media (max-width: 768px) {
-        font-size: 1.75rem;
-        width: 50px;
-        height: 50px;
-    }
-
-    @media (max-width: 480px) {
-        font-size: 1.5rem;
-        width: 45px;
-        height: 45px;
-    }
+    font-size: 0.9rem; // Reduced font size
 `;
 
-// GPA Dots
-const DotsContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 1rem;
+const EducationTitle = styled.span`
+  font-size: 2rem;  // Larger for the main title
+  font-weight: bold;
+  color: #ffffff;
 `;
 
-const Dot = styled.div`
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    margin-right: 6px;
-    background-color: ${props => props.filled ? colors.yinmnBlue : colors.oxfordBlue};
-
-    @media (max-width: 768px) {
-        width: 12px;
-        height: 12px;
-    }
-
-    @media (max-width: 480px) {
-        width: 10px;
-        height: 10px;
-    }
+const EducationLocation = styled.span`
+  font-size: 1.2rem;  // Medium size for location
+  font-weight: 500;
+  color: #c4c4c4;
 `;
+
+const Description = styled.span`
+  font-size: 1rem;  // Standard font size for the description
+  color: #d3d3d3;
+`;
+
+
+
+// Function to determine the number of filled dots based on GPA
+const getFilledDots = (gpa) => {
+    if (typeof gpa === 'number') {
+        return Math.round(gpa);
+    } else if (gpa.includes('%')) {
+        return Math.round(parseFloat(gpa) / 10);
+    }
+    return 0;
+};
 
 // Education Component
 const Education = () => {
@@ -178,9 +240,7 @@ const Education = () => {
             location: 'Keshava Reddy High School',
             date: '2017-2018',
             description: 'Completed secondary school with outstanding performance.',
-            icon: 'school',
-            buttonText: 'Certificate',
-            gpa: '10.00'
+            gpa: 10.00
         },
         {
             id: 2,
@@ -188,9 +248,7 @@ const Education = () => {
             location: 'Tirumala Junior College, Katheru',
             date: '2018-2020',
             description: 'Completed intermediate with a focus on Mathematics, Physics, and Chemistry.',
-            icon: 'school',
-            buttonText: 'Projects',
-            gpa: '96%'
+            gpa: 8.1
         },
         {
             id: 3,
@@ -198,49 +256,40 @@ const Education = () => {
             location: 'Adikavi Nannaya University, Rajanagaram',
             date: '2020-2024',
             description: 'Pursuing a Bachelor\'s degree in Computer Science with various projects and internships.',
-            icon: 'school',
-            buttonText: 'See Projects',
-            gpa: '8.8'
+            gpa: 8.8
         },
     ], []);
 
-    // Calculate filled dots based on GPA
-    const calculateFilledDots = (gpa) => {
-        const gpaNumber = parseFloat(gpa.replace('%', ''));
-        if (!isNaN(gpaNumber)) {
-            return Math.round((gpaNumber / 10) * 10); // Assuming GPA scale is out of 10
-        }
-        return 0;
-    };
-
     return (
-        <div>
+        <EducationContainer>
+            <GlobalStyle />
             <Title>Education</Title>
             <VerticalTimeline>
                 {educationData.map((education) => (
-                    <VerticalTimelineElement 
+                    <VerticalTimelineElement
                         key={education.id}
                         date={education.date}
-                        dateClassName="date"
+                        contentStyle={{ background: 'none', color: colors.platinum }}
+                        contentArrowStyle={{ borderRight: `7px solid ${colors.oxfordBlue}` }}
                         iconStyle={{ background: colors.yinmnBlue, color: colors.platinum }}
-                        icon={<Icon>{education.id}</Icon>}
+                        icon={<NumberIcon>{education.id}</NumberIcon>}
                     >
                         <TimelineContent>
-                            <h3>{education.title}</h3>
-                            <h5>{education.location}</h5>
-                            <Date>{education.date}</Date>
-                            <p>{education.description}</p>
-                            <DotsContainer>
-                                {[...Array(10)].map((_, i) => (
-                                    <Dot key={i} filled={i < calculateFilledDots(education.gpa)} />
+                        <EducationTitle>{education.title}</EducationTitle>
+              <EducationLocation>{education.location}</EducationLocation>
+              <Date>{education.date}</Date>
+              <Description>{education.description}</Description>
+                            <GPAWrapper>
+                                {Array.from({ length: 10 }).map((_, index) => (
+                                    <GPADot key={index} isFilled={index < getFilledDots(education.gpa)} />
                                 ))}
-                            </DotsContainer>
-                           
+                                <GPAText>GPA: {education.gpa}</GPAText>
+                            </GPAWrapper>
                         </TimelineContent>
                     </VerticalTimelineElement>
                 ))}
             </VerticalTimeline>
-        </div>
+        </EducationContainer>
     );
 };
 

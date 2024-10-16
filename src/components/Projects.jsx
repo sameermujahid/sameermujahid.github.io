@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import resumeData from './resumeData'; // Adjust the path according to your project structure
+
 const colors = {
   richBlack: '#0d1b2aff',
   oxfordBlue: '#1b263bff',
@@ -7,33 +9,35 @@ const colors = {
   silverLakeBlue: '#778da9ff',
   platinum: '#e0e1ddff',
 };
-const ProjectsContainer = styled.div`
-  margin-top: 50px;
-  text-align: center;
-  color: #e0e1ddff;
-  padding: 50px 20px;
 
-  @media (max-width: 768px) {
-    padding: 30px 10px;
-    margin-top: 30px;
+const ProjectsContainer = styled.div`
+  text-align: center;
+  color: #e0e1dd;
+  padding: 2rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 4rem 3rem;
   }
 `;
 
-const Title = styled.h2`
-  font-size: 2.5rem;
-  margin-bottom: 40px;
-  color: ${colors.platinum};
+const Title = styled.h1`
+  font-size: 3rem;
   text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: "Bebas Neue", sans-serif;
+  color: ${colors.platinum};
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+  transition: color 0.3s ease;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: 30px;
+    font-size: 2.5rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+    font-size: 2rem;
   }
 `;
 
@@ -51,11 +55,10 @@ const CardContainer = styled.div`
 
 const Card = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
   background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 20px;
   transition: transform 0.3s ease;
   padding: 20px;
 
@@ -64,13 +67,45 @@ const Card = styled.div`
   }
 
   @media (max-width: 768px) {
+    flex-direction: column;
     padding: 15px;
-    border-radius: 8px;
   }
 `;
 
-const Content = styled.div`
-  flex-grow: 1;
+const ImageWrapper = styled.div`
+  width: 30%; // The image occupies 30% of the card
+  @media (max-width: 768px) {
+    width: 100%; // Full width for mobile devices
+  }
+`;
+
+const Image = styled.img`
+  width: 100%; // Ensures the image fills the width of its container
+  height: 100%; // Ensures the image fills the height
+
+  @media (max-width: 768px) {
+    height: 200px; // Fixed height for tablet and mobile devices
+  }
+
+  @media (min-width: 769px) {
+    height: 100%; // Height 100% for larger screens
+  }
+
+  border-radius: 10px; // Adds rounded corners
+  object-fit: cover; // Ensures the image maintains its aspect ratio
+`;
+
+const ContentWrapper = styled.div`
+  width: 70%; // The content occupies 70% of the card
+  padding-left: 20px; // Space between image and content
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-left: 0;
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -106,74 +141,70 @@ const ButtonGroup = styled.div`
   display: flex;
   margin-top: 20px;
   gap: 10px;
-justify-content:center;
+  justify-content: center;
+
   @media (max-width: 768px) {
-    flex-direction: row;
-    gap: 10px;
+    justify-content: center;
   }
 `;
 
 const Button = styled.a`
   display: inline-block;
-  padding: 10px 20px;
-  font-size: 1em;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #000;
   font-weight: 600;
-  color: black;
   background-color: #fff;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
 
-  &:hover {
-    background-color: #778da9ff;
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
   }
 
-  @media (max-width: 768px) {
-    font-size: 0.9em;
-    padding: 8px 16px;
+  @media (min-width: 1024px) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  &:hover {
+    background-color: #0d1b2aff;
+    color: #fff;
   }
 `;
 
 const Projects = () => {
-  const projects = [
-    {
-      title: 'MERA SAHAI: Mera Sahai Platform',
-      date: '',
-      description:
-        "As a web developer for the jobseeker support platform, I oversaw modules allowing everyone to upload job and project alerts. I'm proud of my part in this important effort, which aims to make it easier for jobseekers.",
-      downloadLink: '/assets/mera_sahai_project.pdf',
-    },
-    {
-      title: 'College Project: Water Quality Prediction and Classification',
-      date: '',
-      description:
-        'For my college project, I developed a system using SVM and XGBoost to predict and classify water quality based on diverse parameters. This project highlighted my machine learning skills and strengthened my abilities in project management, problem-solving, and independent work.',
-      downloadLink: '/assets/water_quality_project.pdf',
-    },
-  ];
+  const projects = resumeData.projects;
 
   return (
-    <ProjectsContainer id="projects">
+    <ProjectsContainer>
       <Title>Projects</Title>
       <CardContainer>
         {projects.map((project, index) => (
           <Card key={index}>
-            <Content>
-              <CardTitle>{project.title}</CardTitle>
-              <Date>Date: {project.date}</Date>
+            <ImageWrapper>
+              <Image src={project.image} alt={project.name} />
+            </ImageWrapper>
+            <ContentWrapper>
+              <CardTitle>{project.name}</CardTitle>
+              <Date>{project.date}</Date>
               <Description>{project.description}</Description>
-            </Content>
-            <ButtonGroup>
-              {project.downloadLink && (
-                <Button href={project.downloadLink} download={`${project.title.replace(/\s+/g, '-')}_project.pdf`}>
-                  Download
-                </Button>
-              )}
-              <Button href={project.downloadLink} target="_blank">
-                View
-              </Button>
-            </ButtonGroup>
+              <ButtonGroup>
+                {project.downloadLink && (
+                  <Button href={project.downloadLink} target="_blank" download>
+                    Download
+                  </Button>
+                )}
+                {project.view && (
+                  <Button href={project.view} target="_blank">
+                    View
+                  </Button>
+                )}
+              </ButtonGroup>
+            </ContentWrapper>
           </Card>
         ))}
       </CardContainer>

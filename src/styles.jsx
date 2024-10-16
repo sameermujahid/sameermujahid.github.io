@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { AiFillLinkedin, AiFillGithub, AiFillInstagram, AiFillTwitterCircle } from 'react-icons/ai'; 
 
 const colors = {
-  primary: '#1b263b',
   secondary: '#778da9',
   accent: '#e0e1dd',
     richBlack: '#0d1b2aff',
@@ -16,6 +15,7 @@ const fontSize = {
   medium: '18px',
   small: '16px',
 };
+
 //topbar
 export const TopBarContainer = styled.div`
   top: 10px;
@@ -24,7 +24,7 @@ export const TopBarContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${(props) => (props.scrolled ? '10px' : '20px')};
-  background: ${(props) => (props.scrolled ? colors.primary : 'rgba(13, 28, 43, 0.27)')};
+  background: ${(props) => (props.scrolled ? colors.richBlack : 'rgba(13, 28, 43, 0.27)')};
   color: ${colors.accent};
   transition: background 0.3s ease, padding 0.3s ease, width 0.3s ease;
   position: fixed;
@@ -58,7 +58,6 @@ export const Logo = styled.div`
 export const LogoText = styled.span`
   font-size: ${fontSize.large};
   font-weight: bold;
-  font-family: 'Orbitron', sans-serif;
   color: ${colors.accent};
   transition: opacity 0.3s ease;
   opacity: ${(props) => (props.scrolled ? '0' : '1')};
@@ -102,52 +101,85 @@ export const NavLink = styled.a`
 
   &:hover {
     color: ${colors.secondary};
+    
   }
 
   &.active {
-    color: white;
+    color: #000;
+    font-weight:700;
     background-color: ${colors.secondary};
+    border:0.5px solid ${colors.platinum};
   }
 `;
 
+
 export const Sidebar = styled.div`
-  display: none;
-  flex-direction: column;
   position: fixed;
   top: 0;
   right: 0;
-  height: 100%;
   width: 250px;
-  background: ${colors.primary};
-  color: ${colors.accent};
-  padding: 20px;
-  box-shadow: 0 0 10px ${colors.secondary};
-  z-index: 4;
-  transition: transform 0.3s ease;
-  transform: ${(props) => (props.open ? 'translateX(0)' : 'translateX(100%)')};
-
+  height: 100%;
+  background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: ${props => (props.open ? 'translateX(0)' : 'translateX(100%)')};
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding:50px 10px;
   @media (max-width: 768px) {
-    display: flex;
+    width: 200px;
+    gap:20px;
   }
 `;
 
 export const SidebarLink = styled.a`
-  color: ${colors.accent};
+display:flex;
+  font-size: 1rem;
   text-decoration: none;
-  font-family: 'Roboto', sans-serif;
-  font-size: ${fontSize.medium};
-  margin-bottom: 20px;
-  cursor: pointer;
+  color: #f0f0f0;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  width: 80%;
+  text-align: center;
 
   &:hover {
-    color: ${colors.secondary};
+    background-color: #e0e1dd;
+    color: #1b263b;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 
   &.active {
-    color: white;
-    background-color: ${colors.secondary};
+    background-color: #778da9;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
 `;
+
+export const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #f0f0f0;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #e0e1dd;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
 
 export const MenuToggle = styled.div`
   display: none;
@@ -160,6 +192,57 @@ export const MenuToggle = styled.div`
   }
 `;
 //hero
+
+/* Blob animation styles */
+export const Blob = styled.div`
+  position: absolute;
+  width: 350px; /* Adjust size as needed */
+  height: 350px; /* Adjust size as needed */
+  background: linear-gradient(135deg, #0d1b2a, #e0e1dd); /* Linear gradient with your colors */
+  opacity: 0.6; /* Adjust opacity as needed */
+  border-radius: 50%;
+  animation: blobAnimation 12s infinite ease-in-out;
+  z-index: -1;
+  pointer-events: none;
+  top: 50%; /* Adjust positioning */
+  left: 50%; /* Adjust positioning */
+  transform: translate(-50%, -50%);
+  mix-blend-mode: multiply; /* Blends the blob with the background */
+
+  @keyframes blobAnimation {
+    0% {
+      transform: translate(-50%, -50%)rotate(0deg);
+      border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    }
+    25% {
+      transform: translate(-50%, -50%) rotate(15deg);
+      border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%;
+    }
+    50% {
+      transform: translate(-50%, -50%)rotate(-15deg);
+      border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+    }
+    75% {
+      transform: translate(-50%, -50%)rotate(15deg);
+      border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%;
+    }
+    100% {
+      transform: translate(-50%, -50%)rotate(0deg);
+      border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    width: 350px;
+    height: 350px;
+  }
+
+  @media (max-width: 768px) {
+    width: 250px;
+    height: 250px;
+  }
+`;
+
 export const Container = styled.section`
   display: flex;
   justify-content: center;
@@ -171,7 +254,7 @@ export const Container = styled.section`
   gap: 20px;
   flex-direction: column-reverse;
 
-  @media (min-width: 426px) {
+  @media (min-width: 480px) {
     flex-direction: row;
   }
 `;
@@ -192,8 +275,8 @@ export const Section = styled(motion.div)`
 
   &:first-of-type {
     max-width: 100%;
+
   }
-  
   @media (max-width: 768px) {
     max-width: 100%;
   }
@@ -236,20 +319,40 @@ export const Description = styled(motion.p)`
     font-size: 0.8em;
   }
 `;
+export const ButtonContainer = styled(motion.div)`
 
+
+@media (max-width: 480px) {
+    flex-direction: row;
+    justify-content:center;
+  }
+`;
 export const Button = styled(motion.a)`
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 1em;
-  color: ${colors.richBlack};
+display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #000;
   font-weight: 600;
   background-color: ${colors.platinum};
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 
-  @media (max-width: 768px) {
-    font-size: 0.8em;
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  &:hover {
+  background-color: ${colors.richBlack};
+    color: #fff;
+    border:1px solid #778da9;
   }
 `;
 
@@ -264,7 +367,9 @@ export const ArrowButton = styled(motion.button)`
   
   @media (max-width: 768px) {
     font-size: 1.5em;
+    
   }
+    
 `;
 
 export const SocialIcons = styled(motion.div)`
@@ -272,63 +377,155 @@ export const SocialIcons = styled(motion.div)`
   gap: 10px;
   flex-direction: column;
 
-  @media (max-width: 425px) {
+  @media (max-width: 480px) {
     flex-direction: row;
   }
 `;
 
-export const Icon = styled(motion.a)`
-  font-size: 2em;
+export const Icon = styled.a`
+  font-size: 1.75em;
   color: ${colors.platinum};
   cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover, &:focus {
+    transform: scale(1.2); /* Scale up on hover or focus */
+  }
 
   @media (max-width: 768px) {
     font-size: 1.5em;
+
+    &:hover, &:focus {
+      transform: scale(1.1); /* Slightly smaller scale-up for mobile */
+    }
   }
 `;
+
 
 export const ModalOverlay = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 4;
+  z-index: 100;
 `;
 
 export const ModalContent = styled(motion.div)`
-  background-color: ${colors.platinum};
-  padding: 20px;
+  background: #1b263b;
+  padding: 5px;
   border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 90%;
-  height: 90%;
-  position: relative;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    max-width: 600px; /* Adjust for tablets */
+  }
 
   @media (max-width: 768px) {
-    width: 95%;
-    height: 95%;
-    padding: 10px;
+    max-width: 90%;
+    padding: 5px; /* Adjust for mobile devices */
   }
 `;
 
-export const CloseButton = styled(motion.button)`
-  background: none;
-  border: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: ${colors.richBlack};
+export const ModalTopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+
+  @media (max-width: 768px) {
+    padding: 0px 5px; /* Adjust padding for smaller screens */
+  }
 `;
+
+export const NameText = styled.h2`
+  color: #e0e1dd;
+  font-size: 24px;
+
+  @media (max-width: 1024px) {
+    font-size: 22px; /* Smaller font for tablets */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px; /* Smaller font for mobile */
+  }
+`;
+
+export const TopBarButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 5px; /* Adjust gap for smaller screens */
+  }
+`;
+
+export const TopBarButton = styled.button`
+  background: #415a77;
+  color: #e0e1dd;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #778da9;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 8px 18px; /* Adjust for tablets */
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 12px; /* Adjust for mobile devices */
+    font-size: 12px;
+  }
+`;
+
+export const ModalIframe = styled.iframe`
+  width: 100%;
+  height: 650px;
+  border-radius: 5px;
+
+  @media (max-width: 1024px) {
+    height: 550px; /* Adjust for tablets */
+  }
+
+  @media (max-width: 768px) {
+    height: 450px; /* Adjust for mobile devices */
+  }
+`;
+
+
+// export const CloseButton = styled(motion.button)`
+//   position: absolute;
+//   top: 10px;
+//   right: 10px;
+//   background: ${colors.richBlack};
+//   color: ${colors.platinum};
+//   border: none;
+//   border-radius: 50%;
+//   padding: 8px;
+//   cursor: pointer;
+//   font-size: 1.5em;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+
+//   @media (max-width: 768px) {
+//     top: 5px;
+//     right: 5px;
+//     font-size: 1.2em;
+//     padding: 6px;
+//   }
+// `;
 
 export const ImageContainer = styled(motion.div)`
   width: 300px;
