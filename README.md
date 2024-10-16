@@ -26,4 +26,4 @@ Feel free to reach me through the following handles:
 
 Thank you for checking out my portfolio! Feel free to reach out! 🌍✨
 
-![image](https://github.com/user-attachments/assets/976c594c-d8d9-4d08-869d-bf55c2f59c6a)
+![_3dtext2gif_rgsokiketqus](https://github.com/user-attachments/assets/661ae9e2-0da3-4666-937d-7a6ce898b24c)
