@@ -19,11 +19,6 @@ Vite, ESLint, GitHub Pages, Font Awesome, and more!
 
 Feel free to reach me through the following handles:
 <br>
-[![Email](https://img.shields.io/badge/Email-sameermujahid7777@gmail.com-%23D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sameermujahid7777@gmail.com)  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sameer-mujahid)  
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sameermujahid)  
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/your-instagram-profile)
+[![Email](https://img.shields.io/badge/Email-sameermujahid7777@gmail.com-%23D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sameermujahid7777@gmail.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sameer-mujahid) [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sameermujahid) [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/sameer.mujahid)
 
 Thank you for checking out my portfolio! Feel free to reach out! 🌍✨
-
-![_3dtext2gif_rgsokiketqus](https://github.com/user-attachments/assets/661ae9e2-0da3-4666-937d-7a6ce898b24c)
