@@ -165,8 +165,8 @@ const Footer = ({ setActiveTab }) => {
                 </Section>
                 <Section>
                     <SectionTitle>Connect</SectionTitle>
-                    <NavLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
-                    <NavLink href="https://www.github.com" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
+                    <NavLink href="https://www.linkedin.com/in/shaik-sameer-mujahid" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
+                    <NavLink href="https://github.com/sameermujahid" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
                     <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
                 </Section>
             </FooterContent>
@@ -196,8 +196,8 @@ const Footer = ({ setActiveTab }) => {
                     Connect
                 </AccordionButton>
                 <AccordionContent isOpen={openSection === 'connect'}>
-                    <NavLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
-                    <NavLink href="https://www.github.com" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
+                    <NavLink href="https://www.linkedin.com/in/shaik-sameer-mujahid" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
+                    <NavLink href="https://github.com/sameermujahid" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
                     <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
                 </AccordionContent>
             </AccordionContainer>
