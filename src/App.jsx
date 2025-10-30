@@ -25,7 +25,7 @@ const App = () => (
         <TopBar />
         <Hero />
         <AboutMe/>
-        <Chatbot />
+        {/* <Chatbot /> */}
         <Skills />
         <Tabs/>
         {/* <Certificates />

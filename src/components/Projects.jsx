@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import resumeData from './resumeData'; // Adjust the path according to your project structure
+import resumeData from './resumeData'; // Adjust path if needed
 
 const colors = {
   richBlack: '#0d1b2aff',
@@ -12,167 +12,116 @@ const colors = {
 
 const ProjectsContainer = styled.div`
   text-align: center;
-  color: #e0e1dd;
-  padding: 2rem 1rem;
+  color: ${colors.platinum};
+  padding: 3rem 1rem;
+  background: linear-gradient(145deg, ${colors.richBlack}, ${colors.oxfordBlue});
+  min-height: 100vh;
 
   @media (min-width: 768px) {
-    padding: 3rem 2rem;
-  }
-
-  @media (min-width: 1024px) {
     padding: 4rem 3rem;
   }
 `;
 
 const Title = styled.h1`
   font-size: 3rem;
-  text-align: center;
   font-family: "Bebas Neue", sans-serif;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
   color: ${colors.platinum};
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-  transition: color 0.3s ease;
+  margin-bottom: 3rem;
 
   @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 2rem;
+    font-size: 2.3rem;
   }
 `;
 
 const CardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: space-around;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 40px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+  justify-content: center;
 `;
 
 const Card = styled.div`
   display: flex;
-  flex-direction: row;
-  background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  background: linear-gradient(145deg, ${colors.oxfordBlue}, ${colors.yinmnBlue});
   border-radius: 20px;
-  transition: transform 0.3s ease;
-  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 15px;
+    transform: translateY(-10px);
+    // box-shadow: 0 15px 35px rgba(119, 141, 169, 0.4);
   }
 `;
 
 const ImageWrapper = styled.div`
-  width: 30%; // The image occupies 30% of the card
-  @media (max-width: 768px) {
-    width: 100%; // Full width for mobile devices
-  }
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
 `;
 
 const Image = styled.img`
-  width: 100%; // Ensures the image fills the width of its container
-  height: 100%; // Ensures the image fills the height
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 
-  @media (max-width: 768px) {
-    height: 200px; // Fixed height for tablet and mobile devices
-  }
-
-  @media (min-width: 769px) {
-    height: 100%; // Height 100% for larger screens
-  }
-
-  border-radius: 10px; // Adds rounded corners
-  object-fit: cover; // Ensures the image maintains its aspect ratio
-`;
-
-const ContentWrapper = styled.div`
-  width: 70%; // The content occupies 70% of the card
-  padding-left: 20px; // Space between image and content
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    padding-left: 0;
+  ${Card}:hover & {
+    transform: scale(1.05);
   }
 `;
 
-const CardTitle = styled.h3`
-  font-size: 1.8em;
-  margin-bottom: 10px;
+const CardTitle = styled.h2`
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: ${colors.platinum};
+  margin-bottom: 0.8rem;
+  text-align: center;
 
   @media (max-width: 768px) {
-    font-size: 1.5em;
-  }
-`;
-
-const Date = styled.p`
-  font-size: 1.2em;
-  color: #888;
-  margin-bottom: 10px;
-
-  @media (max-width: 768px) {
-    font-size: 1em;
+    font-size: 1.4rem;
   }
 `;
 
 const Description = styled.p`
-  font-size: 1em;
+  font-size: 1rem;
+  color: ${colors.platinum};
   line-height: 1.6;
-  color: #e0e1dd;
+  text-align: center;
+  flex-grow: 1;
+  margin-bottom: 1.2rem;
 
   @media (max-width: 768px) {
-    font-size: 0.9em;
+    font-size: 0.95rem;
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  margin-top: 20px;
-  gap: 10px;
   justify-content: center;
-
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
+  gap: 12px;
+  margin-top: auto;
 `;
 
 const Button = styled.a`
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #000;
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  background-color: ${colors.platinum};
+  color: ${colors.richBlack};
   font-weight: 600;
-  background-color: #fff;
   text-decoration: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-
-  @media (min-width: 768px) {
-    padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.125rem;
-  }
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 
   &:hover {
-    background-color: #0d1b2aff;
-    color: #fff;
+    background-color: ${colors.richBlack};
+    color: ${colors.platinum};
+    box-shadow: 0 0 10px ${colors.silverLakeBlue};
   }
 `;
 
@@ -188,23 +137,20 @@ const Projects = () => {
             <ImageWrapper>
               <Image src={project.image} alt={project.name} />
             </ImageWrapper>
-            <ContentWrapper>
-              <CardTitle>{project.name}</CardTitle>
-              <Date>{project.date}</Date>
-              <Description>{project.description}</Description>
-              <ButtonGroup>
-                {project.downloadLink && (
-                  <Button href={project.downloadLink} target="_blank" download>
-                    Download
-                  </Button>
-                )}
-                {project.view && (
-                  <Button href={project.view} target="_blank">
-                    View
-                  </Button>
-                )}
-              </ButtonGroup>
-            </ContentWrapper>
+            <CardTitle>{project.name}</CardTitle>
+            <Description>{project.description}</Description>
+            <ButtonGroup>
+              {project.downloadLink && (
+                <Button href={project.downloadLink} target="_blank" download>
+                  Download
+                </Button>
+              )}
+              {project.view && (
+                <Button href={project.view} target="_blank">
+                  View
+                </Button>
+              )}
+            </ButtonGroup>
           </Card>
         ))}
       </CardContainer>

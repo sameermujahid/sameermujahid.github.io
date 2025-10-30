@@ -329,78 +329,116 @@ const ConfirmationMessage = styled.div`
     align-items:center;
     justify-content:center;
 `;
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
 
+const Spinner = styled.div`
+  border: 3px solid rgba(224, 225, 221, 0.3);
+  border-top: 3px solid #e0e1dd;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: ${spin} 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+`;
 
 const Contact = () => {
-    const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const form = e.target;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
 
-        // Log the form submission action to the console
-        console.log('Submit button clicked!');
+    // Prepare form data
+    const formData = new FormData(form);
+    formData.append("access_key", "9ee753a6-c053-4819-9996-56a1043ba7f4");
 
-        // Prepare form data
-        const formData = new FormData(form);
-        formData.append("access_key", "9ee753a6-c053-4819-9996-56a1043ba7f4"); // Add your Web3Forms Access Key
+    // Start loading
+    setIsLoading(true);
 
-        // Submit to Web3Forms
-        axios.post('https://api.web3forms.com/submit', formData)
-            .then(response => {
-                if (response.data.success) {
-                    setSubmitted(true);
-                } else {
-                    alert('There was an error. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('There was an error. Please try again.');
-            });
-    };
+    axios
+      .post("https://api.web3forms.com/submit", formData)
+      .then((response) => {
+        if (response.data.success) {
+          setSubmitted(true);
+          form.reset();
+        } else {
+          alert("There was an error. Please try again.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("There was an error. Please try again.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
-    return (
-        <ConnectContainer id="connect">
-            <Title>Let's Connect</Title>
-            <Container>
-                <LeftSection>
-                    <SVGContainer>
-                        <MailAnimation />
-                    </SVGContainer>
-                    <Title>Contact Me</Title>
-                    <Paragraph>If you have any questions or just want to say hello, feel free to reach out!</Paragraph>
-                    <ContactInfo>
-                        <Email>Email: sameermujahid7777@gmail.com</Email>
-                        <Phone>Phone: +91 8317506633</Phone>
-                    </ContactInfo>
-                    <IconContainer>
-                        <Icon href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank" aria-label="LinkedIn Profile">
-                            <FiLinkedin />
-                        </Icon>
-                        <Icon href="https://github.com/sameermujahid" target="_blank" aria-label="GitHub Profile">
-                            <FiGithub />
-                        </Icon>
-                        <Icon href="https://www.instagram.com/sameer.mujahid/" target="_blank" aria-label="Instagram Profile">
-                            <IoLogoInstagram />
-                        </Icon>
-                        <Icon href="https://x.com/sameer__mujahid" target="_blank" aria-label="Twitter Profile">
-                            <RiTwitterXFill />
-                        </Icon>
-                    </IconContainer>
-                </LeftSection>
-                <FormContainer>
-                    <Form onSubmit={handleSubmit}>
-                        <Input type="text" name="name" placeholder="Your Name" required />
-                        <Input type="email" name="email" placeholder="Your Email" required />
-                        <Textarea name="message" placeholder="Your Message" required></Textarea>
-                        <Button type="submit">Send Message</Button>
-                    </Form>
-                    {submitted && <ConfirmationMessage><Tick/>Thank you for your message! I'll get back to you soon.</ConfirmationMessage>}
-                </FormContainer>
-            </Container>
-        </ConnectContainer>
-    );
+  return (
+    <ConnectContainer id="connect">
+      <Title>Let's Connect</Title>
+      <Container>
+        <LeftSection>
+          <SVGContainer>
+            <MailAnimation />
+          </SVGContainer>
+          <Title>Contact Me</Title>
+          <Paragraph>
+            If you have any questions or just want to say hello, feel free to reach out!
+          </Paragraph>
+          <ContactInfo>
+            <Email>Email: sameermujahid7777@gmail.com</Email>
+            <Phone>Phone: +91 8317506633</Phone>
+          </ContactInfo>
+          <IconContainer>
+            <Icon href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank">
+              <FiLinkedin />
+            </Icon>
+            <Icon href="https://github.com/sameermujahid" target="_blank">
+              <FiGithub />
+            </Icon>
+            <Icon href="https://www.instagram.com/sameer.mujahid/" target="_blank">
+              <IoLogoInstagram />
+            </Icon>
+            <Icon href="https://x.com/sameer__mujahid" target="_blank">
+              <RiTwitterXFill />
+            </Icon>
+          </IconContainer>
+        </LeftSection>
+
+        <FormContainer>
+          <Form onSubmit={handleSubmit}>
+            <Input type="text" name="name" placeholder="Your Name" required />
+            <Input type="email" name="email" placeholder="Your Email" required />
+            <Textarea name="message" placeholder="Your Message" required></Textarea>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Spinner />
+                  &nbsp;Sending...
+                </>
+              ) : (
+                "Send Message"
+              )}
+            </Button>
+          </Form>
+
+          {submitted && (
+            <ConfirmationMessage>
+              <Tick />
+              Thank you for your message! I'll get back to you soon.
+            </ConfirmationMessage>
+          )}
+        </FormContainer>
+      </Container>
+    </ConnectContainer>
+  );
 };
+
 
 export default Contact;

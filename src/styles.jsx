@@ -251,7 +251,7 @@ export const Container = styled.section`
   height: 80vh;
   position: relative;
   color: ${colors.platinum};
-  gap: 20px;
+  gap: 25px;
   flex-direction: column-reverse;
 
   @media (min-width: 480px) {
@@ -383,7 +383,7 @@ export const SocialIcons = styled(motion.div)`
 `;
 
 export const Icon = styled.a`
-  font-size: 1.75em;
+  font-size: 2.25em;
   color: ${colors.platinum};
   cursor: pointer;
   transition: transform 0.3s ease-in-out;

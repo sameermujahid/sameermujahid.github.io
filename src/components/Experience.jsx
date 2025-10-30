@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 // Import your certificate PDFs
-import mycCertificate from '../assets/myc_certificate.pdf';
 import arthashastraCertificate from '../assets/arthashastra_certificate.pdf';
+
 const colors = {
   richBlack: '#0d1b2aff',
   oxfordBlue: '#1b263bff',
@@ -11,34 +11,35 @@ const colors = {
   silverLakeBlue: '#778da9ff',
   platinum: '#e0e1ddff',
 };
+
 const ExperienceSection = styled.div`
   padding: 50px 20px;
   padding: 2rem 1rem;
   
   @media (min-width: 768px) {
     padding: 3rem 2rem;
-
   }
 
   @media (min-width: 1024px) {
     padding: 4rem 3rem;
   }
 `;
+
 const Title = styled.h1`
-    font-size: 3rem;
-    text-align: center;
-    font-family: "Bebas Neue", sans-serif;
-    color: ${colors.platinum};
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-    transition: color 0.3s ease;
+  font-size: 3rem;
+  text-align: center;
+  font-family: "Bebas Neue", sans-serif;
+  color: ${colors.platinum};
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+  transition: color 0.3s ease;
 
-    @media (max-width: 768px) {
-        font-size: 2.5rem;
-=    }
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
 
-    @media (max-width: 480px) {
-        font-size: 2rem;
-=    }
+  @media (max-width: 480px) {
+    font-size: 2rem;
+  }
 `;
 
 const ExperienceContainer = styled.div`
@@ -111,6 +112,9 @@ const Duration = styled.div`
 const Description = styled.p`
   color: #e0e1dd;
   margin-top: 10px;
+  font-size: 1em;
+  line-height: 1.6;
+  margin-bottom: 10px;
 
   @media (max-width: 768px) {
     font-size: 0.9em;
@@ -118,8 +122,12 @@ const Description = styled.p`
 `;
 
 const Responsibilities = styled.ul`
-  margin-top: 20px;
+  margin-top: 15px;
+  margin-bottom: 10px;
   color: #e0e1dd;
+  padding-left: 18px;
+  line-height: 1.6;
+  font-size: 1em;
 
   @media (max-width: 768px) {
     font-size: 0.9em;
@@ -128,6 +136,7 @@ const Responsibilities = styled.ul`
 
 const ResponsibilityItem = styled.li`
   margin-bottom: 8px;
+  line-height: 1.6;
 `;
 
 const SkillList = styled.div`
@@ -160,6 +169,7 @@ const ButtonContainer = styled.div`
     gap: 10px;
   }
 `;
+
 const Button = styled.a`
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -168,11 +178,11 @@ const Button = styled.a`
   font-weight: 600;
   background-color: #fff;
   text-decoration: none;
-  border: none; /* Removes border */
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  outline: none; /* Removes any outline on focus */
+  outline: none;
 
   @media (min-width: 768px) {
     padding: 0.75rem 1.25rem;
@@ -189,48 +199,61 @@ const Button = styled.a`
     color: #fff;
   }
 
-  &:focus {
-    outline: none; /* Ensures no outline appears on focus */
-  }
-
   &:active {
-    transform: scale(0.98); /* Adds a subtle effect on click */
+    transform: scale(0.98);
   }
 `;
 
 const Experience = () => {
   const experienceData = [
     {
-      company: 'MYC Mine and Yours Company, Vizag',
-      role: 'Full Stack Developer (Intern)',
-      duration: 'Duration: 3 months',
-      description: 'MYC is a leading company in Vizag specializing in innovative solutions for various industries.',
+      company: 'CINCYR Tech Private Limited, Hyderabad',
+      role: 'Data Scientist',
+      duration: 'December 2024 – Present',
       responsibilities: [
-        'Gained insights into business planning and pre-production steps for live projects.',
-        'Contributed to various tasks, enhancing understanding of industry practices.',
+        'Led the development of Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) models, enhancing AI-driven decision-making.',
+        'Created custom datasets and fine-tuned LLMs to improve response accuracy, ensuring domain-specific real estate AI models.',
+        'Deployed machine learning (ML) models, increasing operational efficiency and optimizing business workflows.',
+        'Collaborated with cross-functional teams to integrate AI solutions, reducing manual effort by 20% and improving processes.',
+        'Integrated the AI model into multiple applications, enabling real-time data retrieval and contextually accurate responses.'
       ],
-      skills: ['HTML', 'CSS', 'Bootstrap', 'JavaScript', 'PHP', 'PhpMyAdmin'],
-      certificateUrl: mycCertificate,
-      companyUrl: 'https://www.linkedin.com/company/my-company-mine-and-yours-company/',
+      skills: ['Python', 'LLMs', 'RAG', 'Machine Learning', 'Deployment', 'Data Engineering'],
+      certificateUrl: '',
+      companyUrl: 'https://cincyrtech.com/',
+    },
+    {
+      company: 'SocialTek, Hyderabad',
+      role: 'Data Science Intern',
+      duration: 'July 2024 – December 2024',
+      responsibilities: [
+        'Analyzed large datasets with over 500,000 records, ensuring 99% data accuracy and reducing retrieval time by 20%.',
+        'Conducted exploratory data analysis (EDA), uncovering actionable insights that improved data-driven decision-making by 18%.',
+        'Created synthetic datasets, augmenting training data by 35% and improving model accuracy.',
+        'Developed an ATS (Applicant Tracking System) compatibility assessment tool, increasing recruitment efficiency by 25% and reducing hiring time by 30%.',
+        'Designed scoring algorithms to evaluate resumes against job descriptions, streamlining candidate selection and improving accuracy.'
+      ],
+      skills: ['Python', 'EDA', 'Pandas', 'Data Analysis', 'ATS', 'Algorithm Design'],
+      certificateUrl: '',
+      companyUrl: 'https://socialtek.in/',
     },
     {
       company: 'Arthashastra Intelligence, Hyderabad',
-      role: 'Frontend Developer (Intern)',
-      duration: 'Duration: 5 months',
-      description: 'Arthashastra Intelligence provides cutting-edge AI solutions for businesses across the globe.',
+      role: 'Machine Learning Intern',
+      duration: 'December 2023 – June 2024',
       responsibilities: [
-        'Developed responsive interfaces using React for frontend components.',
-        'Created essential components in React using Django Rest Framework.',
-        'Built and maintained entire websites using Wordpress.',
-        'Collaborated to implement new features and enhance existing ones.',
+        'Optimized data preprocessing pipelines, reducing processing time by 20% while maintaining 98% data integrity.',
+        'Built and deployed scalable web applications using React and Django.',
+        'Developed predictive machine learning models in Python, improving customer segmentation and marketing efficiency by 12%.',
+        'Integrated AI solutions with cross-functional teams, reducing operational costs by 10% and enhancing process efficiency.'
       ],
-      skills: ['React', 'Django Rest Framework', 'Wordpress'],
+      skills: ['Python', 'React', 'Django', 'Machine Learning', 'Data Preprocessing'],
       certificateUrl: arthashastraCertificate,
       companyUrl: 'https://arthashastra.ai/',
     },
   ];
 
   const handleDownload = (url) => {
+    if (!url) return;
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', '');
@@ -249,7 +272,6 @@ const Experience = () => {
               <Company>{experience.company}</Company>
               <Role>{experience.role}</Role>
               <Duration>{experience.duration}</Duration>
-              <Description>{experience.description}</Description>
               <Responsibilities>
                 {experience.responsibilities.map((responsibility, idx) => (
                   <ResponsibilityItem key={idx}>{responsibility}</ResponsibilityItem>
@@ -262,8 +284,14 @@ const Experience = () => {
               </SkillList>
             </Content>
             <ButtonContainer>
-              <Button href={experience.companyUrl} target="_blank" rel="noopener noreferrer">About Company</Button>
-              <Button as="button" onClick={() => handleDownload(experience.certificateUrl)}>Download Certificate</Button>
+              <Button href={experience.companyUrl} target="_blank" rel="noopener noreferrer">
+                About Company
+              </Button>
+              {experience.certificateUrl && (
+                <Button as="button" onClick={() => handleDownload(experience.certificateUrl)}>
+                  Download Certificate
+                </Button>
+              )}
             </ButtonContainer>
           </ExperienceItem>
         ))}

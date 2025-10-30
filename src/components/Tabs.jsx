@@ -23,7 +23,7 @@ const TabList = styled.div`
   display: flex;
   justify-content: center;
   background-color: #1b263b;
-  border-radius: 20px;
+    border-radius: 50px; /* Slightly rounded corners */
   padding: 10px 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1;

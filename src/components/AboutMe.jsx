@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import aboutImage from '../assets/about5.jpg';
 import { RiTwitterXFill } from "react-icons/ri";
@@ -63,21 +63,21 @@ const AboutMeSection = styled.section`
         flex-direction: column;
         text-align: center;
         padding: 30px 20px;
-            background: linear-gradient(180deg, #3b5c8e, #1b263b, #0a0d12);
-
+        background: linear-gradient(180deg, #3b5c8e, #1b263b, #0a0d12);
     }
 
     @media (max-width: 480px) {
         padding: 20px 10px;
-            border-radius: 20px;
-                background: linear-gradient(180deg, #3b5c8e, #1b263b, #0a0d12);
-
-
+        border-radius: 20px;
+        background: linear-gradient(180deg, #3b5c8e, #1b263b, #0a0d12);
     }
 `;
+
 const ImageContainer = styled.div`
     flex: 1;
     padding: 20px;
+    perspective: 1000px; /* Add perspective for 3D effect */
+    overflow: hidden; /* Prevent overflow */
 
     img {
         width: 100%;
@@ -87,30 +87,6 @@ const ImageContainer = styled.div`
         transition: transform 0.3s ease, filter 0.5s ease; /* Add filter transition */
         object-fit: cover;
         filter: grayscale(100%); /* Start with black and white */
-
-        &:hover {
-            transform: scale(1.02);
-            filter: grayscale(0%); /* Transition to color on hover */
-        }
-    }
-
-    @media (max-width: 768px) {
-        padding: 15px;
-
-        img {
-            max-height: 250px; /* Smaller image height for tablets */
-                    border-radius: 20px;
-
-        }
-    }
-
-    @media (max-width: 480px) {
-        padding: 10px;
-        width: 100%;
-        
-        img {
-            max-height: 200px; /* Even smaller for mobile */
-        }
     }
 `;
 
@@ -160,12 +136,36 @@ const TextContainer = styled.div`
 `;
 
 const AboutMe = () => {
+    const imageRef = useRef(null);
+
+    const handleMouseMove = (e) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = imageRef.current.getBoundingClientRect();
+
+        // Calculate mouse position relative to the image
+        const xPos = (clientX - left) / width - 0.5; // Normalize to [-0.5, 0.5]
+        const yPos = (clientY - top) / height - 0.5; // Normalize to [-0.5, 0.5]
+
+        // Set rotation based on mouse position
+        imageRef.current.style.transform = `rotateY(${xPos * 30}deg) rotateX(${-yPos * 30}deg)`;
+        imageRef.current.style.filter = 'grayscale(0%)'; // Transition to color
+    };
+
+    const handleMouseLeave = () => {
+        // Reset the transform and filter when the mouse leaves
+        imageRef.current.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        imageRef.current.style.filter = 'grayscale(100%)'; // Back to black and white
+    };
+
     return (
         <OuterSection id="about">
             <Title>About Me</Title>
             <AboutMeSection>
-                <ImageContainer>
-                    <img src={aboutImage} alt="About Me" />
+                <ImageContainer
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <img ref={imageRef} src={aboutImage} alt="About Me" />
                 </ImageContainer>
                 <TextContainer>
                     <p>

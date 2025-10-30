@@ -15,6 +15,8 @@ import skill10 from '../assets/css.webp'; // CSS
 import skill11 from '../assets/react.webp'; // React
 import skill12 from '../assets/wp.webp'; // WordPress
 import skill13 from '../assets/django.webp'; // Django
+import skill14 from '../assets/flask.png'
+import skill15 from '../assets/git.png'
 
 const SkillsContainer = styled.section`
   text-align: center;
@@ -93,33 +95,69 @@ const SkillTitle = styled.h3`
 `;
 
 const SkillData = [
-    { id: 1, image: skill1, title: 'Python' },
-    { id: 2, image: skill2, title: 'C' },
-    { id: 3, image: skill3, title: 'JavaScript' },
-    { id: 4, image: skill4, title: 'AWS' },
-    { id: 5, image: skill5, title: 'SQL' },
-    { id: 6, image: skill6, title: 'PostgreSQL' },
-    { id: 7, image: skill7, title: 'MS Excel' },
-    { id: 8, image: skill8, title: 'Power BI' },
-    { id: 9, image: skill9, title: 'HTML' },
-    { id: 10, image: skill10, title: 'CSS' },
-    { id: 11, image: skill11, title: 'React JS' },
-    { id: 12, image: skill12, title: 'WordPress' },
-    { id: 13, image: skill13, title: 'Django' },
+  { id: 1, image: skill1, title: 'Python', category: 'Languages' },
+  { id: 2, image: skill5, title: 'SQL', category: 'Languages' },
+  { id: 3, image: skill3, title: 'JavaScript', category: 'Languages' },
+  { id: 9, image: skill9, title: 'HTML', category: 'Front-End' },
+  { id: 10, image: skill10, title: 'CSS', category: 'Front-End' },
+  { id: 11, image: skill11, title: 'React JS', category: 'Front-End' },
+  { id: 12, image: skill12, title: 'WordPress', category: 'Front-End' },
+  { id: 13, image: skill13, title: 'Django', category: 'Back-End' },  { id: 5, image: skill14, title: 'Flask', category: 'Back-End' },
+
+  { id: 4, image: skill4, title: 'AWS', category: 'Back-End' },
+  { id: 6, image: skill6, title: 'PostgreSQL', category: 'Back-End' },
+  { id: 7, image: skill7, title: 'MS Excel', category: 'Tools' },
+  { id: 8, image: skill8, title: 'Power BI', category: 'Tools' },
+    { id: 15, image: skill15, title: 'Git', category: 'Tools' },
+
 ];
+
+const categories = ['Languages', 'Front-End', 'Back-End', 'Tools'];
+
+const CategoriesContainer = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+`;
+
+const CategoryColumn = styled.div`
+  background: rgba(30, 39, 73, 0.7);
+  border-radius: 20px;
+  padding: 1rem;
+  min-width: 200px;
+  flex: 1 1 200px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+`;
+
+const CategoryTitle = styled.h2`
+  color: #e0e1dd;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: "Bebas Neue", sans-serif;
+  text-align: center;
+`;
 
 const Skills = () => {
     return (
         <SkillsContainer id="skills">
-            <Title>My Skills</Title>
-            <SkillsGrid>
-                {SkillData.map(skill => (
-                    <SkillCard key={skill.id}>
+            <Title style={{ marginBottom: '2.5rem' }}>My Skills</Title>
+            <CategoriesContainer>
+              {categories.map(category => (
+                <CategoryColumn key={category}>
+                  <CategoryTitle>{category}</CategoryTitle>
+                  <SkillsGrid>
+                    {SkillData.filter(skill => skill.category === category).map(skill => (
+                      <SkillCard key={skill.id}>
                         <SkillImage src={skill.image} alt={skill.title} />
                         <SkillTitle>{skill.title}</SkillTitle>
-                    </SkillCard>
-                ))}
-            </SkillsGrid>
+                      </SkillCard>
+                    ))}
+                  </SkillsGrid>
+                </CategoryColumn>
+              ))}
+            </CategoriesContainer>
         </SkillsContainer>
     );
 };

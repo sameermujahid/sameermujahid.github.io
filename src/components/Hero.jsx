@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Container, VideoBackground, Section, CardContainer, Card, Heading, RoleText, Description, Button, ArrowButton,
-  SocialIcons, Icon, ModalOverlay, ModalContent, CloseButton, ImageContainer, Image, LeftArrowSVG, RightArrowSVG, ModalIframe, ButtonContainer, Blob, // Import the Blob styled component
-  ModalTopBar, TopBarButton, TopBarButtonGroup, NameText // New imports
+  SocialIcons, Icon, ModalOverlay, ModalContent, CloseButton, ImageContainer, Image, LeftArrowSVG, RightArrowSVG, ModalIframe, ButtonContainer, Blob,
+  ModalTopBar, TopBarButton, TopBarButtonGroup, NameText
 } from '../styles';
 import profileImage from '../assets/profile.jpg';
 import backgroundVideo from '../assets/background-video.mp4';
@@ -16,17 +16,22 @@ import { FaArrowDown } from "react-icons/fa";
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
+const roles = [
+  {
+    title: 'AI/ML Engineer',
+    description: 'Build and deploy intelligent systems using machine learning, deep learning, and NLP. Experienced in LLMs, RAG models, computer vision, and model optimization with Python, TensorFlow, and Hugging Face.'
+  },
+  {
+    title: 'Data Scientist',
+    description: 'Analyze large datasets, develop predictive models, and extract insights to drive data-driven decisions. Skilled in EDA, feature engineering, and performance evaluation using Python and scikit-learn.'
+  },
+  {
+    title: 'Data Analyst',
+    description: 'Transform raw data into actionable insights through visualization and statistical analysis. Proficient in Power BI, Tableau, SQL, and Python for business intelligence and decision support.'
+  },
+];
 
-  const roles = [
-    {
-      title: 'Front End Developer',
-      description: 'Build and maintain the user interface of web applications using HTML, CSS, and JavaScript. Experience with frameworks like React or Angular is a plus.'
-    },
-    {
-      title: 'Data Analyst',
-      description: 'Analyze data to provide insights and support business decisions using tools like Excel, SQL, and Python. Strong analytical skills and data visualization experience are required.'
-    },
-  ];
+  
 
   useEffect(() => {
     document.body.style.overflow = showModal ? 'hidden' : 'unset';
@@ -44,19 +49,23 @@ const Hero = () => {
       }
     });
   };
+
   const scrollToAbout = () => {
     const aboutSection = document.getElementById('about');
     if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = -80; // Adjust this value if you have a fixed header
+      const y = aboutSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
   const ScrollArrow = () => (
     <Button
       onClick={scrollToAbout}
-      style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)',color:'#fff', backgroundColor:'rgba(59, 92, 142, 0.1)',padding:'10px', borderRadius:'50px' }}
+      style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#fff', backgroundColor: 'rgba(59, 92, 142, 0.1)', padding: '10px', borderRadius: '50px' }}
     >
-<FaArrowDown/>    </Button>
+      <FaArrowDown />
+    </Button>
   );
 
   return (
@@ -119,9 +128,8 @@ const Hero = () => {
               </Card>
             </motion.div>
           </AnimatePresence>
-       
         </CardContainer>
-        
+
         <ArrowButton onClick={() => handleCardChange('prev')}>{LeftArrowSVG}</ArrowButton>
         <ArrowButton onClick={() => handleCardChange('next')}>{RightArrowSVG}</ArrowButton>
         <ButtonContainer style={{ display: 'flex', gap: '10px' }}>
@@ -165,41 +173,42 @@ const Hero = () => {
             transition={{ duration: 0.5 }}
           />
         </ImageContainer>
-      </Section>        <ScrollArrow /> {/* Place the scroll arrow here */}
+      </Section>
+      <ScrollArrow /> {/* Place the scroll arrow here */}
 
       {showModal && (
-            <ModalOverlay
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              onClick={closeModal}
-            >
-              <ModalContent
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking inside content
-              >
-                <ModalTopBar>
-                  <NameText>SK Sameer Mujahid</NameText>
-                  <TopBarButtonGroup>
-        <TopBarButton onClick={() => window.open('https://www.linkedin.com/in/shaik-sameer-mujahid/', '_blank')}>
-          Connect
-        </TopBarButton>
-        <a href={resumePDF} download="shaik_sameer_muajhid_resume.pdf" style={{ textDecoration: 'none' }}>
-          <TopBarButton>Download</TopBarButton>
-        </a>
-        <TopBarButton onClick={closeModal}>Close</TopBarButton>
-      </TopBarButtonGroup>
-                </ModalTopBar>
-                <ModalIframe
-                  title="resume"
-                  src={resumePDF}
-                  frameBorder="0"
-                ></ModalIframe>
-              </ModalContent>
-            </ModalOverlay>
-          )}
+        <ModalOverlay
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          onClick={closeModal}
+        >
+          <ModalContent
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking inside content
+          >
+            <ModalTopBar>
+              <NameText>SK Sameer Mujahid</NameText>
+              <TopBarButtonGroup>
+                <TopBarButton onClick={() => window.open('https://www.linkedin.com/in/shaik-sameer-mujahid/', '_blank')}>
+                  Connect
+                </TopBarButton>
+                <a href={resumePDF} download="shaik_sameer_muajhid_resume.pdf" style={{ textDecoration: 'none' }}>
+                  <TopBarButton>Download</TopBarButton>
+                </a>
+                <TopBarButton onClick={closeModal}>Close</TopBarButton>
+              </TopBarButtonGroup>
+            </ModalTopBar>
+            <ModalIframe
+              title="resume"
+              src={resumePDF}
+              frameBorder="0"
+            ></ModalIframe>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </Container>
   );
 };

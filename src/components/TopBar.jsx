@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   TopBarContainer,
   Logo,
@@ -68,26 +69,80 @@ const TopBar = () => {
     <>
       <TopBarContainer scrolled={scrolled}>
         <Logo>
-          <LogoText scrolled={scrolled}>My Portfolio</LogoText>
-          <LogoImage src={PortfolioImage} alt="Portfolio Logo" scrolled={scrolled} />
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <LogoText scrolled={scrolled}>My Portfolio</LogoText>
+            <LogoImage 
+              src={PortfolioImage} 
+              alt="Portfolio Logo" 
+              scrolled={scrolled}
+              as={motion.img}
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.2 }}
+            />
+          </motion.div>
         </Logo>
         <NavLinks>
-          <NavLink className={activeLink === 'home' ? 'active' : ''} onClick={handleNavClick('home')} href="#home">Home</NavLink>
-          <NavLink className={activeLink === 'skills' ? 'active' : ''} onClick={handleNavClick('skills')} href="#skills">Skills</NavLink>
-          <NavLink className={activeLink === 'more' ? 'active' : ''} onClick={handleNavClick('more')} href="#more">More</NavLink> {/* Update here */}
-          <NavLink className={activeLink === 'connect' ? 'active' : ''} onClick={handleNavClick('connect')} href="#connect">Let's Connect</NavLink>
+          {['home', 'skills', 'more', 'connect'].map((link) => (
+            <NavLink
+              key={link}
+              className={activeLink === link ? 'active' : ''}
+              onClick={handleNavClick(link)}
+              href={`#${link}`}
+              as={motion.a}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {link === 'connect' ? "Let's Connect" : link.charAt(0).toUpperCase() + link.slice(1)}
+            </NavLink>
+          ))}
         </NavLinks>
-        <MenuToggle onClick={toggleSidebar}>
+        <MenuToggle 
+          onClick={toggleSidebar}
+          as={motion.div}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
           ☰
         </MenuToggle>
       </TopBarContainer>
-      <Sidebar open={sidebarOpen}>
-        <CloseButton onClick={closeSidebar}>&times;</CloseButton>
-        <SidebarLink className={activeLink === 'home' ? 'active' : ''} onClick={handleNavClick('home')} href="#home">Home</SidebarLink>
-        <SidebarLink className={activeLink === 'skills' ? 'active' : ''} onClick={handleNavClick('skills')} href="#skills">Skills</SidebarLink>
-        <SidebarLink className={activeLink === 'more' ? 'active' : ''} onClick={handleNavClick('more')} href="#more">More</SidebarLink> {/* Update here */}
-        <SidebarLink className={activeLink === 'connect' ? 'active' : ''} onClick={handleNavClick('connect')} href="#connect">Let's Connect</SidebarLink>
-      </Sidebar>
+      <AnimatePresence>
+        {sidebarOpen && (
+          <Sidebar 
+            open={sidebarOpen}
+            as={motion.div}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          >
+            <CloseButton 
+              onClick={closeSidebar}
+              as={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              &times;
+            </CloseButton>
+            {['home', 'skills', 'more', 'connect'].map((link) => (
+              <SidebarLink
+                key={link}
+                className={activeLink === link ? 'active' : ''}
+                onClick={handleNavClick(link)}
+                href={`#${link}`}
+                as={motion.a}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {link === 'connect' ? "Let's Connect" : link.charAt(0).toUpperCase() + link.slice(1)}
+              </SidebarLink>
+            ))}
+          </Sidebar>
+        )}
+      </AnimatePresence>
     </>
   );
 }
