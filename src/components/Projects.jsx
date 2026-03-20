@@ -14,7 +14,6 @@ const ProjectsContainer = styled.div`
   text-align: center;
   color: ${colors.platinum};
   padding: 3rem 1rem;
-  background: linear-gradient(145deg, ${colors.richBlack}, ${colors.oxfordBlue});
   min-height: 100vh;
 
   @media (min-width: 768px) {
@@ -52,7 +51,6 @@ const Card = styled.div`
 
   &:hover {
     transform: translateY(-10px);
-    // box-shadow: 0 15px 35px rgba(119, 141, 169, 0.4);
   }
 `;
 
@@ -82,6 +80,11 @@ const CardTitle = styled.h2`
   color: ${colors.platinum};
   margin-bottom: 0.8rem;
   text-align: center;
+  font-size: 1.6rem;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
   @media (max-width: 768px) {
     font-size: 1.4rem;
@@ -140,14 +143,14 @@ const Projects = () => {
             <CardTitle>{project.name}</CardTitle>
             <Description>{project.description}</Description>
             <ButtonGroup>
-              {project.downloadLink && (
-                <Button href={project.downloadLink} target="_blank" download>
-                  Download
+              {project.github && (
+                <Button href={project.github} target="_blank" rel="noopener noreferrer">
+                  GitHub
                 </Button>
               )}
               {project.view && (
-                <Button href={project.view} target="_blank">
-                  View
+                <Button href={project.view} target="_blank" rel="noopener noreferrer">
+                  Live
                 </Button>
               )}
             </ButtonGroup>

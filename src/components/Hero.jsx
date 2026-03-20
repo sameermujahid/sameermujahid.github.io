@@ -7,7 +7,7 @@ import {
 } from '../styles';
 import profileImage from '../assets/profile.jpg';
 import backgroundVideo from '../assets/background-video.mp4';
-import resumePDF from '../assets/shaik_sameer_muajhid_resume.pdf';
+import resumePDF from '../assets/sameer_mujahid_resume.pdf';
 import { RiTwitterXFill } from "react-icons/ri";
 import { IoLogoInstagram } from "react-icons/io5";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
@@ -135,7 +135,7 @@ const roles = [
         <ButtonContainer style={{ display: 'flex', gap: '10px' }}>
           <Button
             href={resumePDF}
-            download="shaik_sameer_muajhid_resume.pdf"
+            download="sameer_mujahid_resume.pdf"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 0.5 }}
@@ -195,7 +195,7 @@ const roles = [
                 <TopBarButton onClick={() => window.open('https://www.linkedin.com/in/shaik-sameer-mujahid/', '_blank')}>
                   Connect
                 </TopBarButton>
-                <a href={resumePDF} download="shaik_sameer_muajhid_resume.pdf" style={{ textDecoration: 'none' }}>
+                <a href={resumePDF} download="sameer_mujahid_resume.pdf" style={{ textDecoration: 'none' }}>
                   <TopBarButton>Download</TopBarButton>
                 </a>
                 <TopBarButton onClick={closeModal}>Close</TopBarButton>
