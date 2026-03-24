@@ -1,4 +1,4 @@
-import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";const x=o.footer`
+import{d as o,j as t,F as s,c as l,I as c,R as d}from"./index-g-MP4zXN.js";const p=o.footer`
   position: relative;
   padding: 60px 24px 40px;
   background: ${({theme:e})=>e.bgSecondary};
@@ -22,7 +22,7 @@ import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";con
     opacity: 0.6;
     pointer-events: none;
   }
-`,h=o.div`
+`,x=o.div`
   width: 100%;
   height: 1px;
   background: ${({theme:e})=>e.border};
@@ -45,7 +45,7 @@ import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";con
     50% { left: calc(100% - 120px); }
     100% { left: 0; }
   }
-`,m=o.div`
+`,h=o.div`
   max-width: 1350px;
   margin: 0 auto;
   display: flex;
@@ -58,24 +58,24 @@ import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";con
     align-items: center;
     text-align: center;
   }
-`,f=o.div`
+`,m=o.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`,g=o.div`
+`,f=o.div`
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: ${({theme:e})=>e.textPrimary};
-`,b=o.div`
+`,g=o.div`
   font-size: 0.8rem;
   color: ${({theme:e})=>e.textTertiary};
   opacity: 0.8;
-`,u=o.div`
+`,b=o.div`
   display: flex;
   gap: 24px;
   // flex-wrap: wrap;
-`,w=o.button`
+`,u=o.button`
   font-size: 0.85rem;
   color: ${({theme:e})=>e.textSecondary};
   background: none;
@@ -103,10 +103,10 @@ import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";con
   &:hover::after {
     width: 100%;
   }
-`,j=o.div`
+`,w=o.div`
   display: flex;
   gap: 10px;
-`,v=o.a`
+`,j=o.a`
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -126,10 +126,10 @@ import{d as o,j as t,q as s,F as l,c,I as d,R as p}from"./index-CE3vrqMX.js";con
     background: ${({theme:e})=>e.accentSubtle};
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   }
-`,y=o.div`
+`;o.div`
   margin-top: 40px;
   text-align: center;
   font-size: 0.75rem;
   color: ${({theme:e})=>e.textTertiary};
   opacity: 0.7;
-`,k=[{label:"Home",id:"home"},{label:"About",id:"about"},{label:"Skills",id:"skills"},{label:"Work",id:"more"},{label:"Connect",id:"connect"}],$=[{href:"https://www.linkedin.com/in/shaik-sameer-mujahid/",icon:t.jsx(l,{})},{href:"https://github.com/sameermujahid",icon:t.jsx(c,{})},{href:"https://www.instagram.com/sameer.mujahid/",icon:t.jsx(d,{})},{href:"https://x.com/sameer__mujahid",icon:t.jsx(p,{})}],I=()=>{const e=n=>{const i=document.getElementById(n);if(i){const r=window.innerWidth<=768?60:80,a=i.getBoundingClientRect().top+window.scrollY-r;window.scrollTo({top:a,behavior:"smooth"})}};return t.jsxs(x,{children:[t.jsx(h,{}),t.jsxs(m,{children:[t.jsxs(f,{children:[t.jsx(g,{children:"SK Sameer Mujahid"}),t.jsx(b,{children:"Building AI × Full Stack Experiences"})]}),t.jsx(u,{children:k.map(({label:n,id:i})=>t.jsx(w,{onClick:()=>e(i),children:n},i))}),t.jsx(j,{children:$.map(({href:n,icon:i},r)=>t.jsx(v,{href:n,target:"_blank",children:i},r))})]}),t.jsxs(y,{children:["Made with ",t.jsx(s,{size:12,fill:"currentColor"})," · ",new Date().getFullYear()," · Designed & Built by Sameer"]})]})};export{I as default};
+`;const v=[{label:"Home",id:"home"},{label:"About",id:"about"},{label:"Skills",id:"skills"},{label:"Work",id:"more"},{label:"Connect",id:"connect"}],k=[{href:"https://www.linkedin.com/in/shaik-sameer-mujahid/",icon:t.jsx(s,{})},{href:"https://github.com/sameermujahid",icon:t.jsx(l,{})},{href:"https://www.instagram.com/sameer.mujahid/",icon:t.jsx(c,{})},{href:"https://x.com/sameer__mujahid",icon:t.jsx(d,{})}],$=()=>{const e=n=>{const i=document.getElementById(n);if(i){const r=window.innerWidth<=768?60:80,a=i.getBoundingClientRect().top+window.scrollY-r;window.scrollTo({top:a,behavior:"smooth"})}};return t.jsxs(p,{children:[t.jsx(x,{}),t.jsxs(h,{children:[t.jsxs(m,{children:[t.jsx(f,{children:"SK Sameer Mujahid"}),t.jsx(g,{children:"Building AI × Full Stack Experiences"})]}),t.jsx(b,{children:v.map(({label:n,id:i})=>t.jsx(u,{onClick:()=>e(i),children:n},i))}),t.jsx(w,{children:k.map(({href:n,icon:i},r)=>t.jsx(j,{href:n,target:"_blank",children:i},r))})]})]})};export{$ as default};
