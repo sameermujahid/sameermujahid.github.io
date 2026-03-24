@@ -1,4 +1,4 @@
-import{d as r,r as l,j as i,m as d,s as x,t as p,u as m,S as h,a as f,G as g}from"./index-Dq9sHIEi.js";import{u as c,s as u,a as o}from"./useScrollAnimation-p6ypd-l0.js";import{r as b}from"./resumeData-pHVEvbOx.js";const j=r.div`
+import{d as r,r as l,j as i,m as d,s as x,t as p,u as m,S as h,a as f,G as g}from"./index-pjwgMWYk.js";import{u as c,s as u,a as o}from"./useScrollAnimation-D5f_9v7Z.js";import{r as b}from"./resumeData-pHVEvbOx.js";const j=r.div`
   padding: 56px 0 60px;
 `,w=r.div`
   margin-bottom: 40px;
