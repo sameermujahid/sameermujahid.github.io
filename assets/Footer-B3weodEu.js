@@ -1,4 +1,4 @@
-import{d as o,j as t,q as s,F as l,c,I as d,R as x}from"./index-pjwgMWYk.js";const p=o.footer`
+import{d as o,j as t,q as s,F as l,c,I as d,R as x}from"./index-DEbrDzht.js";const p=o.footer`
   padding: 40px 24px;
   border-top: 1px solid ${({theme:e})=>e.border};
   background: ${({theme:e})=>e.bgSecondary};
