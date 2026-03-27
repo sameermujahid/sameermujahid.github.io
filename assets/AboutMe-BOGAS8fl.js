@@ -1,4 +1,4 @@
-import{d as t,r as h,j as e,m as o,S as b,a as y,b as v,F as S,c as I,I as L,R as M,G as R}from"./index-XeEcX5ht.js";import{u as A,s as k,a as g}from"./useScrollAnimation-BrSjFOG4.js";const $="/assets/about5-jU8IswgW.jpg",C=t.section`
+import{d as t,r as h,j as e,m as o,S as b,a as y,b as v,F as S,c as I,I as L,R as M,G as R}from"./index-Ba8WK-Zy.js";import{u as A,s as k,a as g}from"./useScrollAnimation-BOBs6-wV.js";const $="/assets/about5-jU8IswgW.jpg",C=t.section`
   max-width: 1350px;
   margin: 0 auto;
   padding: 80px 24px;
