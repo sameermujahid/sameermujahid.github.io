@@ -1,40 +1,50 @@
-// src/App.js
-import React from 'react';
-import styled from 'styled-components';
-import TopBar from './components/TopBar';
+import React, { useRef, lazy, Suspense } from 'react';
 import Hero from './components/Hero';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Connect from './components/Connect';
-import Footer from './components/Footer';
-import Certificates from './components/Certificates';
-import Education from './components/Education';
-import Experience from './components/Experience';
-import Chatbot from './components/Chatbot';
-import Tabs from './components/Tabs';
+import { AppThemeProvider } from './styles/ThemeContext';
+import GlobalStyles from './styles/GlobalStyles';
+import { BgGlow } from './styles/styles';
+import TopBar from './components/TopBar';
 import CustomCursor from './components/CustomCursor';
-import AboutMe from './components/AboutMe';
 
-const AppContainer = styled.div`
-    font-family: Arial, sans-serif;
-`;
+const AboutMe = lazy(() => import('./components/AboutMe'));
+const Skills = lazy(() => import('./components/Skills'));
+const Tabs = lazy(() => import('./components/Tabs'));
+const Connect = lazy(() => import('./components/Connect'));
+const Footer = lazy(() => import('./components/Footer'));
 
-const App = () => (
-    <AppContainer>
-        {/* <CustomCursor/> */}
-        <TopBar />
+const Fallback = () => <div style={{ minHeight: 200 }} />;
+
+function AppContent() {
+  const stickyElement = useRef(null);   // <-- ref for the element you want sticky
+
+  return (
+    <>
+      <GlobalStyles />
+      {/* <CustomCursor stickyElement={stickyElement} /> */}
+      <BgGlow />
+      <TopBar />
+
+      <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
-        <AboutMe/>
-        {/* <Chatbot /> */}
-        <Skills />
-        <Tabs/>
-        {/* <Certificates />
-        <Education />
-        <Experience />
-        <Projects /> */}
-        <Connect />
-        <Footer />
-    </AppContainer>
-);
+
+        <Suspense fallback={<Fallback />}>
+          <AboutMe />
+          <Skills />
+          <Tabs />
+          <Connect />
+          <Footer />
+        </Suspense>
+      </main>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AppThemeProvider>
+      <AppContent />
+    </AppThemeProvider>
+  );
+}
 
 export default App;

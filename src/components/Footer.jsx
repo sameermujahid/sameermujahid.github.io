@@ -1,208 +1,241 @@
-import React, { useState } from 'react';
+// Footer.jsx — Premium Futuristic Footer
+import React from 'react';
 import styled from 'styled-components';
+import { FiLinkedin, FiGithub, FiHeart } from 'react-icons/fi';
+import { IoLogoInstagram } from 'react-icons/io5';
+import { RiTwitterXFill } from 'react-icons/ri';
 
-const colors = {
-    richBlack: '#0d1b2a',
-    oxfordBlue: '#1b263b',
-    yinmnBlue: '#415a77',
-    silverLakeBlue: '#778da9',
-    platinum: '#e0e1dd',
-};
+// ─── Container ─────────────────────────────────────────
 
-const FooterContainer = styled.footer`
-    background-color: ${colors.richBlack};
-    color: ${colors.platinum};
-    padding: 40px 20px;
-    border-top: 4px solid ${colors.yinmnBlue};
-    position: relative;
-    overflow: hidden;
+const FooterEl = styled.footer`
+  position: relative;
+  padding: 60px 24px 40px;
+  background: ${({ theme }) => theme.bgSecondary};
+  overflow: hidden;
 
-    @media (max-width: 768px) {
-        padding: 30px 15px;
-    }
-
-    @media (max-width: 480px) {
-        padding: 20px 10px;
-    }
-`;
-
-const FooterContent = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 20px;
-
-    @media (max-width: 768px) {
-        display: none;
-    }
-`;
-
-const Section = styled.div`
-    min-width: 200px;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    @media (max-width: 768px) {
-        border-bottom: 1px solid ${colors.silverLakeBlue};
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-    }
-`;
-
-const SectionTitle = styled.h3`
-    color: ${colors.yinmnBlue};
-    margin-bottom: 15px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    position: relative;
-
-    @media (max-width: 768px) {
-        font-size: 1.3rem;
-    }
-
-    @media (max-width: 480px) {
-        font-size: 1.2rem;
-    }
-
-    &:before {
-        content: '';
-        display: block;
-        width: 50%;
-        height: 2px;
-        background: ${colors.yinmnBlue};
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        transition: width 0.3s ease;
-    }
-
-    &:hover:before {
-        width: 100%;
-    }
-`;
-
-const NavLink = styled.a`
-    color: ${colors.platinum};
-    text-decoration: none;
-    display: block;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-
-    &:hover {
-        color: ${colors.yinmnBlue};
-        text-decoration: underline;
-    }
-`;
-
-const AccordionContainer = styled.div`
-    @media (min-width: 769px) {
-        display: none;
-    }
-`;
-
-const AccordionButton = styled.div`
-    background: ${colors.yinmnBlue};
-    color: ${colors.platinum};
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: background 0.3s ease;
-
-    &:hover {
-        background: ${colors.silverLakeBlue};
-    }
-`;
-
-const AccordionContent = styled.div`
-    max-height: ${props => (props.isOpen ? '300px' : '0')};
-    overflow: hidden;
-    background: ${colors.oxfordBlue};
-    border-radius: 5px;
-    padding: ${props => (props.isOpen ? '10px' : '0')};
-    transition: max-height 0.5s ease, padding 0.5s ease;
-`;
-
-const Footer = ({ setActiveTab }) => {
-    const [openSection, setOpenSection] = useState(null);
-
-    const toggleSection = (section) => {
-        setOpenSection(openSection === section ? null : section);
-    };
-
-    // Smooth scroll handler
-    const handleScrollToSection = (id, tabName) => {
-        const section = document.querySelector(id);
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        // Update active tab based on the link clicked
-        setActiveTab(tabName);
-    };
-
-    return (
-        <FooterContainer>
-            <FooterContent>
-                <Section>
-                    <SectionTitle>My Details</SectionTitle>
-                    <div>Name: Shaik Sameer Mujahid</div>
-                    <div>Email: sameermujahid7777@gmail.com</div>
-                    <div>Phone: +91 8317506633</div>
-                </Section>
-                <Section>
-                    <SectionTitle>Sections</SectionTitle>
-                    <NavLink onClick={() => handleScrollToSection('#home', 'Home')}>Home</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#skills', 'Skills')}>Skills</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Projects')}>Projects</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Certificates')}>Certificates</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Education')}>Education</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Experience')}>Experience</NavLink>
-                </Section>
-                <Section>
-                    <SectionTitle>Connect</SectionTitle>
-                    <NavLink href="https://www.linkedin.com/in/shaik-sameer-mujahid" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
-                    <NavLink href="https://github.com/sameermujahid" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
-                </Section>
-            </FooterContent>
-            <AccordionContainer>
-                <AccordionButton onClick={() => toggleSection('details')}>
-                    My Details
-                </AccordionButton>
-                <AccordionContent isOpen={openSection === 'details'}>
-                    <div>Name: Shaik Sameer Mujahid</div>
-                    <div>Email: sameermujahid7777@gmail.com</div>
-                    <div>Phone: +91 8317506633</div>
-                </AccordionContent>
-                
-                <AccordionButton onClick={() => toggleSection('topics')}>
-                Sections
-                </AccordionButton>
-                <AccordionContent isOpen={openSection === 'topics'}>
-                    <NavLink onClick={() => handleScrollToSection('#home', 'Home')}>Home</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#skills', 'Skills')}>Skills</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Projects')}>Projects</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Certificates')}>Certificates</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Education')}>Education</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#more', 'Experience')}>Experience</NavLink>
-                </AccordionContent>
-
-                <AccordionButton onClick={() => toggleSection('connect')}>
-                    Connect
-                </AccordionButton>
-                <AccordionContent isOpen={openSection === 'connect'}>
-                    <NavLink href="https://www.linkedin.com/in/shaik-sameer-mujahid" target="_blank" rel="noopener noreferrer">LinkedIn</NavLink>
-                    <NavLink href="https://github.com/sameermujahid" target="_blank" rel="noopener noreferrer">GitHub</NavLink>
-                    <NavLink onClick={() => handleScrollToSection('#connect', 'Connect')}>Let's Connect</NavLink>
-                </AccordionContent>
-            </AccordionContainer>
-        </FooterContainer>
+  /* Glass gradient glow */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(
+      circle,
+      ${({ theme }) => theme.accentSubtle} 0%,
+      transparent 70%
     );
+    filter: blur(80px);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+`;
+
+// ─── Top Line Glow ─────────────────────────────────────
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background: ${({ theme }) => theme.border};
+  position: relative;
+  margin-bottom: 40px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 2px;
+    background: ${({ theme }) => theme.accent};
+    top: -0.5px;
+    left: 0;
+    animation: slide 6s linear infinite;
+  }
+
+  @keyframes slide {
+    0% { left: 0; }
+    50% { left: calc(100% - 120px); }
+    100% { left: 0; }
+  }
+`;
+
+// ─── Layout ───────────────────────────────────────────
+
+const Inner = styled.div`
+  max-width: 1350px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+`;
+
+// ─── Branding ─────────────────────────────────────────
+
+const Brand = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Name = styled.div`
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
+`;
+
+const Tagline = styled.div`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.textTertiary};
+  opacity: 0.8;
+`;
+
+// ─── Nav ──────────────────────────────────────────────
+
+const NavRow = styled.div`
+  display: flex;
+  gap: 24px;
+  // flex-wrap: wrap;
+`;
+
+const NavItem = styled.button`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.textSecondary};
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.25s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 1.5px;
+    background: ${({ theme }) => theme.accent};
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.accent};
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+`;
+
+// ─── Socials ──────────────────────────────────────────
+
+const SocialRow = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const SocialBtn = styled.a`
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.textTertiary};
+  border: 1px solid ${({ theme }) => theme.border};
+  backdrop-filter: blur(10px);
+
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    color: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
+    background: ${({ theme }) => theme.accentSubtle};
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+`;
+
+// ─── Bottom Signature ─────────────────────────────────
+
+const Bottom = styled.div`
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.textTertiary};
+  opacity: 0.7;
+`;
+
+// ─── Data ─────────────────────────────────────────────
+
+const NAV_ITEMS = [
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Work', id: 'more' },
+  { label: 'Connect', id: 'connect' },
+];
+
+const SOCIAL_LINKS = [
+  { href: 'https://www.linkedin.com/in/shaik-sameer-mujahid/', icon: <FiLinkedin /> },
+  { href: 'https://github.com/sameermujahid', icon: <FiGithub /> },
+  { href: 'https://www.instagram.com/sameer.mujahid/', icon: <IoLogoInstagram /> },
+  { href: 'https://x.com/sameer__mujahid', icon: <RiTwitterXFill /> },
+];
+
+// ─── Component ────────────────────────────────────────
+
+const Footer = () => {
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = window.innerWidth <= 768 ? 60 : 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <FooterEl>
+      <Divider />
+
+      <Inner>
+        <Brand>
+          <Name>SK Sameer Mujahid</Name>
+          <Tagline>Building AI × Full Stack Experiences</Tagline>
+        </Brand>
+
+        <NavRow>
+          {NAV_ITEMS.map(({ label, id }) => (
+            <NavItem key={id} onClick={() => scrollTo(id)}>
+              {label}
+            </NavItem>
+          ))}
+        </NavRow>
+
+        <SocialRow>
+          {SOCIAL_LINKS.map(({ href, icon }, i) => (
+            <SocialBtn key={i} href={href} target="_blank">
+              {icon}
+            </SocialBtn>
+          ))}
+        </SocialRow>
+      </Inner>
+
+      {/* <Bottom>
+        Made with <FiHeart size={12} fill="currentColor" /> · {new Date().getFullYear()} · Designed & Built by Sameer
+      </Bottom> */}
+    </FooterEl>
+  );
 };
 
 export default Footer;

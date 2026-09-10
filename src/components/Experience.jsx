@@ -1,261 +1,332 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-
-// Import your certificate PDFs
+import { motion } from 'framer-motion';
+import { GlassCard, SectionLabel, SectionTitle } from '../styles/styles';
+import { useScrollAnimation, staggerContainer, staggerItem } from '../hooks/useScrollAnimation';
 import arthashastraCertificate from '../assets/arthashastra_certificate.pdf';
+import { FiExternalLink, FiDownload, FiCalendar, FiMapPin } from 'react-icons/fi';
 
-const colors = {
-  richBlack: '#0d1b2aff',
-  oxfordBlue: '#1b263bff',
-  yinmnBlue: '#415a77ff',
-  silverLakeBlue: '#778da9ff',
-  platinum: '#e0e1ddff',
-};
+const EXPERIENCE_DATA = [
+  {
+    company: 'CINCYR Tech Private Limited',
+    location: 'Hyderabad',
+    role: 'Data Scientist',
+    duration: 'Dec 2024 – Present',
+    type: 'Internship',
+    color: '#2997ff',
+    responsibilities: [
+      'Led development of LLMs and RAG models, enhancing AI-driven decision-making.',
+      'Created custom datasets and fine-tuned LLMs for domain-specific real estate AI.',
+      'Deployed ML models, increasing operational efficiency and optimizing workflows.',
+      'Integrated AI solutions, reducing manual effort by 20%.',
+    ],
+    skills: ['Python', 'LLMs', 'RAG', 'Machine Learning', 'Deployment'],
+    companyUrl: 'https://cincyrtech.com/',
+    certificateUrl: '',
+  },
+  {
+    company: 'SocialTek',
+    location: 'Hyderabad',
+    role: 'Data Science Intern',
+    duration: 'Jul 2024 – Dec 2024',
+    type: 'Internship',
+    color: '#34c759',
+    responsibilities: [
+      'Analyzed 500,000+ records, ensuring 99% data accuracy and 20% faster retrieval.',
+      'Conducted EDA, improving data-driven decision-making by 18%.',
+      'Created synthetic datasets, augmenting training data by 35%.',
+      'Built ATS tool, boosting recruitment efficiency by 25%.',
+    ],
+    skills: ['Python', 'EDA', 'Pandas', 'Data Analysis', 'ATS'],
+    companyUrl: 'https://socialtek.in/',
+    certificateUrl: '',
+  },
+  {
+    company: 'Arthashastra Intelligence',
+    location: 'Hyderabad',
+    role: 'Machine Learning Intern',
+    duration: 'Dec 2023 – Jun 2024',
+    type: 'Internship',
+    color: '#ff9f0a',
+    responsibilities: [
+      'Optimized data pipelines, reducing processing time by 20%.',
+      'Built scalable web apps using React and Django.',
+      'Developed ML models improving customer segmentation by 12%.',
+      'Integrated AI solutions, reducing costs by 10%.',
+    ],
+    skills: ['Python', 'React', 'Django', 'Machine Learning'],
+    companyUrl: 'https://arthashastra.ai/',
+    certificateUrl: arthashastraCertificate,
+  },
+];
 
-const ExperienceSection = styled.div`
-  padding: 50px 20px;
-  padding: 2rem 1rem;
-  
-  @media (min-width: 768px) {
-    padding: 3rem 2rem;
-  }
+// ─── Styled ───────────────────────────────────────────────────────────────────
 
-  @media (min-width: 1024px) {
-    padding: 4rem 3rem;
+const Wrapper = styled.div`
+  padding: 60px 0;
+
+  @media (max-width: 768px) {
+    padding: 56px 0 60px;
   }
 `;
 
-const Title = styled.h1`
-  font-size: 3rem;
-  text-align: center;
-  font-family: "Bebas Neue", sans-serif;
-  color: ${colors.platinum};
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-  transition: color 0.3s ease;
+const Header = styled.div`
+  margin-bottom: 48px;
 
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    margin-bottom: 40px;
+  }
+`;
+
+const Timeline = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+`;
+
+const ExpCard = styled(GlassCard)`
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-left: 3px solid ${({ $color }) => $color};
+
+  @media (max-width: 768px) {
+    padding: 28px 30px;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
   }
 
   @media (max-width: 480px) {
-    font-size: 2rem;
+    padding: 20px;
   }
 `;
 
-const ExperienceContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
+const ExpTop = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
   }
-
-  font-family: 'Arial', sans-serif;
 `;
 
-const ExperienceItem = styled.div`
+const ExpMeta = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease-in-out;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
+  gap: 6px;
+  flex: 1;
 
   @media (max-width: 768px) {
-    padding: 15px;
+    gap: 8px;
   }
 `;
 
-const Content = styled.div`
-  flex-grow: 1;
+const RoleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 `;
 
-const Company = styled.div`
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #e0e1dd;
-  margin-bottom: 10px;
+const CompanyRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const Company = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.textPrimary};
 
   @media (max-width: 768px) {
-    font-size: 1.5em;
+    font-size: 1.125rem;
   }
 `;
 
 const Role = styled.div`
-  font-size: 1.4em;
-  color: #e0e1dd;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: ${({ theme, $color }) => $color || theme.accent};
 
   @media (max-width: 768px) {
-    font-size: 1.2em;
+    font-size: 0.9375rem;
   }
 `;
 
-const Duration = styled.div`
-  font-size: 1.2em;
-  color: #888;
-  margin-bottom: 10px;
+const MetaRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    font-size: 1em;
+    gap: 14px;
   }
 `;
 
-const Description = styled.p`
-  color: #e0e1dd;
-  margin-top: 10px;
-  font-size: 1em;
+const MetaChip = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8125rem;
+  color: ${({ theme }) => theme.textTertiary};
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const TypeBadge = styled.span`
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 980px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: ${({ $color }) => $color}18;
+  color: ${({ $color }) => $color};
+  border: 1px solid ${({ $color }) => $color}30;
+
+  @media (max-width: 768px) {
+    padding: 3px 10px;
+    font-size: 0.72rem;
+  }
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.border};
+`;
+
+const BulletList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 9px;
+  }
+`;
+
+const Bullet = styled.li`
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
   line-height: 1.6;
-  margin-bottom: 10px;
+  color: ${({ theme }) => theme.textSecondary};
+
+  &::before {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: ${({ $color }) => $color};
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
 
   @media (max-width: 768px) {
-    font-size: 0.9em;
+    font-size: 0.875rem;
+    line-height: 1.65;
+
+    &::before {
+      margin-top: 8px;
+    }
   }
 `;
 
-const Responsibilities = styled.ul`
-  margin-top: 15px;
-  margin-bottom: 10px;
-  color: #e0e1dd;
-  padding-left: 18px;
-  line-height: 1.6;
-  font-size: 1em;
-
-  @media (max-width: 768px) {
-    font-size: 0.9em;
-  }
-`;
-
-const ResponsibilityItem = styled.li`
-  margin-bottom: 8px;
-  line-height: 1.6;
-`;
-
-const SkillList = styled.div`
+const TagList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
-`;
-
-const Skill = styled.div`
-  background-color: #415a77;
-  color: #e0e1dd;
-  padding: 8px 12px;
-  border-radius: 20px;
+  gap: 8px;
+  margin-top: auto;
 
   @media (max-width: 768px) {
-    font-size: 0.9em;
-    padding: 6px 10px;
+    gap: 7px;
   }
 `;
 
-const ButtonContainer = styled.div`
+const Tag = styled.span`
+  padding: 5px 12px;
+  border-radius: 980px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: ${({ theme }) => theme.bgTertiary};
+  color: ${({ theme }) => theme.textSecondary};
+  border: 1px solid ${({ theme }) => theme.border};
+
+  @media (max-width: 768px) {
+    padding: 4px 11px;
+    font-size: 0.78rem;
+  }
+`;
+
+const ActionRow = styled.div`
   display: flex;
-  margin-top: 20px;
   gap: 10px;
-  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: auto;
 
   @media (max-width: 768px) {
-    flex-direction: row;
-    gap: 10px;
+    gap: 8px;
   }
 `;
 
-const Button = styled.a`
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #000;
-  font-weight: 600;
-  background-color: #fff;
+const ActionBtn = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 980px;
+  font-size: 0.8125rem;
+  font-weight: 500;
   text-decoration: none;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  outline: none;
-
-  @media (min-width: 768px) {
-    padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-  }
-  
-  @media (min-width: 1024px) {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.125rem;
-  }
+  background: ${({ theme }) => theme.bgTertiary};
+  color: ${({ theme }) => theme.textSecondary};
+  border: 1px solid ${({ theme }) => theme.border};
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: #0d1b2aff;
-    color: #fff;
+    background: ${({ theme }) => theme.accentSubtle};
+    color: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
   }
 
-  &:active {
-    transform: scale(0.98);
+  @media (max-width: 768px) {
+    padding: 7px 14px;
+    font-size: 0.8rem;
   }
 `;
 
-const Experience = () => {
-  const experienceData = [
-    {
-      company: 'CINCYR Tech Private Limited, Hyderabad',
-      role: 'Data Scientist',
-      duration: 'December 2024 – Present',
-      responsibilities: [
-        'Led the development of Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) models, enhancing AI-driven decision-making.',
-        'Created custom datasets and fine-tuned LLMs to improve response accuracy, ensuring domain-specific real estate AI models.',
-        'Deployed machine learning (ML) models, increasing operational efficiency and optimizing business workflows.',
-        'Collaborated with cross-functional teams to integrate AI solutions, reducing manual effort by 20% and improving processes.',
-        'Integrated the AI model into multiple applications, enabling real-time data retrieval and contextually accurate responses.'
-      ],
-      skills: ['Python', 'LLMs', 'RAG', 'Machine Learning', 'Deployment', 'Data Engineering'],
-      certificateUrl: '',
-      companyUrl: 'https://cincyrtech.com/',
-    },
-    {
-      company: 'SocialTek, Hyderabad',
-      role: 'Data Science Intern',
-      duration: 'July 2024 – December 2024',
-      responsibilities: [
-        'Analyzed large datasets with over 500,000 records, ensuring 99% data accuracy and reducing retrieval time by 20%.',
-        'Conducted exploratory data analysis (EDA), uncovering actionable insights that improved data-driven decision-making by 18%.',
-        'Created synthetic datasets, augmenting training data by 35% and improving model accuracy.',
-        'Developed an ATS (Applicant Tracking System) compatibility assessment tool, increasing recruitment efficiency by 25% and reducing hiring time by 30%.',
-        'Designed scoring algorithms to evaluate resumes against job descriptions, streamlining candidate selection and improving accuracy.'
-      ],
-      skills: ['Python', 'EDA', 'Pandas', 'Data Analysis', 'ATS', 'Algorithm Design'],
-      certificateUrl: '',
-      companyUrl: 'https://socialtek.in/',
-    },
-    {
-      company: 'Arthashastra Intelligence, Hyderabad',
-      role: 'Machine Learning Intern',
-      duration: 'December 2023 – June 2024',
-      responsibilities: [
-        'Optimized data preprocessing pipelines, reducing processing time by 20% while maintaining 98% data integrity.',
-        'Built and deployed scalable web applications using React and Django.',
-        'Developed predictive machine learning models in Python, improving customer segmentation and marketing efficiency by 12%.',
-        'Integrated AI solutions with cross-functional teams, reducing operational costs by 10% and enhancing process efficiency.'
-      ],
-      skills: ['Python', 'React', 'Django', 'Machine Learning', 'Data Preprocessing'],
-      certificateUrl: arthashastraCertificate,
-      companyUrl: 'https://arthashastra.ai/',
-    },
-  ];
+// ─── Sub-component ─────────────────────────────────────────────────────────────────────
 
-  const handleDownload = (url) => {
-    if (!url) return;
+const ExpCardComponent = memo(({ exp, index }) => {
+  const { ref, isInView } = useScrollAnimation(0.1);
+
+  const handleDownload = () => {
+    if (!exp.certificateUrl) return;
     const link = document.createElement('a');
-    link.href = url;
+    link.href = exp.certificateUrl;
     link.setAttribute('download', '');
     document.body.appendChild(link);
     link.click();
@@ -263,40 +334,93 @@ const Experience = () => {
   };
 
   return (
-    <ExperienceSection>
-      <Title>Internship and Experience</Title>
-      <ExperienceContainer>
-        {experienceData.map((experience, index) => (
-          <ExperienceItem key={index}>
-            <Content>
-              <Company>{experience.company}</Company>
-              <Role>{experience.role}</Role>
-              <Duration>{experience.duration}</Duration>
-              <Responsibilities>
-                {experience.responsibilities.map((responsibility, idx) => (
-                  <ResponsibilityItem key={idx}>{responsibility}</ResponsibilityItem>
-                ))}
-              </Responsibilities>
-              <SkillList>
-                {experience.skills.map((skill, idx) => (
-                  <Skill key={idx}>{skill}</Skill>
-                ))}
-              </SkillList>
-            </Content>
-            <ButtonContainer>
-              <Button href={experience.companyUrl} target="_blank" rel="noopener noreferrer">
-                About Company
-              </Button>
-              {experience.certificateUrl && (
-                <Button as="button" onClick={() => handleDownload(experience.certificateUrl)}>
-                  Download Certificate
-                </Button>
-              )}
-            </ButtonContainer>
-          </ExperienceItem>
+    <ExpCard
+      ref={ref}
+      as={motion.div}
+      $color={exp.color}
+      initial={{ opacity: 0, x: -24 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ x: 4 }}
+      whileTap={{ scale: 0.99 }}
+    >
+      <ExpTop>
+        <ExpMeta>
+          <CompanyRow>
+            <Company>{exp.company}</Company>
+            <TypeBadge $color={exp.color}>{exp.type}</TypeBadge>
+          </CompanyRow>
+          <RoleRow>
+            <Role $color={exp.color}>{exp.role}</Role>
+          </RoleRow>
+          <MetaRow>
+            <MetaChip>
+              <FiCalendar size={12} />
+              {exp.duration}
+            </MetaChip>
+            <MetaChip>
+              <FiMapPin size={12} />
+              {exp.location}
+            </MetaChip>
+          </MetaRow>
+        </ExpMeta>
+      </ExpTop>
+
+      <Divider />
+
+      <BulletList>
+        {exp.responsibilities.map((item, i) => (
+          <Bullet key={i} $color={exp.color}>{item}</Bullet>
         ))}
-      </ExperienceContainer>
-    </ExperienceSection>
+      </BulletList>
+
+      <TagList>
+        {exp.skills.map(skill => (
+          <Tag key={skill}>{skill}</Tag>
+        ))}
+      </TagList>
+
+      <ActionRow>
+        <ActionBtn href={exp.companyUrl} target="_blank" rel="noopener noreferrer">
+          <FiExternalLink size={12} />
+          About Company
+        </ActionBtn>
+        {exp.certificateUrl && (
+          <ActionBtn as="button" onClick={handleDownload}>
+            <FiDownload size={12} />
+            Certificate
+          </ActionBtn>
+        )}
+      </ActionRow>
+    </ExpCard>
+  );
+});
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+const Experience = () => {
+  const { ref, isInView } = useScrollAnimation();
+
+  return (
+    <Wrapper>
+      <Header>
+        <motion.div
+          ref={ref}
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <SectionLabel variants={staggerItem}>Experience</SectionLabel>
+          <SectionTitle variants={staggerItem}>Where I've worked.</SectionTitle>
+        </motion.div>
+      </Header>
+
+      <Timeline>
+        {EXPERIENCE_DATA.map((exp, i) => (
+          <ExpCardComponent key={exp.company} exp={exp} index={i} />
+        ))}
+      </Timeline>
+    </Wrapper>
   );
 };
 

@@ -1,215 +1,252 @@
+// Hero.jsx — Apple-Inspired Hero Section
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import styled from 'styled-components';
 import {
-  Container, VideoBackground, Section, CardContainer, Card, Heading, RoleText, Description, Button, ArrowButton,
-  SocialIcons, Icon, ModalOverlay, ModalContent, CloseButton, ImageContainer, Image, LeftArrowSVG, RightArrowSVG, ModalIframe, ButtonContainer, Blob,
-  ModalTopBar, TopBarButton, TopBarButtonGroup, NameText
-} from '../styles';
-import profileImage from '../assets/profile.jpg';
-import backgroundVideo from '../assets/background-video.mp4';
+  HeroContainer, HeroInner, HeroContent, HeroImageWrapper,
+  HeroImage, HeroEyebrow, HeroHeading, HeroRole, HeroButtons,
+  HeroBlob, SocialIcons, SocialIcon,
+  PrimaryButton, SecondaryButton,
+  ModalOverlay, ModalContent, ModalTopBar, ModalTitle,
+  ModalActions, ModalButton, ModalIframe, HeroBlobSecondary
+} from '../styles/styles';
+import profileImage from '../assets/profile.webp';
 import resumePDF from '../assets/sameer_mujahid_resume.pdf';
-import { RiTwitterXFill } from "react-icons/ri";
-import { IoLogoInstagram } from "react-icons/io5";
-import { FiGithub, FiLinkedin } from "react-icons/fi";
-import { FaArrowDown } from "react-icons/fa";
+import { RiTwitterXFill } from 'react-icons/ri';
+import { IoLogoInstagram } from 'react-icons/io5';
+import { FiGithub, FiLinkedin, FiDownload, FiEye } from 'react-icons/fi';
 
-const Hero = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [showModal, setShowModal] = useState(false);
-const roles = [
-  {
-    title: 'AI/ML Engineer',
-    description: 'Build and deploy intelligent systems using machine learning, deep learning, and NLP. Experienced in LLMs, RAG models, computer vision, and model optimization with Python, TensorFlow, and Hugging Face.'
-  },
-  {
-    title: 'Data Scientist',
-    description: 'Analyze large datasets, develop predictive models, and extract insights to drive data-driven decisions. Skilled in EDA, feature engineering, and performance evaluation using Python and scikit-learn.'
-  },
-  {
-    title: 'Data Analyst',
-    description: 'Transform raw data into actionable insights through visualization and statistical analysis. Proficient in Power BI, Tableau, SQL, and Python for business intelligence and decision support.'
-  },
+const ROLES = [
+  { title: 'AI / ML Engineer',  color: '#2997ff' },
+  { title: 'Data Scientist',    color: '#34c759' },
+  { title: 'Data Analyst',      color: '#ff9f0a' },
 ];
 
-  
+const SOCIAL_LINKS = [
+  { href: 'https://www.linkedin.com/in/shaik-sameer-mujahid/', label: 'LinkedIn',  icon: <FiLinkedin /> },
+  { href: 'https://github.com/sameermujahid',                  label: 'GitHub',    icon: <FiGithub /> },
+  { href: 'https://www.instagram.com/sameer.mujahid/',         label: 'Instagram', icon: <IoLogoInstagram /> },
+  { href: 'https://x.com/sameer__mujahid',                     label: 'Twitter',   icon: <RiTwitterXFill /> },
+];
+
+const ScrollCircle = styled(motion.button)`
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid ${({ theme }) => theme.border};
+  background: ${({ theme }) => theme.glass};
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.textSecondary};
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.accent};
+  }
+`;
+
+const containerVariants = {
+  hidden:  {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } }
+};
+
+const itemVariants = {
+  hidden:  { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] } }
+};
+
+const Hero = () => {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = showModal ? 'hidden' : 'unset';
+    const interval = setInterval(() => {
+      setRoleIndex(i => (i + 1) % ROLES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = showModal ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [showModal]);
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
-
-  const handleCardChange = (direction) => {
-    setActiveIndex((prevIndex) => {
-      if (direction === 'next') {
-        return (prevIndex + 1) % roles.length;
-      } else {
-        return (prevIndex - 1 + roles.length) % roles.length;
-      }
-    });
-  };
-
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      const yOffset = -80; // Adjust this value if you have a fixed header
-      const y = aboutSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
   };
 
-  const ScrollArrow = () => (
-    <Button
-      onClick={scrollToAbout}
-      style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#fff', backgroundColor: 'rgba(59, 92, 142, 0.1)', padding: '10px', borderRadius: '50px' }}
-    >
-      <FaArrowDown />
-    </Button>
-  );
-
   return (
-    <Container id="home">
-      <SocialIcons
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.5 }}
-      >
-        <Icon href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank" aria-label="LinkedIn Profile" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}><FiLinkedin /></Icon>
-        <Icon href="https://github.com/sameermujahid" target="_blank" aria-label="GitHub Profile" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}><FiGithub /></Icon>
-        <Icon href="https://www.instagram.com/sameer.mujahid/" target="_blank" aria-label="Instagram Profile" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}><IoLogoInstagram /></Icon>
-        <Icon href="https://x.com/sameer__mujahid" target="_blank" aria-label="Twitter Profile" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}><RiTwitterXFill /></Icon>
-      </SocialIcons>
-      <VideoBackground autoPlay loop muted>
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </VideoBackground>
-      <Section
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-        style={{ position: 'relative' }}
-      >
-        <Heading
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          Hi, I am SK Sameer Mujahid
-        </Heading>
-        <CardContainer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card>
-                <RoleText
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {roles[activeIndex].title}
-                </RoleText>
-                <Description
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {roles[activeIndex].description}
-                </Description>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
-        </CardContainer>
+    <>
+      <HeroContainer id="home">
+        <HeroInner>
+          {/* Content */}
+          <HeroContent
+            as={motion.div}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <HeroEyebrow variants={itemVariants}>
+              <span />
+              Available for opportunities
+            </HeroEyebrow>
 
-        <ArrowButton onClick={() => handleCardChange('prev')}>{LeftArrowSVG}</ArrowButton>
-        <ArrowButton onClick={() => handleCardChange('next')}>{RightArrowSVG}</ArrowButton>
-        <ButtonContainer style={{ display: 'flex', gap: '10px' }}>
-          <Button
-            href={resumePDF}
-            download="sameer_mujahid_resume.pdf"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
-          >
-            Download Resume
-          </Button>
-          <Button
-            onClick={openModal}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.4, duration: 0.5 }}
-          >
-            View Resume
-          </Button>
-        </ButtonContainer>
-      </Section>
-      <Section
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-        style={{ position: 'relative', zIndex: 1 }}
-      >
-        <Blob /> {/* Add the Blob component here */}
-        <ImageContainer
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          style={{ position: 'relative' }}
-        >
-          <Image
-            src={profileImage}
-            alt="Profile"
-            initial={{ opacity: 0, scale: 0.9 }}
+            <HeroHeading variants={itemVariants}>
+              Hi, I'm{' '}
+              <em>SK Sameer</em>
+              <br />
+              Mujahid
+            </HeroHeading>
+
+            <HeroRole as={motion.div} variants={itemVariants}>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={roleIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.38, ease: 'easeOut' }}
+                  style={{
+                    display: 'inline-block',
+                    color: ROLES[roleIndex].color,
+                    fontWeight: 600,
+                  }}
+                >
+                  {ROLES[roleIndex].title}
+                </motion.span>
+              </AnimatePresence>
+              {' '}— Building intelligent systems and{' '}
+              <br />
+              data-driven solutions that matter.
+            </HeroRole>
+
+            <HeroButtons variants={itemVariants}>
+              <PrimaryButton
+                href={resumePDF}
+                download="sameer_mujahid_resume.pdf"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <FiDownload size={15} />
+                Download Resume
+              </PrimaryButton>
+              <SecondaryButton
+                as={motion.button}
+                onClick={() => setShowModal(true)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <FiEye size={15} />
+                View Resume
+              </SecondaryButton>
+            </HeroButtons>
+
+            <SocialIcons variants={itemVariants}>
+              {SOCIAL_LINKS.map(({ href, label, icon }) => (
+                <SocialIcon
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  whileHover={{ scale: 1.12, y: -3 }}
+                  whileTap={{ scale: 0.93 }}
+                >
+                  {icon}
+                </SocialIcon>
+              ))}
+            </SocialIcons>
+          </HeroContent>
+
+          {/* Image */}
+          <HeroImageWrapper
+            initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          />
-        </ImageContainer>
-      </Section>
-      <ScrollArrow /> {/* Place the scroll arrow here */}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <HeroBlobSecondary />
+            <HeroBlob />
+            <HeroImage
+              src={profileImage}
+              alt="SK Sameer Mujahid"
+              whileHover={{ scale: 1.04 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            />
+          </HeroImageWrapper>
+        </HeroInner>
 
-      {showModal && (
-        <ModalOverlay
+        {/* Scroll indicator */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          onClick={closeModal}
+          transition={{ delay: 1.4 }}
+          style={{
+            position: 'absolute',
+            bottom: 28,
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
         >
-          <ModalContent
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking inside content
+          <motion.div
+            animate={{ y: [0, 7, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <ModalTopBar>
-              <NameText>SK Sameer Mujahid</NameText>
-              <TopBarButtonGroup>
-                <TopBarButton onClick={() => window.open('https://www.linkedin.com/in/shaik-sameer-mujahid/', '_blank')}>
-                  Connect
-                </TopBarButton>
-                <a href={resumePDF} download="sameer_mujahid_resume.pdf" style={{ textDecoration: 'none' }}>
-                  <TopBarButton>Download</TopBarButton>
-                </a>
-                <TopBarButton onClick={closeModal}>Close</TopBarButton>
-              </TopBarButtonGroup>
-            </ModalTopBar>
-            <ModalIframe
-              title="resume"
-              src={resumePDF}
-              frameBorder="0"
-            ></ModalIframe>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-    </Container>
+            <ScrollCircle onClick={() => scrollToSection('about')}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </ScrollCircle>
+          </motion.div>
+        </motion.div>
+      </HeroContainer>
+
+      {/* Resume Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <ModalOverlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setShowModal(false)}
+          >
+            <ModalContent
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ duration: 0.32, ease: [0.25, 0.46, 0.45, 0.94] }}
+              onClick={e => e.stopPropagation()}
+            >
+              <ModalTopBar>
+                <ModalTitle>SK Sameer Mujahid — Resume</ModalTitle>
+                <ModalActions>
+                  <ModalButton as="a" href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank">
+                    Connect
+                  </ModalButton>
+                  <ModalButton as="a" href={resumePDF} download="sameer_mujahid_resume.pdf">
+                    Download
+                  </ModalButton>
+                  <ModalButton onClick={() => setShowModal(false)}>Close</ModalButton>
+                </ModalActions>
+              </ModalTopBar>
+              <ModalIframe title="Resume" src={resumePDF} />
+            </ModalContent>
+          </ModalOverlay>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

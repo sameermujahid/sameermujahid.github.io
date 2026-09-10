@@ -1,444 +1,977 @@
-import React, { useState } from 'react';
+// Connect.jsx
+// Professional-grade animation philosophy: orchestrated state transitions with zero layout thrash.
+// Every motion is purposeful. Spring physics tuned for premium feel. No janky DOM shuffling.
+// Proper exit strategies, layout stability, and hardware-accelerated transforms throughout.
+
+import React, { useState, useRef } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 import axios from 'axios';
-import styled, { keyframes } from 'styled-components';
-import MailAnimation from './MailAnimation';
-import { RiTwitterXFill } from "react-icons/ri";
-import { IoLogoInstagram } from "react-icons/io5";
-import { FiGithub, FiLinkedin } from "react-icons/fi";
+import {
+  GlassCard, SectionLabel, SectionTitle, SectionSubtitle,
+  Spinner
+} from '../styles/styles';
+import { useScrollAnimation, staggerContainer, staggerItem } from '../hooks/useScrollAnimation';
+import { RiTwitterXFill } from 'react-icons/ri';
+import { IoLogoInstagram } from 'react-icons/io5';
+import {
+  FiGithub, FiLinkedin, FiMail, FiPhone,
+  FiBriefcase, FiUsers, FiArrowRight, FiCheck,
+} from 'react-icons/fi';
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  animate,
+} from 'framer-motion';
 
-const planeAnimation = keyframes`
-    0% {
-        transform: translateX(0) translateY(0) rotate(0);
-        opacity: 0;
-    }
-    50% {
-        transform: translateX(50px) translateY(-20px) rotate(15deg);
-        opacity: 0.5;
-    }
-    100% {
-        transform: translateX(100px) translateY(-40px) rotate(30deg);
-        opacity: 1;
-    }
+// ─── Physics presets (tuned for premium feel) ─────────────────────────────────
+const SPRING_SMOOTH   = { type: 'spring', stiffness: 120, damping: 20, mass: 0.8 };
+const SPRING_BOUNCY   = { type: 'spring', stiffness: 260, damping: 24, mass: 0.7 };
+const SPRING_TIGHT    = { type: 'spring', stiffness: 300, damping: 30, mass: 0.5 };
+const EASE_OUT_QUART  = [0.25, 1, 0.5, 1];
+const EASE_OUT_EXPO   = [0.16, 1, 0.3, 1];
+const EASE_IN_OUT_SINE = [0.37, 0, 0.63, 1];
+
+// ─── Keyframes ───────────────────────────────────────────────────────────────
+const shimmer = keyframes`
+  0%   { background-position: -100% center; }
+  100% { background-position: 200% center; }
 `;
 
-const ConnectContainer = styled.section`
-    align-items: center;
-    padding: 50px;
-    color: #e0e1ddff; /* platinum */
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-
-    @media (max-width: 480px) {
-        padding: 30px 10px;
-        justify-content: space-between;
-    }
-`;
-
-const Container = styled.section`
-    color: #e0e1ddff; /* platinum */
-    display: flex;
-    gap: 30px;
-
-    @media (max-width: 480px) {
-        flex-direction: column;
-    }
-`;
-
-const LeftSection = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-    margin-bottom: 30px;
-
-    @media (min-width: 768px) {
-        margin-bottom: 0;
-    }
-`;
-
-const PaperPlane = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 50px;
-    animation: ${planeAnimation} 2s linear infinite;
-    z-index: 1;
-    border: none;
-`;
-
-const SVGContainer = styled.div`
-    margin-bottom: 20px;
-    transform: rotate(45deg);
-    transition: transform 0.5s ease;
-
-    @media (max-width: 768px) {
-        display: none; /* Hide SVGContainer (and its content) on mobile screens */
-    }
-
-    &:hover {
-        transform: rotate(0);
-    }
-
-    svg {
-        width: 100%;
-        height: 100%;
-        fill: #e0e1ddff; /* platinum */
-    }
-`;
-
-const Title = styled.h1`
-    font-size: 3rem;
-    text-align: center;
-    font-family: "Bebas Neue", sans-serif;
-    color: #e0e1ddff;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-    transition: color 0.3s ease;
-
-    @media (max-width: 768px) {
-        font-size: 2.5rem;
-=    }
-
-    @media (max-width: 480px) {
-        font-size: 2rem;
-=    }
-`;
-
-const Paragraph = styled.p`
-    font-size: 1.2em;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-`;
-
-const ContactInfo = styled.div`
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 2;
-`;
-
-const Email = styled.span`
-    font-size: 1.1em;
-    margin-bottom: 10px;
-`;
-
-const Phone = styled.span`
-    font-size: 1.1em;
-    margin-bottom: 10px;
-`;
-
-const IconContainer = styled.div`
-    margin-top: 20px;
-    display: flex;
-    gap: 20px;
-    position: relative;
-    z-index: 2;
-`;
-
-const Icon = styled.a`
-  font-size: 1.75em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    color:#000;
-    background-color: #415a77ff; /* silver lake blue */
-    border-radius: 50%;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #0d1b2aff; /* yinmn blue */
-            color:#fff;
-
-    }
-
-    svg {
-        width: 60%;
-        height: 60%;
-    }
-`;
-
-const FormContainer = styled.div`
-    flex: 1;
-    padding: 40px;
-    background-color: #1b263bff; /* oxford blue */
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    position: relative;
-    z-index: 2;
-flex-direction:column;
- display:flex;
-    align-items:center;
-    justify-content:center;
-    @media (max-width: 768px) {
-        margin-left: 0;
-        padding: 1px;
-    }
-`;
-
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 80%;
-    padding: 0px; /* Default padding for larger screens */
-    
-    @media (max-width: 768px) {
-        width: 90%; /* Adjust width for tablet screens */
-        padding: 15px; /* Adjust padding for tablet screens */
-        font-size: 16px; /* Adjust font size for tablet screens */
-    }
-
-    @media (max-width: 480px) {
-        width: 95%; /* Adjust width for mobile screens */
-        padding: 10px; /* Adjust padding for mobile screens */
-        font-size: 14px; /* Adjust font size for mobile screens */
-    }
-`;
-
-const Input = styled.input`
-  padding: 15px;
-  font-size: 1.1em;
-  border: none;
-  border-radius: 8px;
-  background-color: rgba(65, 90, 119, 0.8);
-  color: #e0e1dd;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-
-  &::placeholder {
-    color: rgba(224, 225, 221, 0.7);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #778da9;
-  }
-`;
-
-const Textarea = styled.textarea`
-  padding: 15px;
-  font-size: 1.1em;
-  border: none;
-  border-radius: 8px;
-  background-color: rgba(65, 90, 119, 0.8);
-  color: #e0e1dd;
-  resize: none;
-  height: 150px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-
-  &::placeholder {
-    color: rgba(224, 225, 221, 0.7);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #778da9;
-  }
-`;
-
-const gradientMorph = keyframes`
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-`;
-
-const gradientReverse = keyframes`
-  0% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-`;
-
-const Button = styled.button`
-  padding: 15px;
-  font-size: 1.2em;
-  color: #e0e1dd;
-  background: linear-gradient(135deg, #1b263b, #415a77, #1b263b);
-  background-size: 200% 200%;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-
-  &:hover {
-    animation: ${gradientMorph} 2s ease forwards;
-  }
-
-  &:not(:hover) {
-    animation: ${gradientReverse} 2s ease forwards;
-  }
-`;
-
-const fadeIn = keyframes`
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-`;
-const CircleTickIcon = styled.div`
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; /* Size of the circle */
-    height: 40px; /* Size of the circle */
-    background-color: #28a745; /* Circle background color */
-    border-radius: 50%; /* Makes it circular */
-    margin-right: 10px; /* Space between the icon and text */
-`;
-
-const Tick = () => (
-    <CircleTickIcon>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" fill="#ffffff">
-            <path d="M20.285 5.293a1 1 0 00-1.414 0L9 14.586 5.707 11.293a1 1 0 00-1.414 1.414l4.293 4.293a1 1 0 001.414 0l11-11a1 1 0 000-1.414z" />
-        </svg>
-    </CircleTickIcon>
-);
-
-const ConfirmationMessage = styled.div`
-    animation: ${fadeIn} 0.5s ease forwards; /* Animation effect */
-    color: #fff; /* Dark teal text */
-    border: 2px solid #fff; /* Darker border */
-    border-radius: 20px; /* Rounded corners */
-    padding: 20px;
-    width:80%;
-    margin-top: 20px; /* Space above the message */
-    text-align: center; /* Center align text */
-    font-size: 1.2em; /* Larger font size */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow effect */
-    display:flex;
-    align-items:center;
-    justify-content:center;
-`;
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
+const gradientRotate = keyframes`
+  0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
 
-const Spinner = styled.div`
-  border: 3px solid rgba(224, 225, 221, 0.3);
-  border-top: 3px solid #e0e1dd;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  animation: ${spin} 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
+const ripple = keyframes`
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
 `;
 
-const Contact = () => {
-  const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+const Wrapper = styled.section`
+  padding: 100px 24px 120px;
+  max-width: 1350px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 70px 20px 90px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 60px 16px 80px;
+  }
+`;
+const Header = styled.div`
+  margin-bottom: 64px;
+`;
 
-  const handleSubmit = (e) => {
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 32px;
+  align-items: center;
+  
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 20px;
+  }
+`;
+// ─── Info card ────────────────────────────────────────────────────────────────
+const InfoCard = styled(GlassCard)`
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: sticky;
+  top: 100px;
+  
+  @media (max-width: 968px) {
+    position: static;
+    padding: 28px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 24px;
+    gap: 24px;
+  }
+`;
+
+const InfoTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: ${({ theme }) => theme.textPrimary};
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+`;
+
+const InfoBody = styled.p`
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: ${({ theme }) => theme.textSecondary};
+  margin: 0;
+`;
+
+const ContactItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.textSecondary};
+  text-decoration: none;
+  padding: 10px 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  
+  &:hover {
+    color: ${({ theme }) => theme.accent};
+    transform: translateX(4px);
+  }
+  
+  svg {
+    color: ${({ theme }) => theme.accent};
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover svg {
+    transform: scale(1.1);
+  }
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    ${({ theme }) => theme.border} 20%,
+    ${({ theme }) => theme.border} 80%,
+    transparent
+  );
+`;
+
+const SocialRow = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+const SocialBtn = styled.a`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid ${({ theme }) => theme.border};
+  background: ${({ theme }) => theme.bgTertiary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.textSecondary};
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: ${({ theme }) => theme.accent};
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  svg {
+    position: relative;
+    z-index: 1;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover {
+    border-color: ${({ theme }) => theme.accent};
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px ${({ theme }) => `${theme.accent}30`};
+    
+    &::before { opacity: 0.1; }
+    
+    svg {
+      color: ${({ theme }) => theme.accent};
+      transform: scale(1.15);
+    }
+  }
+`;
+
+const OpportunityTag = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: ${({ theme }) => theme.accentSubtle};
+  color: ${({ theme }) => theme.accent};
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      ${({ theme }) => `${theme.accent}20`},
+      transparent
+    );
+    animation: ${shimmer} 3s ease-in-out infinite;
+  }
+`;
+
+// ─── Form card ────────────────────────────────────────────────────────────────
+const FormCardWrapper = styled(motion.div)`
+  position: relative;
+`;
+
+const FormCard = styled(GlassCard)`
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+`;
+
+// Success gradient background (animated)
+const SuccessGradient = styled(motion.div)`
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    ${({ theme }) => `${theme.accent}15`},
+    transparent 60%,
+    ${({ theme }) => `${theme.accent}15`}
+  );
+  animation: ${gradientRotate} 8s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+`;
+
+// Ripple effect on success
+const Ripple = styled(motion.div)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: ${({ theme }) => `${theme.accent}15`};
+  pointer-events: none;
+  z-index: 0;
+`;
+
+const FormInner = styled(motion.div)`
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+  }
+  
+  @media (max-width: 480px) {
+  }
+`;
+
+const SuccessInner = styled(motion.div)`
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+    padding: 50px 32px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 40px 24px;
+    gap: 16px;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const FormField = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Label = styled.label`
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.textSecondary};
+  letter-spacing: 0.01em;
+`;
+
+const baseInput = css`
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  background: ${({ theme }) => theme.bgTertiary};
+  border: 2px solid ${({ theme }) => theme.border};
+  color: ${({ theme }) => theme.textPrimary};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &::placeholder {
+    color: ${({ theme }) => theme.textTertiary};
+  }
+  
+  &:focus {
+    border-color: ${({ theme }) => theme.accent};
+    background: ${({ theme }) => theme.bgSecondary};
+    box-shadow: 0 0 0 4px ${({ theme }) => `${theme.accent}15`};
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+const Input = styled.input`${baseInput}`;
+const Textarea = styled.textarea`
+  ${baseInput}
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.6;
+`;
+
+// ─── Submit button ────────────────────────────────────────────────────────────
+const SubmitBtn = styled(motion.button)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 32px;
+  border-radius: 100px;
+  border: none;
+  width: 100%;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+  background: ${({ theme }) => theme.accent};
+  box-shadow: 0 4px 16px ${({ theme }) => `${theme.accent}40`};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover:not(:disabled) {
+    background: ${({ theme }) => theme.accentHover};
+    box-shadow: 0 6px 24px ${({ theme }) => `${theme.accent}50`};
+    transform: translateY(-2px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    cursor: default;
+    opacity: 0.8;
+  }
+`;
+
+const BtnShine = styled(motion.div)`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: translateX(-100%);
+`;
+
+const BtnProgress = styled(motion.div)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: inherit;
+  pointer-events: none;
+`;
+
+const BtnLabel = styled(motion.span)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+`;
+
+
+const CheckContainer = styled(motion.div)`
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.accentSubtle};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, ${({ theme }) => theme.accent}, ${({ theme }) => theme.accentHover});
+    opacity: 0.3;
+    filter: blur(12px);
+  }
+`;
+
+const CheckIcon = styled(motion.div)`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.accent};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+`;
+
+const SuccessTitle = styled(motion.h3)`
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.textPrimary},
+    ${({ theme }) => theme.accent}
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const SuccessSub = styled(motion.p)`
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: ${({ theme }) => theme.textSecondary};
+  max-width: 320px;
+  margin: 0;
+`;
+
+const SuccessDivider = styled(motion.div)`
+  width: 48px;
+  height: 2px;
+  border-radius: 2px;
+  background: ${({ theme }) => theme.accent};
+  opacity: 0.3;
+`;
+
+const ResetBtn = styled(motion.button)`
+  background: transparent;
+  border: 2px solid ${({ theme }) => theme.border};
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.textPrimary};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 100px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 8px;
+  
+  &:hover {
+    color: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
+    background: ${({ theme }) => theme.accentSubtle};
+    transform: translateY(-2px);
+  }
+`;
+
+// ─── Animation variants ───────────────────────────────────────────────────────
+const formContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+  exit: {
+    transition: {
+      staggerChildren: 0.04,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const formField = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: 'blur(4px)',
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: SPRING_SMOOTH,
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    filter: 'blur(4px)',
+    transition: {
+      duration: 0.2,
+      ease: EASE_OUT_QUART,
+    },
+  },
+};
+
+const successContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const successItem = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: SPRING_BOUNCY,
+  },
+};
+
+const checkIconVariant = {
+  hidden: {
+    scale: 0,
+    rotate: -180,
+  },
+  visible: {
+    scale: 1,
+    rotate: 0,
+    transition: {
+      ...SPRING_BOUNCY,
+      delay: 0.3,
+    },
+  },
+};
+
+const dividerVariant = {
+  hidden: { scaleX: 0 },
+  visible: {
+    scaleX: 1,
+    transition: SPRING_TIGHT,
+  },
+};
+
+// ─── Social links ─────────────────────────────────────────────────────────────
+const SOCIAL_LINKS = [
+  { href: 'https://www.linkedin.com/in/shaik-sameer-mujahid/', icon: <FiLinkedin />, label: 'LinkedIn' },
+  { href: 'https://github.com/sameermujahid', icon: <FiGithub />, label: 'GitHub' },
+  { href: 'https://www.instagram.com/sameer.mujahid/', icon: <IoLogoInstagram />, label: 'Instagram' },
+  { href: 'https://x.com/sameer__mujahid', icon: <RiTwitterXFill />, label: 'Twitter' },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
+const Connect = () => {
+  const [phase, setPhase] = useState('idle'); // 'idle' | 'loading' | 'success'
+  const [showRipple, setShowRipple] = useState(false);
+  
+  const progressX = useMotionValue(0);
+  const progressWidth = useTransform(progressX, [0, 1], ['0%', '100%']);
+  
+  const { ref, isInView } = useScrollAnimation();
+  const formRef = useRef(null);
+
+  // ── Submit ──────────────────────────────────────────────────────────────────
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-
-    // Prepare form data
     const formData = new FormData(form);
-    formData.append("access_key", "9ee753a6-c053-4819-9996-56a1043ba7f4");
+    formData.append('access_key', '9ee753a6-c053-4819-9996-56a1043ba7f4');
 
-    // Start loading
-    setIsLoading(true);
+    setPhase('loading');
+    progressX.set(0);
+    
+    // Smooth progress animation
+    animate(progressX, 0.85, {
+      duration: 2.2,
+      ease: EASE_OUT_EXPO,
+    });
 
-    axios
-      .post("https://api.web3forms.com/submit", formData)
-      .then((response) => {
-        if (response.data.success) {
-          setSubmitted(true);
-          form.reset();
-        } else {
-          alert("There was an error. Please try again.");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("There was an error. Please try again.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const res = await axios.post('https://api.web3forms.com/submit', formData);
+
+      if (res.data.success) {
+        // Complete progress
+        await animate(progressX, 1, {
+          duration: 0.25,
+          ease: EASE_OUT_QUART,
+        });
+        
+        form.reset();
+        
+        // Small delay for smoother transition
+        await new Promise(resolve => setTimeout(resolve, 150));
+        
+        setShowRipple(true);
+        setPhase('success');
+        
+      } else {
+        progressX.set(0);
+        setPhase('idle');
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      progressX.set(0);
+      setPhase('idle');
+      alert('Something went wrong. Please try again.');
+    }
   };
 
+  // ── Reset ───────────────────────────────────────────────────────────────────
+  const handleReset = () => {
+    setPhase('idle');
+    setShowRipple(false);
+    progressX.set(0);
+  };
+
+  const isLoading = phase === 'loading';
+  const isSuccess = phase === 'success';
+
   return (
-    <ConnectContainer id="connect">
-      <Title>Let's Connect</Title>
-      <Container>
-        <LeftSection>
-          <SVGContainer>
-            <MailAnimation />
-          </SVGContainer>
-          <Title>Contact Me</Title>
-          <Paragraph>
-            If you have any questions or just want to say hello, feel free to reach out!
-          </Paragraph>
-          <ContactInfo>
-            <Email>Email: sameermujahid7777@gmail.com</Email>
-            <Phone>Phone: +91 8317506633</Phone>
-          </ContactInfo>
-          <IconContainer>
-            <Icon href="https://www.linkedin.com/in/shaik-sameer-mujahid/" target="_blank">
-              <FiLinkedin />
-            </Icon>
-            <Icon href="https://github.com/sameermujahid" target="_blank">
-              <FiGithub />
-            </Icon>
-            <Icon href="https://www.instagram.com/sameer.mujahid/" target="_blank">
-              <IoLogoInstagram />
-            </Icon>
-            <Icon href="https://x.com/sameer__mujahid" target="_blank">
-              <RiTwitterXFill />
-            </Icon>
-          </IconContainer>
-        </LeftSection>
+    <Wrapper>
+      
+      {/* ── Header ── */}
+      <Header  id="connect">
+        <motion.div
+          ref={ref}
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <SectionLabel variants={staggerItem}>Connect</SectionLabel>
+          <SectionTitle variants={staggerItem}>
+            Let's connect and explore<br />opportunities.
+          </SectionTitle>
+          <SectionSubtitle variants={staggerItem}>
+            Whether you're looking to collaborate, discuss opportunities, or just connect, I'd love to hear from you.
+          </SectionSubtitle>
+        </motion.div>
+      </Header>
 
-        <FormContainer>
-          <Form onSubmit={handleSubmit}>
-            <Input type="text" name="name" placeholder="Your Name" required />
-            <Input type="email" name="email" placeholder="Your Email" required />
-            <Textarea name="message" placeholder="Your Message" required></Textarea>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Spinner />
-                  &nbsp;Sending...
-                </>
-              ) : (
-                "Send Message"
-              )}
-            </Button>
-          </Form>
+      <Grid>
+        
+        {/* ── Left — Info ── */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: EASE_OUT_EXPO }}
+        >
+          <InfoCard>
+            <div>
+              <OpportunityTag>
+                <FiBriefcase size={13} />
+                Open to opportunities
+              </OpportunityTag>
+              <InfoTitle>
+                <FiUsers size={24} />
+                Let's connect
+              </InfoTitle>
+              <InfoBody style={{ marginTop: 12 }}>
+                I'm always open to new opportunities, collaborations, and conversations.
+                Feel free to reach out for projects, job opportunities, or just to say hello!
+              </InfoBody>
+            </div>
 
-          {submitted && (
-            <ConfirmationMessage>
-              <Tick />
-              Thank you for your message! I'll get back to you soon.
-            </ConfirmationMessage>
-          )}
-        </FormContainer>
-      </Container>
-    </ConnectContainer>
+            <Divider />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <ContactItem href="mailto:sameermujahid7777@gmail.com">
+                <FiMail size={16} />
+                sameermujahid7777@gmail.com
+              </ContactItem>
+              <ContactItem href="tel:+918317506633">
+                <FiPhone size={16} />
+                +91 8317506633
+              </ContactItem>
+            </div>
+
+            <Divider />
+
+            <SocialRow>
+              {SOCIAL_LINKS.map(({ href, icon, label }) => (
+                <SocialBtn
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                >
+                  {icon}
+                </SocialBtn>
+              ))}
+            </SocialRow>
+          </InfoCard>
+        </motion.div>
+
+        {/* ── Right — Form Card ── */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.25, ease: EASE_OUT_EXPO }}
+        >
+          <FormCardWrapper
+            layout
+            transition={SPRING_SMOOTH}
+          >
+            <FormCard>
+              
+              {/* Success gradient background */}
+              <AnimatePresence>
+                {isSuccess && (
+                  <SuccessGradient
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                )}
+              </AnimatePresence>
+              
+              {/* Ripple effect */}
+              <AnimatePresence>
+                {showRipple && (
+                  <Ripple
+                    initial={{ scale: 0, opacity: 0.6 }}
+                    animate={{ scale: 2.5, opacity: 0 }}
+                    transition={{ duration: 1, ease: EASE_OUT_EXPO }}
+                    onAnimationComplete={() => setShowRipple(false)}
+                  />
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait">
+                
+                {/* ──── FORM ──── */}
+                {!isSuccess && (
+                  <FormInner
+                    key="form"
+                    variants={formContainer}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <Form ref={formRef} onSubmit={handleSubmit}>
+                      
+                      {/* Name */}
+                      <FormField variants={formField}>
+                        <Label htmlFor="name">Your Name</Label>
+                        <Input
+                          id="name"
+                          type="text"
+                          name="name"
+                          placeholder="John Doe"
+                          required
+                          disabled={isLoading}
+                        />
+                      </FormField>
+
+                      {/* Email */}
+                      <FormField variants={formField}>
+                        <Label htmlFor="email">Email Address</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          name="email"
+                          placeholder="john@example.com"
+                          required
+                          disabled={isLoading}
+                        />
+                      </FormField>
+
+                      {/* Message */}
+                      <FormField variants={formField}>
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea
+                          id="message"
+                          name="message"
+                          placeholder="Tell me about your project, opportunity, or idea..."
+                          required
+                          disabled={isLoading}
+                        />
+                      </FormField>
+
+                      {/* Submit Button */}
+                      <FormField variants={formField}>
+                        <SubmitBtn
+                          type="submit"
+                          disabled={isLoading}
+                          whileTap={!isLoading ? { scale: 0.98 } : {}}
+                        >
+                          {/* Shine effect */}
+                          {!isLoading && (
+                            <BtnShine
+                              animate={{
+                                x: ['0%', '200%'],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                repeatDelay: 1,
+                                ease: 'easeInOut',
+                              }}
+                            />
+                          )}
+                          
+                          {/* Progress bar */}
+                          {isLoading && (
+                            <BtnProgress
+                              style={{ width: progressWidth }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                            />
+                          )}
+
+                          <AnimatePresence mode="wait">
+                            {isLoading ? (
+                              <BtnLabel
+                                key="loading"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <Spinner />
+                                Sending message...
+                              </BtnLabel>
+                            ) : (
+                              <BtnLabel
+                                key="idle"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2.2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <line x1="22" y1="2" x2="11" y2="13" />
+                                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                                Send Message
+                              </BtnLabel>
+                            )}
+                          </AnimatePresence>
+                        </SubmitBtn>
+                      </FormField>
+                      
+                    </Form>
+                  </FormInner>
+                )}
+
+                {/* ──── SUCCESS ──── */}
+                {isSuccess && (
+                  <SuccessInner
+                    key="success"
+                    variants={successContainer}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    
+                    {/* Check icon */}
+                    <motion.div variants={successItem}>
+                      <CheckContainer>
+                        <CheckIcon variants={checkIconVariant}>
+                          <FiCheck />
+                        </CheckIcon>
+                      </CheckContainer>
+                    </motion.div>
+
+                    {/* Title */}
+                    <SuccessTitle variants={successItem}>
+                      Message sent successfully!
+                    </SuccessTitle>
+
+                    {/* Divider */}
+                    <SuccessDivider variants={dividerVariant} />
+
+                    {/* Subtitle */}
+                    <SuccessSub variants={successItem}>
+                      Thank you for reaching out! I'll get back to you as soon as possible.
+                    </SuccessSub>
+
+                    {/* Reset button */}
+                    <motion.div variants={successItem}>
+                      <ResetBtn
+                        onClick={handleReset}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Send another message
+                        <FiArrowRight size={14} />
+                      </ResetBtn>
+                    </motion.div>
+                    
+                  </SuccessInner>
+                )}
+                
+              </AnimatePresence>
+            </FormCard>
+          </FormCardWrapper>
+        </motion.div>
+
+      </Grid>
+    </Wrapper>
   );
 };
 
-
-export default Contact;
+export default Connect;

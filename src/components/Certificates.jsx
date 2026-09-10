@@ -1,172 +1,198 @@
-import React from 'react';
+// Certificates.jsx — Responsive Apple-Inspired Certificates Grid
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import resumeData from './resumeData'; // Ensure you import resumeData correctly
+import { motion } from 'framer-motion';
+import { GlassCard, SectionLabel, SectionTitle } from '../styles/styles';
+import { useScrollAnimation, staggerContainer, staggerItem } from '../hooks/useScrollAnimation';
+import resumeData from '../data/resumeData';
+import { FiDownload, FiEye, FiAward } from 'react-icons/fi';
 
-const colors = {
-  richBlack: '#0d1b2aff',
-  oxfordBlue: '#1b263bff',
-  yinmnBlue: '#415a77ff',
-  silverLakeBlue: '#778da9ff',
-  platinum: '#e0e1ddff',
-};
+// ─── Styled ──────────────────────────────────────────────────────────────────
 
-// Styled components for Certificates
-const CertificatesContainer = styled.div`
-  text-align: center;
-  color: #e0e1dd;
-  padding: 2rem 1rem;
+const Wrapper = styled.div`
+  padding: 56px 0 60px;
+`;
 
-  @media (min-width: 768px) {
-    padding: 3rem 2rem;
+const Header = styled.div`
+  margin-bottom: 40px;
+`;
+
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  @media (max-width: 992px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
   }
 
-  @media (min-width: 1024px) {
-    padding: 4rem 3rem;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
   }
 `;
-const Title = styled.h1`
-    font-size: 3rem;
-    text-align: center;
-    font-family: "Bebas Neue", sans-serif;
-    color: ${colors.platinum};
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-    transition: color 0.3s ease;
 
-    @media (max-width: 768px) {
-        font-size: 2.5rem;
-    }
-
-    @media (max-width: 480px) {
-        font-size: 2rem;
-    }
-`;
-const CardContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  justify-content: center;
-`;
-
-const Card = styled.div`
-  background: linear-gradient(135deg, #1b263b 30%, #415a77 100%);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+const Card = styled(GlassCard)`
+  flex: 1 1 calc(33.333% - 20px);
+  min-width: 300px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  gap: 14px;
+  box-sizing: border-box;
+  height: 100%;
 
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  @media (max-width: 992px) {
+    flex: none;
+    min-width: auto;
   }
 `;
 
-const CardTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: #fff;
-
-  @media (min-width: 768px) {
-    font-size: 1.75rem;
-  }
-
-  @media (min-width: 1024px) {
-    font-size: 2rem;
-  }
-`;
-
-const CardDate = styled.p`
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-  color: #dcdcdc;
-
-  @media (min-width: 768px) {
-    font-size: 1rem;
-  }
-
-  @media (min-width: 1024px) {
-    font-size: 1.125rem;
-  }
-`;
-
-const Description = styled.p`
-  font-size: 0.875rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  color: #f0f0f0;
-
-  @media (min-width: 768px) {
-    font-size: 1rem;
-  }
-
-  @media (min-width: 1024px) {
-    font-size: 1.125rem;
-  }
-`;
-
-const ButtonGroup = styled.div`
+const IconBadge = styled.div`
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: ${({ theme }) => theme.accentSubtle};
+  color: ${({ theme }) => theme.accent};
   display: flex;
-  gap: 0.5rem;
-  margin-top: auto;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 `;
 
-const Button = styled.a`
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #000;
+const CardTitle = styled.h3`
+  font-size: 0.9375rem;
   font-weight: 600;
-  background-color: #fff;
+  letter-spacing: -0.01em;
+  color: ${({ theme }) => theme.textPrimary};
+  line-height: 1.4;
+`;
+
+const CardDate = styled.div`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.textTertiary};
+  font-weight: 500;
+  margin-top: 2px;
+`;
+
+const CardDesc = styled.p`
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.textSecondary};
+  flex: 1;
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: ${({ theme }) => theme.border};
+`;
+
+const Actions = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const ActionBtn = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 980px;
+  font-size: 0.8rem;
+  font-weight: 500;
   text-decoration: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-
-  @media (min-width: 768px) {
-    padding: 0.75rem 1.25rem;
-    font-size: 1rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.125rem;
-  }
+  background: ${({ theme }) => theme.bgTertiary};
+  color: ${({ theme }) => theme.textSecondary};
+  border: 1px solid ${({ theme }) => theme.border};
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: #0d1b2aff;
-    color: #fff;
+    background: ${({ theme }) => theme.accentSubtle};
+    color: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
+  }
+
+  @media (hover: none) {
+    &:active {
+      background: ${({ theme }) => theme.accentSubtle};
+      color: ${({ theme }) => theme.accent};
+      border-color: ${({ theme }) => theme.accent};
+    }
   }
 `;
 
-// Certificates component
-const Certificates = () => {
-  const certificates = resumeData.courses_certificates; // Get certificates from resumeData
+// ─── Sub-component ───────────────────────────────────────────────────────────
+
+const CertCard = memo(({ cert, index }) => {
+  const { ref, isInView } = useScrollAnimation(0.08);
 
   return (
-    <CertificatesContainer>
-      <Title>Certificates</Title>
-      <CardContainer>
-        {certificates.map((certificate, index) => (
-          <Card key={index}>
-            <CardTitle>{certificate.course}</CardTitle>
-            <CardDate>Date: {certificate.duration}</CardDate>
-            <Description>{certificate.description}</Description>
-            <ButtonGroup>
-              <Button href={certificate.pdf} download={`${certificate.course.replace(/\s+/g, '-')}_certificate.pdf`}>
-                Download
-              </Button>
-              <Button href={certificate.pdf} target="_blank" rel="noopener noreferrer">
-                View
-              </Button>
-            </ButtonGroup>
-          </Card>
+    <Card
+      ref={ref}
+      as={motion.div}
+      initial={{ opacity: 0, y: 18 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: (index % 3) * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ y: -4, transition: { duration: 0.22 } }}
+      whileTap={{ y: 0 }}
+    >
+      <IconBadge>
+        <FiAward />
+      </IconBadge>
+      <div>
+        <CardTitle>{cert.course}</CardTitle>
+        <CardDate>{cert.duration}</CardDate>
+      </div>
+      <CardDesc>{cert.description}</CardDesc>
+      <Divider />
+      <Actions>
+        <ActionBtn
+          href={cert.pdf}
+          download={`${cert.course.replace(/\s+/g, '-')}_certificate.pdf`}
+        >
+          <FiDownload size={12} />
+          Download
+        </ActionBtn>
+        <ActionBtn href={cert.pdf} target="_blank" rel="noopener noreferrer">
+          <FiEye size={12} />
+          View
+        </ActionBtn>
+      </Actions>
+    </Card>
+  );
+});
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+const Certificates = () => {
+  const { ref, isInView } = useScrollAnimation();
+
+  return (
+    <Wrapper>
+      <Header>
+        <motion.div
+          ref={ref}
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <SectionLabel variants={staggerItem}>Certificates</SectionLabel>
+          <SectionTitle variants={staggerItem}>Certifications & courses.</SectionTitle>
+        </motion.div>
+      </Header>
+
+      <Grid>
+        {resumeData.courses_certificates.map((cert, i) => (
+          <CertCard key={i} cert={cert} index={i} />
         ))}
-      </CardContainer>
-    </CertificatesContainer>
+      </Grid>
+    </Wrapper>
   );
 };
 

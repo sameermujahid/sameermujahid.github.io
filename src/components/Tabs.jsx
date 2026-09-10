@@ -1,209 +1,172 @@
-import React, { useState, useEffect } from 'react';
+// Tabs.jsx — Apple-Inspired Segmented Tab Control
+import React, { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import Certificates from './Certificates';
-import Education from './Education';
-import Experience from './Experience';
-import Projects from './Projects';
-import { FaCertificate, FaGraduationCap, FaBriefcase, FaProjectDiagram } from 'react-icons/fa'; // Example icons
+import { FaCertificate, FaGraduationCap, FaBriefcase, FaProjectDiagram } from 'react-icons/fa';
 
-// Container for the tabs and content
-const TabsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
+// Lazy-load tab content for performance
+const Certificates = lazy(() => import('./Certificates'));
+const Education = lazy(() => import('./Education'));
+const Experience = lazy(() => import('./Experience'));
+const Projects = lazy(() => import('./Projects'));
 
-// Tab list container styling
-const TabList = styled.div`
-  position: sticky;
-  top: 75px;
-  display: flex;
-  justify-content: center;
-  background-color: #1b263b;
-    border-radius: 50px; /* Slightly rounded corners */
-  padding: 10px 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-`;
+const TAB_ITEMS = [
+  { id: 'Projects', label: 'Projects', icon: <FaProjectDiagram size={14} /> },
+  { id: 'Experience', label: 'Experience', icon: <FaBriefcase size={14} /> },
+  { id: 'Education', label: 'Education', icon: <FaGraduationCap size={14} /> },
+  { id: 'Certificates', label: 'Certificates', icon: <FaCertificate size={14} /> },
+];
 
-// Individual Tab Button styling with animated border
-const TabButton = styled(motion.button)`
-  position: relative;
-  background: none;
-  border: none;
-  color: #e0e1dd;
-  font-size: 1rem;
-  padding: 10px 20px;
-  cursor: pointer;
-  outline: none;
-  font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 5px;
+// ─── Styled ───────────────────────────────────────────────────────────────────
 
-  &:hover {
-    color: #778da9;
-  }
-
-  &.active {
-    color: #e0e1dd;
-  }
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 2px solid #415a77; /* Border color */
-    border-radius: 50px; /* Slightly rounded corners */
-    transform: scale(0); /* Start off as 0 scale */
-    transition: transform 0.4s ease-in-out; /* Animation for scale */
-    z-index: -1; /* Behind the text */
-  }
-
-  &.active:after {
-    transform: scale(1); /* Scale to cover the button */
-  }
+const Wrapper = styled.section`
+  padding: 0 0 120px;
+  max-width: 1350px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
-    span {
-      display: none; // Hide text on mobile
+    padding: 0 0 80px;
+  }
+`;
+
+const TabBar = styled.div`
+  position: sticky;
+  top: 80px;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 16px 24px;
+
+  @media (max-width: 768px) {
+    top: 64px;
+    padding: 12px 16px;
+  }
+`;
+
+const TabTrack = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: ${({ theme }) => theme.glass};
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid ${({ theme }) => theme.glassBorder};
+  border-radius: 980px;
+  padding: 6px;
+  box-shadow: ${({ theme }) => theme.shadowMd};
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+`;
+
+const TabBtn = styled.button`
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 980px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${({ theme, $active }) => ($active ? 'black' : theme.textSecondary)};
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  z-index: 1;
+
+  &:hover {
+    color: ${({ theme }) => theme.textSecondary};
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    gap: 4px;
+
+    span.label {
+      display: none;
     }
   }
 `;
 
-// Tab content area styling with smooth transition and shadow effects
-const TabContent = styled(motion.div)`
-  width: 100%;
-  transition: all 0.4s ease-in-out;
-  opacity: 0;
-  transform: translateY(-10px);
+const ActivePill = styled(motion.div)`
+  position: absolute;
+  inset: 0;
+  background: white;
+  border-radius: 980px;
+  z-index: 0;
+  box-shadow: ${({ theme }) => theme.shadowSm};
+  border: 1px solid ${({ theme }) => theme.glassBorder};
+`;
 
-  &.active {
-    opacity: 1;
-    transform: translateY(0);
+const ContentArea = styled.div`
+  padding: 0 24px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
   }
 `;
+
+const ContentLoader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: ${({ theme }) => theme.textTertiary};
+  font-size: 0.875rem;
+`;
+
+// ─── Component ─────────────────────────────────────────────────────────────────
 
 const Tabs = () => {
-  const [activeTab, setActiveTab] = useState('Certificates');
-
-  // Function to handle hash change
-  const handleHashChange = () => {
-    const hash = window.location.hash.replace('#', '');
-    if (['Certificates', 'Education', 'Experience', 'Projects'].includes(hash)) {
-      setActiveTab(hash);
-    } else {
-      setActiveTab('Certificates'); // Default tab
-    }
-  };
-
-  useEffect(() => {
-    // Set the active tab based on the hash when the component mounts
-    handleHashChange();
-    // Add event listener to handle hash changes
-    window.addEventListener('hashchange', handleHashChange);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, []);
+  const [active, setActive] = useState('Projects');
 
   return (
-    <TabsContainer id="more">
-      <TabList>
-        <TabButton
-          className={activeTab === 'Certificates' ? 'active' : ''}
-          onClick={() => setActiveTab('Certificates')}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <FaCertificate size={24} />
-          <span>Certificates</span>
-        </TabButton>
-        <TabButton
-          className={activeTab === 'Education' ? 'active' : ''}
-          onClick={() => setActiveTab('Education')}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <FaGraduationCap size={24} />
-          <span>Education</span>
-        </TabButton>
-        <TabButton
-          className={activeTab === 'Experience' ? 'active' : ''}
-          onClick={() => setActiveTab('Experience')}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <FaBriefcase size={24} />
-          <span>Experience</span>
-        </TabButton>
-        <TabButton
-          className={activeTab === 'Projects' ? 'active' : ''}
-          onClick={() => setActiveTab('Projects')}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <FaProjectDiagram size={24} />
-          <span>Projects</span>
-        </TabButton>
-      </TabList>
+    <Wrapper id="more">
+      <TabBar>
+        <TabTrack>
+          {TAB_ITEMS.map(({ id, label, icon }) => (
+            <TabBtn
+              key={id}
+              $active={active === id}
+              onClick={() => setActive(id)}
+            >
+              {active === id && (
+                <ActivePill
+                  layoutId="active-pill"
+                  transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+                />
+              )}
+              <span style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 6 }}>
+                {icon}
+                <span className="label">{label}</span>
+              </span>
+            </TabBtn>
+          ))}
+        </TabTrack>
+      </TabBar>
 
-      <AnimatePresence wait>
-        {activeTab === 'Certificates' && (
-          <TabContent
-            key="Certificates"
-            initial={{ opacity: 0, y: 20 }}
+      <ContentArea>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <Certificates />
-          </TabContent>
-        )}
-        {activeTab === 'Education' && (
-          <TabContent
-            key="Education"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Education />
-          </TabContent>
-        )}
-        {activeTab === 'Experience' && (
-          <TabContent
-            key="Experience"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Experience />
-          </TabContent>
-        )}
-        {activeTab === 'Projects' && (
-          <TabContent
-            key="Projects"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Projects />
-          </TabContent>
-        )}
-      </AnimatePresence>
-    </TabsContainer>
+            <Suspense fallback={<ContentLoader>Loading…</ContentLoader>}>
+              {active === 'Certificates' && <Certificates />}
+              {active === 'Education' && <Education />}
+              {active === 'Experience' && <Experience />}
+              {active === 'Projects' && <Projects />}
+            </Suspense>
+          </motion.div>
+        </AnimatePresence>
+      </ContentArea>
+    </Wrapper>
   );
 };
 
