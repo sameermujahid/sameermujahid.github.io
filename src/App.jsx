@@ -33,22 +33,18 @@ import TopBar from './components/TopBar';
 import { SpotlightEffects } from './components/SpotlightEffects';
 
 
-/*
-|--------------------------------------------------------------------------
-| Lazy-loaded pages
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Lazy-loaded pages
+-------------------------------------------------------------------------- */
 
 const Courage = lazy(
   () => import('./components/Courage')
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| Lazy-loaded portfolio sections
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Lazy-loaded portfolio sections
+-------------------------------------------------------------------------- */
 
 const AboutMe = lazy(
   () => import('./components/AboutMe')
@@ -71,11 +67,9 @@ const Footer = lazy(
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| Route loading screen
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Route loading screen
+-------------------------------------------------------------------------- */
 
 const RouteLoader = () => {
   return (
@@ -89,11 +83,9 @@ const RouteLoader = () => {
 };
 
 
-/*
-|--------------------------------------------------------------------------
-| Section fallback
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Section fallback
+-------------------------------------------------------------------------- */
 
 const SectionFallback = ({
   minHeight,
@@ -110,20 +102,16 @@ const SectionFallback = ({
 };
 
 
-/*
-|--------------------------------------------------------------------------
-| Deferred Section
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Deferred Section
+-------------------------------------------------------------------------- */
 
 const DeferredSection = ({
   Component,
   minHeight = 400,
 }) => {
   const hostRef = useRef(null);
-
   const [ready, setReady] = useState(false);
-
 
   useEffect(() => {
     const node = hostRef.current;
@@ -132,48 +120,31 @@ const DeferredSection = ({
       return;
     }
 
-
-    /*
-     * Older browsers without IntersectionObserver:
-     * load immediately.
-     */
-
     if (!('IntersectionObserver' in window)) {
       setReady(true);
       return;
     }
 
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setReady(true);
-
           observer.disconnect();
         }
       },
       {
         root: null,
-
-        /*
-         * Load the section before the user actually reaches it.
-         */
-
         rootMargin: '900px 0px 900px 0px',
-
         threshold: 0,
       }
     );
 
-
     observer.observe(node);
-
 
     return () => {
       observer.disconnect();
     };
   }, []);
-
 
   return (
     <div ref={hostRef}>
@@ -197,20 +168,15 @@ const DeferredSection = ({
 };
 
 
-/*
-|--------------------------------------------------------------------------
-| Portfolio
-|--------------------------------------------------------------------------
-*/
-
+/* --------------------------------------------------------------------------
+   Portfolio
+-------------------------------------------------------------------------- */
 function Portfolio() {
   return (
     <>
       <GlobalStyles />
 
       <BgGlow />
-
-      <TopBar />
 
       <SpotlightEffects />
 
@@ -222,30 +188,25 @@ function Portfolio() {
       >
         <Hero />
 
-
         <DeferredSection
           Component={AboutMe}
           minHeight={650}
         />
-
 
         <DeferredSection
           Component={Skills}
           minHeight={850}
         />
 
-
         <DeferredSection
           Component={Tabs}
           minHeight={1050}
         />
 
-
         <DeferredSection
           Component={Connect}
           minHeight={850}
         />
-
 
         <DeferredSection
           Component={Footer}
@@ -257,23 +218,15 @@ function Portfolio() {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| Scroll manager
-|--------------------------------------------------------------------------
-|
-| Ensures that entering Courage starts at the top and returning to
-| the portfolio starts at the top as well.
-|
-*/
+/* --------------------------------------------------------------------------
+   Scroll manager
+-------------------------------------------------------------------------- */
 
 function ScrollManager() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (
-      'scrollRestoration' in window.history
-    ) {
+    if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
 
@@ -288,11 +241,9 @@ function ScrollManager() {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| Page transition wrapper
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   Page transition wrapper
+-------------------------------------------------------------------------- */
 
 const pageTransition = {
   initial: {
@@ -345,7 +296,6 @@ function AnimatedPage({
       ? courageTransition
       : pageTransition;
 
-
   return (
     <motion.div
       initial="initial"
@@ -366,21 +316,19 @@ function AnimatedPage({
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-*/
-
+/* --------------------------------------------------------------------------
+   Routes
+-------------------------------------------------------------------------- */
 function AppRoutes() {
   const location = useLocation();
-
 
   return (
     <>
       <ScrollManager />
 
-
+      {/* TopBar only on the portfolio/home page */}
+      {/* {location.pathname === '/' && <TopBar />} */}
+<TopBar visible={location.pathname === '/'} />
       <AnimatePresence
         mode="wait"
         initial={false}
@@ -389,11 +337,6 @@ function AppRoutes() {
           location={location}
           key={location.pathname}
         >
-
-          {/* --------------------------------------------------------- */}
-          {/* Home                                                       */}
-          {/* --------------------------------------------------------- */}
-
           <Route
             path="/"
             element={
@@ -403,11 +346,6 @@ function AppRoutes() {
             }
           />
 
-
-          {/* --------------------------------------------------------- */}
-          {/* Courage                                                    */}
-          {/* --------------------------------------------------------- */}
-
           <Route
             path="/courage"
             element={
@@ -416,7 +354,6 @@ function AppRoutes() {
               </AnimatedPage>
             }
           />
-
         </Routes>
       </AnimatePresence>
     </>
@@ -424,29 +361,25 @@ function AppRoutes() {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| App
-|--------------------------------------------------------------------------
-*/
+/* --------------------------------------------------------------------------
+   App
+-------------------------------------------------------------------------- */
 
 function App() {
   return (
     <AppThemeProvider>
       <BrowserRouter>
-
         <div
           id="app-shell"
           style={{
             minHeight: '100vh',
             width: '100%',
-            overflowX: 'hidden',
+            overflowX: 'clip',
             background: '#050505',
           }}
         >
           <AppRoutes />
         </div>
-
       </BrowserRouter>
     </AppThemeProvider>
   );

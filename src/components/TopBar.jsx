@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useThemeToggle } from '../styles/ThemeContext';
 import resumeData from '../data/resumeData';
 import { FiStar } from 'react-icons/fi';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   TopBarBar,
@@ -133,7 +134,9 @@ const CloseIcon = () => (
    COMPONENT
 ================================================================ */
 
-const TopBar = () => {
+const TopBar = ({ visible = true }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -455,42 +458,40 @@ const TopBar = () => {
 
 
       if (element) {
-
         const top =
-          element.getBoundingClientRect()
-            .top +
+          element.getBoundingClientRect().top +
           window.scrollY -
           80;
-
 
         window.scrollTo({
           top,
           behavior: 'smooth',
         });
-
+      } else if (location.pathname !== '/') {
+        // Navigation was requested from another route. Return to the
+        // portfolio first; the destination section will be resolved after
+        // the portfolio route mounts.
+        navigate('/', { state: { scrollTo: id } });
       }
 
-
       setActiveLink(id);
-
       setSidebarOpen(false);
 
-    }, []);
+    }, [location.pathname, navigate]);
 
 
   /* ================================================================
      COURAGE
   ================================================================ */
 
-  const goToCourage =
-    useCallback(() => {
+const goToCourage =
+  useCallback(() => {
 
-      setSidebarOpen(false);
+    setSidebarOpen(false);
 
-      window.location.href =
-        '/courage';
+    navigate('/courage');
 
-    }, []);
+  }, [navigate]);
 
 
   /* ================================================================
@@ -502,32 +503,35 @@ const TopBar = () => {
       {/* ============================================================
           TOP BAR
       ============================================================ */}
-
-      <TopBarBar
-        $scrolled={scrolled}
-        data-scrolled={scrolled}
-
-        initial={{
-          y: -72,
-          opacity: 0,
-        }}
-
-        animate={{
-          y: 0,
-          opacity: 1,
-        }}
-
-        transition={{
-          duration: 0.6,
-          ease: [
-            0.25,
-            0.46,
-            0.45,
-            0.94,
-          ],
-        }}
-      >
-
+<TopBarBar
+  $scrolled={scrolled}
+  data-scrolled={scrolled}
+  $visible={visible}
+  aria-hidden={!visible}
+  initial={false}
+  animate={{
+    y: visible ? 0 : -96,
+    opacity: visible ? 1 : 0,
+    scale: visible ? 1 : 0.985,
+  }}
+  transition={{
+    y: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+    opacity: {
+      duration: 0.35,
+      ease: [0.22, 1, 0.36, 1],
+    },
+    scale: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }}
+  style={{
+    pointerEvents: visible ? 'auto' : 'none',
+  }}
+>
         {/* ========================================================
             LOGO
         ======================================================== */}

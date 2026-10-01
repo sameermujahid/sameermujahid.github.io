@@ -3059,32 +3059,57 @@ export const TopBarBar = styled(motion.header)`
   left: 0;
   right: 0;
   margin: 0 auto;
+
   z-index: 1000;
 
-  /* Dynamic width and height based on scroll state */
-  width: ${({ $scrolled }) => $scrolled ? 'min(560px, calc(100vw - 32px))' : 'min(820px, calc(100vw - 32px))'};
-  height: ${({ $scrolled }) => $scrolled ? '56px' : '64px'};
-  transition:
-    width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.3s ease,
-    background 0.3s ease,
-    border-radius 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    padding 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: ${({ $scrolled }) =>
+    $scrolled
+      ? 'min(560px, calc(100vw - 32px))'
+      : 'min(820px, calc(100vw - 32px))'};
 
-${TopBarglass}
+  height: ${({ $scrolled }) =>
+    $scrolled
+      ? '56px'
+      : '64px'};
 
-box-shadow:
-  0 0 0 1px rgba(255, 255, 255, 0.35),
-  0 0 12px rgba(255, 255, 255, 0.08);
+  padding: ${({ $scrolled }) =>
+    $scrolled
+      ? '8px 16px'
+      : '12px 20px'};
 
-border-radius: ${({ $scrolled }) => $scrolled ? '28px' : '32px'};
+  border-radius: ${({ $scrolled }) =>
+    $scrolled
+      ? '28px'
+      : '32px'};
 
-  padding: ${({ $scrolled }) => $scrolled ? '8px 16px' : '12px 20px'};
+  ${TopBarglass}
+
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 12px rgba(255, 255, 255, 0.08);
+
+  transition:
+    width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    background 0.4s ease;
+
+  will-change:
+    transform,
+    opacity,
+    width,
+    height;
+
+  transform-origin: center top;
 
   &[data-scrolled="true"] {
     box-shadow: ${({ theme }) => theme.shadowLg};
@@ -3093,13 +3118,17 @@ border-radius: ${({ $scrolled }) => $scrolled ? '28px' : '32px'};
 
   @media (max-width: 768px) {
     top: 0;
+
     width: 100%;
     height: 60px;
+
+    padding: 12px 20px;
+
     border-radius: 0;
+
     border-left: none;
     border-right: none;
     border-top: none;
-    padding: 12px 20px;
   }
 `;
 export const TopBarStarBtn = styled(motion.button)`
