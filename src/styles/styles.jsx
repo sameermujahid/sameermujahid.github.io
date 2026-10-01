@@ -3630,13 +3630,15 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
 `
+/* ================================================================
+   COURAGE PAGE
+================================================================ */
 
 export const CouragePage = styled.main`
   position: relative;
 
   width: 100%;
   height: 100dvh;
-
   min-height: 560px;
 
   overflow: hidden;
@@ -3644,20 +3646,25 @@ export const CouragePage = styled.main`
   background:
     radial-gradient(
       circle at 50% 45%,
-      rgba(62, 137, 255, 0.045) 0%,
-      rgba(62, 137, 255, 0.015) 22%,
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(41, 151, 255, 0.055)'
+          : 'rgba(0, 113, 227, 0.045)'} 0%,
       transparent 55%
     ),
-    #080808;
+    ${({ theme }) => theme.bg};
 
-  color: #f5f1e8;
+  color: ${({ theme }) => theme.textPrimary};
 
   isolation: isolate;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 `;
 
 
@@ -3667,23 +3674,25 @@ export const CouragePage = styled.main`
 
 export const CourageAtmosphere = styled.div`
   position: absolute;
-
   inset: -20%;
 
   z-index: -5;
-
   pointer-events: none;
 
   background:
     radial-gradient(
       ellipse at 50% 50%,
-      rgba(5, 118, 247, 0.16),
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(41, 151, 255, 0.14)'
+          : 'rgba(0, 113, 227, 0.09)'},
       transparent 52%
     );
 
   filter: blur(40px);
 
-  opacity: 0.9;
+  opacity: ${({ theme }) =>
+    theme.mode === 'dark' ? 0.9 : 0.7};
 
   transform: translateZ(0);
 
@@ -3693,28 +3702,28 @@ export const CourageAtmosphere = styled.div`
     0%,
     100% {
       transform: scale(1);
-      opacity: 0.72;
     }
 
     50% {
       transform: scale(1.04);
-      opacity: 0.95;
     }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 `;
 
 
 /* ================================================================
-   BACKGROUND STARS
+   BACKGROUND STARS / PARTICLES
 ================================================================ */
 
 export const CourageStars = styled.div`
   position: absolute;
-
   inset: 0;
 
   z-index: -2;
-
   pointer-events: none;
 
   span {
@@ -3725,99 +3734,93 @@ export const CourageStars = styled.div`
 
     border-radius: 50%;
 
-    background: rgba(238, 234, 136, 0.55);
+    background: ${({ theme }) =>
+      theme.mode === 'dark'
+        ? 'rgba(114, 183, 255, 0.65)'
+        : 'rgba(0, 113, 227, 0.35)'};
 
     box-shadow:
-      0 0 6px rgba(255, 255, 255, 0.22);
+      0 0 6px
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(114, 183, 255, 0.35)'
+          : 'rgba(0, 113, 227, 0.18)'};
 
-    animation:
-      courageStar 6s ease-in-out infinite;
+    animation: courageStar 6s ease-in-out infinite;
   }
-
 
   span:nth-child(1) {
     top: 18%;
     left: 17%;
-
     animation-delay: -1s;
   }
-
 
   span:nth-child(2) {
     top: 27%;
     left: 79%;
-
     animation-delay: -3s;
   }
-
 
   span:nth-child(3) {
     top: 63%;
     left: 12%;
-
     animation-delay: -2s;
   }
-
 
   span:nth-child(4) {
     top: 73%;
     left: 86%;
-
     animation-delay: -4s;
   }
-
 
   span:nth-child(5) {
     top: 12%;
     left: 48%;
-
     animation-delay: -5s;
   }
-
 
   span:nth-child(6) {
     top: 84%;
     left: 39%;
-
     animation-delay: -2.5s;
   }
-
 
   span:nth-child(7) {
     top: 39%;
     left: 91%;
-
     animation-delay: -1.5s;
   }
-
 
   span:nth-child(8) {
     top: 49%;
     left: 7%;
-
     animation-delay: -4.5s;
   }
-
 
   @keyframes courageStar {
     0%,
     100% {
       opacity: 0.2;
-
       transform: scale(0.8);
     }
 
     50% {
       opacity: 0.75;
-
       transform: scale(1.15);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    span {
+      animation: none;
+      opacity: 0.35;
     }
   }
 `;
 
 
 /* ================================================================
-   CENTRAL BLUE GLOW
+   CENTRAL GLOW
 ================================================================ */
 
 export const CourageGlow = styled.div`
@@ -3832,7 +3835,6 @@ export const CourageGlow = styled.div`
   transform: translate(-50%, -50%);
 
   z-index: -3;
-
   pointer-events: none;
 
   border-radius: 50%;
@@ -3840,16 +3842,20 @@ export const CourageGlow = styled.div`
   background:
     radial-gradient(
       circle,
-      rgba(74, 157, 255, 0.055) 0%,
-      rgba(74, 157, 255, 0.018) 28%,
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(74, 157, 255, 0.07)'
+          : 'rgba(0, 113, 227, 0.045)'} 0%,
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(74, 157, 255, 0.025)'
+          : 'rgba(0, 113, 227, 0.012)'} 28%,
       transparent 68%
     );
 
   filter: blur(18px);
 
-  animation:
-    courageGlow 9s ease-in-out infinite;
-
+  animation: courageGlow 9s ease-in-out infinite;
 
   @keyframes courageGlow {
     0%,
@@ -3869,16 +3875,19 @@ export const CourageGlow = styled.div`
         scale(1.04);
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
 
 /* ================================================================
-   FULL SCREEN CONTENT STAGE
+   CONTENT STAGE
 ================================================================ */
 
 export const CourageContent = styled.div`
   position: absolute;
-
   inset: 0;
 
   width: 100%;
@@ -3887,14 +3896,9 @@ export const CourageContent = styled.div`
   z-index: 5;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  /*
-   * Places the initial composition slightly above
-   * the exact mathematical center.
-   */
   padding-bottom: 6vh;
 
   box-sizing: border-box;
@@ -3902,16 +3906,12 @@ export const CourageContent = styled.div`
   text-align: center;
 
   pointer-events: none;
-
-  /*
-   * Do NOT hide the animated composition.
-   */
   overflow: visible;
 `;
 
 
 /* ================================================================
-   SINGLE MOVING COMPOSITION
+   COMPOSITION
 ================================================================ */
 
 export const CourageComposition = styled.div`
@@ -3920,7 +3920,6 @@ export const CourageComposition = styled.div`
   width: min(900px, 88vw);
 
   display: flex;
-
   flex-direction: column;
 
   align-items: center;
@@ -3928,14 +3927,9 @@ export const CourageComposition = styled.div`
 
   text-align: center;
 
-  /*
-   * Keeps the entire composition smooth during
-   * the upward morph.
-   */
   will-change: transform;
 
   transform: translateZ(0);
-
   backface-visibility: hidden;
 
   pointer-events: none;
@@ -3951,22 +3945,24 @@ export const CourageMark = styled.div`
   height: 42px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   margin-bottom: 22px;
 
-  color: #72b7ff;
+  color: ${({ theme }) => theme.accent};
 
   font-size: 40px;
-
   line-height: 1;
 
   opacity: 0.92;
 
   text-shadow:
-    0 0 12px rgba(74, 157, 255, 0.32);
+    0 0 12px
+    ${({ theme }) =>
+      theme.mode === 'dark'
+        ? 'rgba(41, 151, 255, 0.32)'
+        : 'rgba(0, 113, 227, 0.18)'};
 `;
 
 
@@ -3977,7 +3973,7 @@ export const CourageMark = styled.div`
 export const CourageEyebrow = styled.div`
   margin-bottom: 14px;
 
-  color: rgba(245, 241, 232, 0.48);
+  color: ${({ theme }) => theme.textTertiary};
 
   font-family:
     Inter,
@@ -3987,36 +3983,30 @@ export const CourageEyebrow = styled.div`
     sans-serif;
 
   font-size: 12px;
-
   font-weight: 600;
 
   letter-spacing: 0.32em;
-
   line-height: 1;
 
   text-transform: uppercase;
-
   white-space: nowrap;
 `;
 
 
 /* ================================================================
-   COURAGE TITLE
+   TITLE
 ================================================================ */
 
 export const CourageTitle = styled.h1`
   margin: 0;
 
-  color: #f5f1e8;
+  color: ${({ theme }) => theme.textPrimary};
 
   font-family:
     Georgia,
     'Times New Roman',
     serif;
 
-  /*
-   * Slightly larger than the previous version.
-   */
   font-size: clamp(68px, 9vw, 124px);
 
   font-weight: 500;
@@ -4030,7 +4020,11 @@ export const CourageTitle = styled.h1`
   white-space: nowrap;
 
   text-shadow:
-    0 0 40px rgba(255, 255, 255, 0.025);
+    0 0 40px
+    ${({ theme }) =>
+      theme.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.025)'
+        : 'rgba(0, 0, 0, 0.025)'};
 
   transform: translateZ(0);
 
@@ -4048,22 +4042,14 @@ export const CourageTitle = styled.h1`
 export const CourageStatement = styled.div`
   width: 100%;
 
-  /*
-   * Reserve the complete quote area from the beginning.
-   *
-   * This is what prevents "Courage" from jumping when
-   * the lines appear.
-   */
   min-height: 112px;
 
   margin-top: 34px;
 
   display: flex;
-
   flex-direction: column;
 
   align-items: center;
-
   justify-content: flex-start;
 
   overflow: visible;
@@ -4077,7 +4063,7 @@ export const CourageStatement = styled.div`
 export const CourageLine = styled.div`
   margin: 0;
 
-  color: rgba(245, 241, 232, 0.76);
+  color: ${({ theme }) => theme.textSecondary};
 
   font-family:
     Inter,
@@ -4110,14 +4096,18 @@ export const CourageLine = styled.div`
 
 
 /* ================================================================
-   BLUE ACCENT
+   ACCENT
 ================================================================ */
 
 export const CourageAccent = styled.span`
-  color: #72b7ff;
+  color: ${({ theme }) => theme.accent};
 
   text-shadow:
-    0 0 18px rgba(74, 157, 255, 0.16);
+    0 0 18px
+    ${({ theme }) =>
+      theme.mode === 'dark'
+        ? 'rgba(41, 151, 255, 0.18)'
+        : 'rgba(0, 113, 227, 0.12)'};
 `;
 
 
@@ -4135,7 +4125,7 @@ export const CourageContinue = styled.div`
 
   margin-top: 34px;
 
-  color: rgba(245, 241, 232, 0.35);
+  color: ${({ theme }) => theme.textTertiary};
 
   font-family:
     Inter,
@@ -4154,7 +4144,6 @@ export const CourageContinue = styled.div`
 
   white-space: nowrap;
 
-
   span:first-child,
   span:last-child {
     display: block;
@@ -4166,16 +4155,15 @@ export const CourageContinue = styled.div`
       linear-gradient(
         90deg,
         transparent,
-        rgba(245, 241, 232, 0.22)
+        ${({ theme }) => theme.borderStrong}
       );
   }
-
 
   span:last-child {
     background:
       linear-gradient(
         90deg,
-        rgba(245, 241, 232, 0.22),
+        ${({ theme }) => theme.borderStrong},
         transparent
       );
   }
@@ -4203,137 +4191,71 @@ export const CourageBackButton = styled(motion.button)`
 
   padding: 11px 17px;
 
-  /*
-   * Transparent border allows the gradient underneath
-   * to become the visible border.
-   */
-  border: 1px solid transparent;
+  border: 1px solid ${({ theme }) => theme.border};
 
   border-radius: 999px;
 
-  /*
-   * Blue glass background + blue gradient border.
-   */
-  background:
-    linear-gradient(
-      rgba(15, 25, 42, 0.72),
-      rgba(8, 14, 26, 0.72)
-    ) padding-box,
+  background: ${({ theme }) => theme.glass};
 
-    linear-gradient(
-      135deg,
-      rgba(113, 183, 255, 0.72),
-      rgba(61, 126, 255, 0.28),
-      rgba(113, 183, 255, 0.58)
-    ) border-box;
+  color: ${({ theme }) => theme.textSecondary};
 
-  /*
-   * Very subtle glass tint.
-   */
-  box-shadow:
-    inset 0 0 18px rgba(67, 139, 255, 0.055),
-    0 0 20px rgba(44, 110, 255, 0.045);
+  box-shadow: ${({ theme }) => theme.shadowSm};
 
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
 
-  color: rgba(235, 244, 255, 0.72);
+  font-family: inherit;
 
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
-  font-size: 12px;
-
+  font-size: 0.875rem;
   font-weight: 500;
-
-  letter-spacing: 0.08em;
-
-  line-height: 1;
 
   cursor: pointer;
 
-  outline: none;
-
   transition:
-    color 0.5s ease,
-    box-shadow 0.5s ease,
-    background 0.5s ease,
-    transform 0.5s ease;
-
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 
   &:hover {
-    color: #eaf4ff;
+    background: ${({ theme }) => theme.glassHover};
 
-    background:
-      linear-gradient(
-        rgba(19, 39, 67, 0.82),
-        rgba(8, 20, 38, 0.82)
-      ) padding-box,
+    color: ${({ theme }) => theme.textPrimary};
 
-      linear-gradient(
-        135deg,
-        rgba(130, 196, 255, 0.95),
-        rgba(70, 137, 255, 0.5),
-        rgba(130, 196, 255, 0.8)
-      ) border-box;
+    border-color: ${({ theme }) => theme.accent};
 
     box-shadow:
-      inset 0 0 20px rgba(67, 139, 255, 0.09),
-      0 0 26px rgba(44, 110, 255, 0.1);
-
-    transform: translateX(-3px);
+      ${({ theme }) => theme.shadowMd},
+      0 0 20px
+      ${({ theme }) =>
+        theme.mode === 'dark'
+          ? 'rgba(41, 151, 255, 0.08)'
+          : 'rgba(0, 113, 227, 0.08)'};
   }
-
 
   &:active {
     transform: scale(0.97);
   }
 
-
-  span:first-child {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 17px;
-    height: 17px;
-
-    color: #72b7ff;
-
-    font-size: 17px;
-
-    line-height: 1;
-
-    transform: translateY(-1px);
-
-    text-shadow:
-      0 0 10px rgba(74, 157, 255, 0.35);
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 3px;
   }
-
-
-  span:last-child {
-    font-size: 11px;
-
-    text-transform: uppercase;
-  }
-
 
   @media (max-width: 600px) {
-    top: 20px;
+    top: 18px;
     left: 18px;
 
-    padding: 10px 14px;
+    padding: 9px 14px;
 
-    gap: 9px;
+    font-size: 0.8125rem;
+  }
 
-    span:last-child {
-      font-size: 10px;
-    }
+  @media (prefers-reduced-transparency: reduce) {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    background: ${({ theme }) => theme.bgSecondary};
   }
 `;
 

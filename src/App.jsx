@@ -13,98 +13,52 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import {
-  motion,
-  AnimatePresence,
-} from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import Hero from './components/Hero';
+import Courage from './components/Courage';
 
-import {
-  AppThemeProvider,
-} from './styles/ThemeContext';
-
-import {
-  BgGlow,
-  GlobalStyles,
-} from './styles/styles';
-
+import { AppThemeProvider } from './styles/ThemeContext';
+import GlobalStyles from './styles/GlobalStyles';
+import { BgGlow } from './styles/styles';
 import TopBar from './components/TopBar';
 import { SpotlightEffects } from './components/SpotlightEffects';
+const AboutMe = lazy(() => import('./components/AboutMe'));
+const Skills = lazy(() => import('./components/Skills'));
+const Tabs = lazy(() => import('./components/Tabs'));
+const Connect = lazy(() => import('./components/Connect'));
+const Footer = lazy(() => import('./components/Footer'));
+import styled from 'styled-components';
+const RouteStage = styled.div`
+  min-height: 100vh;
+  width: 100%;
 
+  background: ${({ theme }) => theme.bg};
 
-/* --------------------------------------------------------------------------
-   Lazy-loaded pages
--------------------------------------------------------------------------- */
+  color: ${({ theme }) => theme.textPrimary};
 
-const Courage = lazy(
-  () => import('./components/Courage')
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+`;
+/* ================================================================
+   SECTION FALLBACK
+================================================================ */
+
+const SectionFallback = ({ minHeight }) => (
+  <div
+    aria-hidden="true"
+    style={{
+      minHeight,
+      width: '100%',
+    }}
+  />
 );
 
 
-/* --------------------------------------------------------------------------
-   Lazy-loaded portfolio sections
--------------------------------------------------------------------------- */
-
-const AboutMe = lazy(
-  () => import('./components/AboutMe')
-);
-
-const Skills = lazy(
-  () => import('./components/Skills')
-);
-
-const Tabs = lazy(
-  () => import('./components/Tabs')
-);
-
-const Connect = lazy(
-  () => import('./components/Connect')
-);
-
-const Footer = lazy(
-  () => import('./components/Footer')
-);
-
-
-/* --------------------------------------------------------------------------
-   Route loading screen
--------------------------------------------------------------------------- */
-
-const RouteLoader = () => {
-  return (
-    <div
-      className="route-loader"
-      aria-hidden="true"
-    >
-      <div className="route-loader-glow" />
-    </div>
-  );
-};
-
-
-/* --------------------------------------------------------------------------
-   Section fallback
--------------------------------------------------------------------------- */
-
-const SectionFallback = ({
-  minHeight,
-}) => {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        minHeight,
-        width: '100%',
-      }}
-    />
-  );
-};
-
-
-/* --------------------------------------------------------------------------
-   Deferred Section
--------------------------------------------------------------------------- */
+/* ================================================================
+   DEFERRED SECTION
+================================================================ */
 
 const DeferredSection = ({
   Component,
@@ -116,9 +70,7 @@ const DeferredSection = ({
   useEffect(() => {
     const node = hostRef.current;
 
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
     if (!('IntersectionObserver' in window)) {
       setReady(true);
@@ -141,9 +93,7 @@ const DeferredSection = ({
 
     observer.observe(node);
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -151,32 +101,30 @@ const DeferredSection = ({
       {ready ? (
         <Suspense
           fallback={
-            <SectionFallback
-              minHeight={minHeight}
-            />
+            <SectionFallback minHeight={minHeight} />
           }
         >
           <Component />
         </Suspense>
       ) : (
-        <SectionFallback
-          minHeight={minHeight}
-        />
+        <SectionFallback minHeight={minHeight} />
       )}
     </div>
   );
 };
 
 
-/* --------------------------------------------------------------------------
-   Portfolio
--------------------------------------------------------------------------- */
+/* ================================================================
+   PORTFOLIO
+================================================================ */
 function Portfolio() {
   return (
     <>
       <GlobalStyles />
 
       <BgGlow />
+
+      <TopBar />
 
       <SpotlightEffects />
 
@@ -218,172 +166,69 @@ function Portfolio() {
 }
 
 
-/* --------------------------------------------------------------------------
-   Scroll manager
--------------------------------------------------------------------------- */
+/* ================================================================
+   ROUTE TRANSITION
+================================================================ */
 
-function ScrollManager() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'auto',
-    });
-  }, [pathname]);
-
-  return null;
-}
-
-
-/* --------------------------------------------------------------------------
-   Page transition wrapper
--------------------------------------------------------------------------- */
-
-const pageTransition = {
-  initial: {
-    opacity: 0,
-    y: 14,
-    filter: 'blur(8px)',
-  },
-
-  animate: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-  },
-
-  exit: {
-    opacity: 0,
-    y: -10,
-    filter: 'blur(8px)',
-  },
-};
-
-
-const courageTransition = {
-  initial: {
-    opacity: 0,
-    scale: 0.985,
-    filter: 'blur(10px)',
-  },
-
-  animate: {
-    opacity: 1,
-    scale: 1,
-    filter: 'blur(0px)',
-  },
-
-  exit: {
-    opacity: 0,
-    scale: 1.025,
-    filter: 'blur(12px)',
-  },
-};
-
-
-function AnimatedPage({
-  children,
-  type = 'portfolio',
-}) {
-  const variants =
-    type === 'courage'
-      ? courageTransition
-      : pageTransition;
-
-  return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={variants}
-      transition={{
-        duration: 0.6,
-        ease: [0.76, 0, 0.24, 1],
-      }}
-      style={{
-        width: '100%',
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-
-/* --------------------------------------------------------------------------
-   Routes
--------------------------------------------------------------------------- */
-function AppRoutes() {
+function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <>
-      <ScrollManager />
-
-      {/* TopBar only on the portfolio/home page */}
-      {/* {location.pathname === '/' && <TopBar />} */}
-<TopBar visible={location.pathname === '/'} />
+    <RouteStage>
       <AnimatePresence
         mode="wait"
         initial={false}
       >
-        <Routes
-          location={location}
+        <motion.div
           key={location.pathname}
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          transition={{
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style={{
+            minHeight: '100vh',
+            width: '100%',
+          }}
         >
-          <Route
-            path="/"
-            element={
-              <AnimatedPage type="portfolio">
-                <Portfolio />
-              </AnimatedPage>
-            }
-          />
+          <Routes location={location}>
+            <Route
+              path="/"
+              element={<Portfolio />}
+            />
 
-          <Route
-            path="/courage"
-            element={
-              <AnimatedPage type="courage">
-                <Courage />
-              </AnimatedPage>
-            }
-          />
-        </Routes>
+            <Route
+              path="/courage"
+              element={<Courage />}
+            />
+          </Routes>
+        </motion.div>
       </AnimatePresence>
-    </>
+    </RouteStage>
   );
 }
 
 
-/* --------------------------------------------------------------------------
-   App
--------------------------------------------------------------------------- */
+/* ================================================================
+   APP
+================================================================ */
 
 function App() {
   return (
     <AppThemeProvider>
       <BrowserRouter>
-        <div
-          id="app-shell"
-          style={{
-            minHeight: '100vh',
-            width: '100%',
-            overflowX: 'clip',
-            background: '#050505',
-          }}
-        >
-          <AppRoutes />
-        </div>
+        <AnimatedRoutes />
       </BrowserRouter>
     </AppThemeProvider>
   );
 }
-
 
 export default App;

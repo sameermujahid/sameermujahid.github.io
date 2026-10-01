@@ -10,7 +10,7 @@ export const lightTheme = {
   glassShadow: '0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)',
   glassHover: 'rgba(255, 255, 255, 0.95)',
   textPrimary: '#1d1d1f',
-  textSecondary: '#00000',
+  textSecondary: '#6e6e73',
   textTertiary: '#aeaeb2',
   textAccent: '#0071e3',
   accent: '#0071e3',
