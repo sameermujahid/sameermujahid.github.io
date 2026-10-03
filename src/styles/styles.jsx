@@ -111,50 +111,195 @@ export const GlassCard = styled(motion.div)`
     border-radius: 16px;
   }
 `;
-
 export const PrimaryButton = styled(motion.a)`
+  width: 220px;
+  height: 54px;
+
+  box-sizing: border-box;
+
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 20px;
+
+  border-radius: 999px;
+
+  border: 1px solid transparent;
+
   background: ${({ theme }) => theme.accent};
   color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  border-radius: 980px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover {
-    background: ${({ theme }) => theme.accentHover};
-    box-shadow: 0 8px 24px rgba(0, 113, 227, 0.35);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  svg {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    display: block;
   }
 
-  &:active { transform: translateY(1px); }
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.accent};
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 54px;
+
+    font-size: 0.95rem;
+
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    width: 175px;
+    height: 50px;
+
+    padding: 0 12px;
+
+    font-size: 0.88rem;
+
+    gap: 7px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    width: 160px;
+    height: 48px;
+
+    font-size: 0.84rem;
+
+    gap: 6px;
+  }
 `;
 
-export const SecondaryButton = styled(motion.a)`
+
+export const SecondaryButton = styled(motion.button)`
+  width: 220px;
+  height: 54px;
+
+  box-sizing: border-box;
+
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 13px 27px;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 20px;
+
+  border-radius: 999px;
+
+  border: 1px solid ${({ theme }) => theme.accent};
+
   background: transparent;
+
   color: ${({ theme }) => theme.accent};
-  font-size: 0.9375rem;
+
+  font-size: 1rem;
   font-weight: 600;
-  border-radius: 980px;
-  border: 1.5px solid ${({ theme }) => theme.accent};
-  cursor: pointer;
+  line-height: 1;
+
   text-decoration: none;
+
   white-space: nowrap;
-  transition: background-color 0.2s ease;
 
-  &:hover { background: ${({ theme }) => theme.accentSubtle}; }
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  svg {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    display: block;
+  }
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 54px;
+
+    font-size: 0.95rem;
+
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    width: 175px;
+    height: 50px;
+
+    padding: 0 12px;
+
+    font-size: 0.88rem;
+
+    gap: 7px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    width: 160px;
+    height: 48px;
+
+    font-size: 0.84rem;
+
+    gap: 6px;
+  }
 `;
-
 /* --- Hero.jsx: styled --- */
 /* ============================================================
    HERO PROFILE DEPTH GLOW
