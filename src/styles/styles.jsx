@@ -155,26 +155,244 @@ export const SecondaryButton = styled(motion.a)`
   &:hover { background: ${({ theme }) => theme.accentSubtle}; }
 `;
 
-export const HeroContainer = styled.section`
-  min-height: 100vh;
-  min-height: 100svh;
+/* --- Hero.jsx: styled --- */
+/* ============================================================
+   HERO PROFILE DEPTH GLOW
+   ============================================================ */
+
+export const HeroProfileDepthGlow = styled.div`
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  left: -30px;
+  bottom: -30px;
+
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse 58% 58% at 28% 68%,
+      rgba(255, 255, 255, 0.30) 0%,
+      rgba(255, 255, 255, 0.20) 18%,
+      rgba(255, 255, 255, 0.10) 34%,
+      rgba(255, 255, 255, 0.045) 50%,
+      rgba(255, 255, 255, 0) 74%
+    );
+
+  filter: blur(26px);
+  opacity: 0.95;
+
+  transform: translateZ(0);
+  will-change: transform;
+
+  @media (max-width: 768px) {
+    width: 310px;
+    height: 280px;
+
+    left: -70px;
+    bottom: -58px;
+
+    filter: blur(24px);
+
+    background:
+      radial-gradient(
+        ellipse 58% 58% at 30% 68%,
+        rgba(255, 255, 255, 0.24) 0%,
+        rgba(255, 255, 255, 0.15) 22%,
+        rgba(255, 255, 255, 0.07) 40%,
+        rgba(255, 255, 255, 0) 74%
+      );
+  }
+
+  @media (max-width: 480px) {
+    width: 270px;
+    height: 240px;
+
+    left: -52px;
+    bottom: -48px;
+
+    filter: blur(22px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    will-change: auto;
+  }
+`;
+
+
+/* ============================================================
+   HERO AMBIENT GLOW
+   ============================================================ */
+
+export const HeroProfileAmbientGlow = styled.div`
+  position: absolute;
+
+  width: 330px;
+  height: 330px;
+
+  right: -65px;
+  top: 15px;
+
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(41, 151, 255, 0.055) 0%,
+      rgba(41, 151, 255, 0.025) 35%,
+      rgba(41, 151, 255, 0) 72%
+    );
+
+  filter: blur(34px);
+  opacity: 0.8;
+
+  transform: translateZ(0);
+
+  @media (max-width: 768px) {
+    width: 250px;
+    height: 250px;
+
+    right: -55px;
+    top: 10px;
+
+    filter: blur(28px);
+  }
+`;
+
+
+/* ============================================================
+   SCROLL CIRCLE
+   ============================================================ */
+
+export const HeroScrollCircle = styled(motion.button)`
+  width: 40px;
+  height: 40px;
+
+  min-width: 40px;
+  min-height: 40px;
+
+  padding: 0;
+
+  border-radius: 50%;
+  border: 1.5px solid ${({ theme }) => theme.border};
+
+  background: ${({ theme }) => theme.glass};
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
+
+  color: ${({ theme }) => theme.textSecondary};
+
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
+  z-index: 30;
+
+  flex-shrink: 0;
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.accent};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 768px) {
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+    min-height: 38px;
+
+    svg {
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 36px;
+    height: 36px;
+
+    min-width: 36px;
+    min-height: 36px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+`;
+
+
+/* ============================================================
+   HERO CONTAINER
+   ============================================================ */
+
+export const HeroContainer = styled.section`
+  position: relative;
+
+  width: 100%;
+
+  /*
+   * Important:
+   * Use a real viewport height rather than allowing the hero
+   * to become unnecessarily taller than the screen.
+   */
+  min-height: 100vh;
+  min-height: 100svh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   padding: 120px 24px 80px;
+
   background: ${({ theme }) => theme.bg};
 
-  /* Keep the grid, but remove the full-page 60px backdrop blur.
-     The blur was compositing the entire hero on every frame. */
+  overflow: hidden;
+
+  isolation: isolate;
+
+  box-sizing: border-box;
+
+  /*
+   * Background grid
+   */
   &::after {
     content: '';
+
     position: absolute;
     inset: 0;
+
     pointer-events: none;
+
     z-index: 0;
+
     background-image:
       linear-gradient(
         ${({ theme }) =>
@@ -191,70 +409,245 @@ export const HeroContainer = styled.section`
             : 'rgba(0,0,0,0.07)'} 1px,
         transparent 1px
       );
+
     background-size: 80px 80px;
-    mask-image: linear-gradient(to bottom, transparent, black 15%, black 82%, transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 82%, transparent);
+
+    mask-image:
+      linear-gradient(
+        to bottom,
+        transparent,
+        black 15%,
+        black 82%,
+        transparent
+      );
+
+    -webkit-mask-image:
+      linear-gradient(
+        to bottom,
+        transparent,
+        black 15%,
+        black 82%,
+        transparent
+      );
   }
 
+  /*
+   * TABLET
+   */
+  @media (max-width: 1024px) {
+    padding: 105px 24px 70px;
+  }
+
+  /*
+   * MOBILE
+   */
   @media (max-width: 768px) {
-    padding: 110px 20px 70px;
+    min-height: 100svh;
+
+    padding:
+      max(86px, env(safe-area-inset-top) + 72px)
+      18px
+      max(58px, env(safe-area-inset-bottom) + 50px);
+
+    align-items: center;
+  }
+
+  /*
+   * SMALL MOBILE
+   */
+  @media (max-width: 480px) {
+    padding:
+      max(78px, env(safe-area-inset-top) + 68px)
+      14px
+      max(52px, env(safe-area-inset-bottom) + 46px);
+  }
+
+  /*
+   * SHORT MOBILE/TABLET SCREENS
+   *
+   * This is the important fix for your 768 x 695
+   * type of viewport.
+   */
+  @media (max-width: 768px) and (max-height: 760px) {
+    padding:
+      max(76px, env(safe-area-inset-top) + 64px)
+      16px
+      max(46px, env(safe-area-inset-bottom) + 40px);
   }
 `;
 
+
+/* ============================================================
+   HERO INNER
+   ============================================================ */
+
 export const HeroInner = styled.div`
+  position: relative;
+  z-index: 2;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   gap: 60px;
+
   max-width: 1100px;
-  margin: 0 auto;
+
   width: 100%;
 
+  margin: 0 auto;
+
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    gap: 40px;
+  }
+
+  /*
+   * Mobile/tablet:
+   * Image first, content second.
+   */
   @media (max-width: 768px) {
     flex-direction: column-reverse;
-    gap: 36px;
+
+    justify-content: center;
+
     align-items: center;
+
+    gap: 20px;
+
+    width: 100%;
+
     text-align: center;
   }
-`;
 
-export const HeroContent = styled.div`
-  flex: 1;
-  max-width: 600px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-
-  @media (max-width: 768px) {
-    align-items: center;
-    max-width: 100%;
+  /*
+   * Short mobile/tablet:
+   * Reduce vertical occupation.
+   */
+  @media (max-width: 768px) and (max-height: 760px) {
+    gap: 12px;
   }
 `;
+
+
+/* ============================================================
+   HERO CONTENT
+   ============================================================ */
+
+export const HeroContent = styled.div`
+  position: relative;
+  z-index: 5;
+
+  flex: 1;
+
+  max-width: 600px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 22px;
+
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    max-width: 560px;
+  }
+
+  @media (max-width: 768px) {
+    flex: none;
+
+    width: 100%;
+    max-width: 680px;
+
+    align-items: center;
+
+    text-align: center;
+
+    gap: 14px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 11px;
+  }
+
+  /*
+   * Short screens are the most important case.
+   */
+  @media (max-width: 768px) and (max-height: 760px) {
+    gap: 8px;
+  }
+`;
+
+
+/* ============================================================
+   AVAILABILITY
+   ============================================================ */
 
 export const HeroEyebrow = styled(motion.div)`
   display: inline-flex;
+
   align-items: center;
+  justify-content: center;
+
   gap: 8px;
+
   font-size: 0.875rem;
+
+  line-height: 1.2;
+
   font-weight: 500;
+
   color: ${({ theme }) => theme.textSecondary};
+
+  white-space: nowrap;
 
   span {
     display: inline-block;
+
     width: 7px;
     height: 7px;
+
+    min-width: 7px;
+    min-height: 7px;
+
     border-radius: 50%;
+
     background: #34c759;
+
     animation: ${pulseGlow} 2s ease infinite;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.78rem;
+
+    gap: 7px;
+
+    span {
+      width: 6px;
+      height: 6px;
+      min-width: 6px;
+      min-height: 6px;
+    }
   }
 `;
 
+
+/* ============================================================
+   HERO HEADING
+   ============================================================ */
+
 export const HeroHeading = styled(motion.h1)`
+  margin: 0;
+
   font-size: clamp(2.6rem, 6.5vw, 4rem);
+
   font-weight: 700;
+
   letter-spacing: -0.04em;
+
   line-height: 1.03;
+
   color: ${({ theme }) => theme.textPrimary};
 
   em {
@@ -262,99 +655,383 @@ export const HeroHeading = styled(motion.h1)`
     color: ${({ theme }) => theme.accent};
   }
 
+  @media (max-width: 768px) {
+    font-size: clamp(2.35rem, 7vw, 3.25rem);
+
+    line-height: 0.99;
+
+    letter-spacing: -0.045em;
+  }
+
   @media (max-width: 480px) {
-    font-size: clamp(2.35rem, 12vw, 3.25rem);
+    font-size: clamp(2.15rem, 10.8vw, 3rem);
+
+    line-height: 0.98;
+  }
+
+  /*
+   * Short screen optimization.
+   */
+  @media (max-width: 768px) and (max-height: 760px) {
+    font-size: clamp(2rem, 7.8vw, 2.7rem);
+
+    line-height: 0.96;
   }
 `;
 
+
+/* ============================================================
+   HERO ROLE / DESCRIPTION
+   ============================================================ */
+
 export const HeroRole = styled(motion.div)`
+  margin: 0;
+
   font-size: clamp(1rem, 2.5vw, 1.25rem);
+
   font-weight: 400;
+
   color: ${({ theme }) => theme.textSecondary};
+
   line-height: 1.6;
+
+  max-width: 600px;
+
+  @media (max-width: 768px) {
+    max-width: 600px;
+
+    font-size: clamp(0.95rem, 2.7vw, 1.1rem);
+
+    line-height: 1.42;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.94rem;
+
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) and (max-height: 760px) {
+    font-size: 0.88rem;
+
+    line-height: 1.32;
+  }
 `;
+
+
+/* ============================================================
+   HERO BUTTONS
+   ============================================================ */
 
 export const HeroButtons = styled(motion.div)`
   display: flex;
+
+  align-items: center;
+  justify-content: flex-start;
+
   gap: 12px;
+
   flex-wrap: wrap;
+
+  width: 100%;
 
   @media (max-width: 768px) {
     justify-content: center;
+
+    gap: 10px;
+
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
+
+  @media (max-width: 390px) {
+    /*
+     * Keep buttons side-by-side on narrow phones.
+     * The actual button styles determine their width.
+     */
+    gap: 7px;
+  }
+
+  @media (max-width: 768px) and (max-height: 760px) {
+    gap: 7px;
   }
 `;
 
-export const HeroImageWrapper = styled(motion.div)`
+
+/* ============================================================
+   SOCIAL ICONS
+   ============================================================ */
+
+export const SocialIcons = styled(motion.div)`
   position: relative;
-  flex-shrink: 0;
-  z-index: 2;
-  width: 360px;
-  height: 360px;
+  z-index: 10;
+
   display: flex;
+
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  width: 100%;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 7px;
+  }
+
+  @media (max-width: 768px) and (max-height: 760px) {
+    gap: 6px;
+  }
+`;
+
+
+/* ============================================================
+   SOCIAL ICON
+   ============================================================ */
+
+export const SocialIcon = styled(motion.a)`
+  position: relative;
+  z-index: 11;
+
+  width: 44px;
+  height: 44px;
+
+  min-width: 44px;
+  min-height: 44px;
+
+  border-radius: 50%;
+
+  ${glassMixin}
+
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
-  /* Clean accent glow directly behind the portrait.
-     No grey rectangle, no animated morph, no huge blur surface. */
-  &::before {
-    content: '';
-    position: absolute;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      ${({ theme }) => `${theme.accent}22`} 0%,
-      ${({ theme }) => `${theme.accent}0d`} 42%,
-      transparent 72%
-    );
-    pointer-events: none;
-    z-index: 0;
+  font-size: 1rem;
+
+  line-height: 1;
+
+  color: ${({ theme }) => theme.textSecondary};
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  flex-shrink: 0;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+
+    display: block;
+
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.accent};
+    border-color: ${({ theme }) => theme.accent};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.accent};
+    outline-offset: 3px;
   }
 
   @media (max-width: 768px) {
-    width: 240px;
-    height: 240px;
+    width: 40px;
+    height: 40px;
 
-    &::before {
-      width: 250px;
-      height: 250px;
+    min-width: 40px;
+    min-height: 40px;
+
+    svg {
+      width: 17px;
+      height: 17px;
     }
   }
 
   @media (max-width: 480px) {
-    width: 200px;
-    height: 200px;
+    width: 38px;
+    height: 38px;
 
-    &::before {
-      width: 215px;
-      height: 215px;
+    min-width: 38px;
+    min-height: 38px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  @media (max-width: 768px) and (max-height: 760px) {
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+    min-height: 34px;
+
+    svg {
+      width: 15px;
+      height: 15px;
     }
   }
 `;
 
+
+/* ============================================================
+   HERO IMAGE WRAPPER
+   ============================================================ */
+
+export const HeroImageWrapper = styled(motion.div)`
+  position: relative;
+
+  flex-shrink: 0;
+
+  z-index: 4;
+
+  width: 360px;
+  height: 360px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1024px) {
+    width: 300px;
+    height: 300px;
+  }
+
+  @media (max-width: 768px) {
+    width: 220px;
+    height: 220px;
+  }
+
+  @media (max-width: 480px) {
+    width: 190px;
+    height: 190px;
+  }
+
+  /*
+   * Critical for 768x695 and other short mobile screens.
+   */
+  @media (max-width: 768px) and (max-height: 760px) {
+    width: 175px;
+    height: 175px;
+  }
+
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    width: 360px;
+    height: 360px;
+
+    border-radius: 50%;
+
+    background:
+      radial-gradient(
+        circle,
+        ${({ theme }) => `${theme.accent}22`} 0%,
+        ${({ theme }) => `${theme.accent}0d`} 42%,
+        transparent 72%
+      );
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    @media (max-width: 1024px) {
+      width: 310px;
+      height: 310px;
+    }
+
+    @media (max-width: 768px) {
+      width: 240px;
+      height: 240px;
+    }
+
+    @media (max-width: 480px) {
+      width: 210px;
+      height: 210px;
+    }
+
+    @media (max-width: 768px) and (max-height: 760px) {
+      width: 190px;
+      height: 190px;
+    }
+  }
+`;
+
+
+/* ============================================================
+   HERO IMAGE
+   ============================================================ */
+
 export const HeroImage = styled(motion.img)`
   position: relative;
-  z-index: 2;
+
+  z-index: 3;
+
   width: 300px;
   height: 300px;
+
   border-radius: 50%;
+
   object-fit: cover;
+
   border: 2px solid ${({ theme }) => theme.glassBorder};
+
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.3),
     inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 
+  display: block;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 250px;
+  }
+
   @media (max-width: 768px) {
-    width: 200px;
-    height: 200px;
+    width: 190px;
+    height: 190px;
   }
 
   @media (max-width: 480px) {
-    width: 170px;
-    height: 170px;
+    width: 165px;
+    height: 165px;
+  }
+
+  @media (max-width: 768px) and (max-height: 760px) {
+    width: 150px;
+    height: 150px;
   }
 `;
+
+
+/* ============================================================
+   DISABLED OLD BLOBS
+   ============================================================ */
 
 export const HeroBlob = styled.div`
   display: none;
@@ -364,55 +1041,40 @@ export const HeroBlobSecondary = styled.div`
   display: none;
 `;
 
-export const SocialIcons = styled(motion.div)`
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
 
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
-`;
-
-export const SocialIcon = styled(motion.a)`
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  ${glassMixin}
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.textSecondary};
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-
-  &:hover {
-    color: ${({ theme }) => theme.accent};
-    border-color: ${({ theme }) => theme.accent};
-  }
-`;
+/* ============================================================
+   BACKGROUND GLOW
+   ============================================================ */
 
 export const BgGlow = styled.div`
   position: fixed;
+
   inset: 0;
+
   z-index: 0;
+
   pointer-events: none;
+
   overflow: hidden;
 
   &::before,
   &::after {
     content: '';
+
     position: absolute;
+
     border-radius: 50%;
+
     pointer-events: none;
   }
 
   &::before {
     top: -20%;
     right: -10%;
+
     width: min(700px, 120vw);
     height: 700px;
+
     background: ${({ theme }) =>
       theme.mode === 'dark'
         ? 'radial-gradient(circle, rgba(41,151,255,0.045) 0%, transparent 68%)'
@@ -422,8 +1084,10 @@ export const BgGlow = styled.div`
   &::after {
     bottom: -10%;
     left: -5%;
+
     width: min(600px, 120vw);
     height: 600px;
+
     background: ${({ theme }) =>
       theme.mode === 'dark'
         ? 'radial-gradient(circle, rgba(120,80,255,0.04) 0%, transparent 68%)'
@@ -2044,166 +2708,6 @@ export const FooterBottom = styled.div`
   font-size: 0.75rem;
   color: ${({ theme }) => theme.textTertiary};
   opacity: 0.7;
-`;
-
-/* --- Hero.jsx: styled --- */
-export const HeroProfileDepthGlow = styled.div`
-  position: absolute;
-
-  /*
-   * Slightly larger than the portrait so the light can breathe
-   * around the lower-left edge.
-   */
-  width: 500px;
-  height: 500px;
-
-  /*
-   * Put the light toward the lower-left of the image.
-   */
-  left: -30px;
-  bottom: -30px;
-
-  z-index: 0;
-  pointer-events: none;
-
-  /*
-   * Soft white light.
-   *
-   * The important part is that it remains transparent around
-   * the outer edges instead of becoming a grey circular/blob shape.
-   */
-  background:
-    radial-gradient(
-      ellipse 58% 58% at 28% 68%,
-      rgba(255, 255, 255, 0.30) 0%,
-      rgba(255, 255, 255, 0.20) 18%,
-      rgba(255, 255, 255, 0.10) 34%,
-      rgba(255, 255, 255, 0.045) 50%,
-      rgba(255, 255, 255, 0.00) 74%
-    );
-
-  /*
-   * Blur makes the light blend into the page rather than
-   * looking like a visible shape.
-   */
-  filter: blur(26px);
-
-  opacity: 0.95;
-
-  transform: translateZ(0);
-
-  /*
-   * Keeps the glow cheap to render.
-   */
-  will-change: transform;
-
-  @media (max-width: 768px) {
-    width: 310px;
-    height: 280px;
-
-    left: -70px;
-    bottom: -58px;
-
-    filter: blur(24px);
-
-    background:
-      radial-gradient(
-        ellipse 58% 58% at 30% 68%,
-        rgba(255, 255, 255, 0.24) 0%,
-        rgba(255, 255, 255, 0.15) 22%,
-        rgba(255, 255, 255, 0.07) 40%,
-        rgba(255, 255, 255, 0) 74%
-      );
-  }
-
-  @media (max-width: 480px) {
-    width: 270px;
-    height: 240px;
-
-    left: -52px;
-    bottom: -48px;
-
-    filter: blur(22px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    will-change: auto;
-  }
-`;
-
-/* --- Hero.jsx: styled --- */
-export const HeroProfileAmbientGlow = styled.div`
-  position: absolute;
-
-  width: 330px;
-  height: 330px;
-
-  right: -65px;
-  top: 15px;
-
-  z-index: 0;
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(41, 151, 255, 0.055) 0%,
-      rgba(41, 151, 255, 0.025) 35%,
-      rgba(41, 151, 255, 0) 72%
-    );
-
-  filter: blur(34px);
-
-  opacity: 0.8;
-
-  transform: translateZ(0);
-
-  @media (max-width: 768px) {
-    width: 250px;
-    height: 250px;
-
-    right: -55px;
-    top: 10px;
-
-    filter: blur(28px);
-  }
-`;
-
-/* --- Hero.jsx: styled --- */
-export const HeroScrollCircle = styled(motion.button)`
-  width: 40px;
-  height: 40px;
-
-  border-radius: 50%;
-  border: 1.5px solid ${({ theme }) => theme.border};
-
-  background: ${({ theme }) => theme.glass};
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  color: ${({ theme }) => theme.textSecondary};
-
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
-    background-color 0.2s ease;
-
-  &:hover {
-    border-color: ${({ theme }) => theme.accent};
-    color: ${({ theme }) => theme.accent};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.accent};
-    outline-offset: 3px;
-  }
 `;
 
 /* --- Projects.jsx: styled --- */

@@ -28,6 +28,7 @@ const Skills = lazy(() => import('./components/Skills'));
 const Tabs = lazy(() => import('./components/Tabs'));
 const Connect = lazy(() => import('./components/Connect'));
 const Footer = lazy(() => import('./components/Footer'));
+import Fun from './components/fun/Fun';
 import styled from 'styled-components';
 const RouteStage = styled.div`
   min-height: 100vh;
@@ -209,6 +210,10 @@ function AnimatedRoutes() {
               path="/courage"
               element={<Courage />}
             />
+            <Route
+  path="/fun"
+  element={<Fun />}
+/>
           </Routes>
         </motion.div>
       </AnimatePresence>
