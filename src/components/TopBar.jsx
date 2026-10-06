@@ -1,9 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useThemeToggle } from '../styles/ThemeContext';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+
+import {
+  AnimatePresence,
+  motion,
+} from 'framer-motion';
+
+import {
+  useThemeToggle,
+} from '../styles/ThemeContext';
+
 import resumeData from '../data/resumeData';
+
 import { FiStar } from 'react-icons/fi';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
 
 import {
   TopBarBar,
@@ -64,19 +82,67 @@ const SunIcon = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <circle cx="12" cy="12" r="5" />
+    <circle
+      cx="12"
+      cy="12"
+      r="5"
+    />
 
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
+    <line
+      x1="12"
+      y1="1"
+      x2="12"
+      y2="3"
+    />
 
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line
+      x1="12"
+      y1="21"
+      x2="12"
+      y2="23"
+    />
 
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
+    <line
+      x1="4.22"
+      y1="4.22"
+      x2="5.64"
+      y2="5.64"
+    />
 
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    <line
+      x1="18.36"
+      y1="18.36"
+      x2="19.78"
+      y2="19.78"
+    />
+
+    <line
+      x1="1"
+      y1="12"
+      x2="3"
+      y2="12"
+    />
+
+    <line
+      x1="21"
+      y1="12"
+      x2="23"
+      y2="12"
+    />
+
+    <line
+      x1="4.22"
+      y1="19.78"
+      x2="5.64"
+      y2="18.36"
+    />
+
+    <line
+      x1="18.36"
+      y1="5.64"
+      x2="19.78"
+      y2="4.22"
+    />
   </svg>
 );
 
@@ -107,9 +173,26 @@ const MenuIcon = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="18" x2="21" y2="18" />
+    <line
+      x1="3"
+      y1="6"
+      x2="21"
+      y2="6"
+    />
+
+    <line
+      x1="3"
+      y1="12"
+      x2="21"
+      y2="12"
+    />
+
+    <line
+      x1="3"
+      y1="18"
+      x2="21"
+      y2="18"
+    />
   </svg>
 );
 
@@ -124,8 +207,19 @@ const CloseIcon = () => (
     strokeWidth="2"
     strokeLinecap="round"
   >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
+    <line
+      x1="18"
+      y1="6"
+      x2="6"
+      y2="18"
+    />
+
+    <line
+      x1="6"
+      y1="6"
+      x2="18"
+      y2="18"
+    />
   </svg>
 );
 
@@ -138,7 +232,8 @@ const TopBar = ({ visible = true }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] =
+    useState(false);
 
   const [activeLink, setActiveLink] =
     useState('home');
@@ -157,7 +252,6 @@ const TopBar = ({ visible = true }) => {
         : false
     );
 
-
   const {
     isDark,
     toggle,
@@ -169,12 +263,10 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   useEffect(() => {
-
     const mediaQuery =
       window.matchMedia(
         `(max-width: ${MOBILE_BREAKPOINT}px)`
       );
-
 
     const handleChange = (event) => {
       setIsMobile(event.matches);
@@ -188,9 +280,7 @@ const TopBar = ({ visible = true }) => {
       }
     };
 
-
     setIsMobile(mediaQuery.matches);
-
 
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener(
@@ -201,9 +291,7 @@ const TopBar = ({ visible = true }) => {
       mediaQuery.addListener(handleChange);
     }
 
-
     return () => {
-
       if (mediaQuery.removeEventListener) {
         mediaQuery.removeEventListener(
           'change',
@@ -212,9 +300,7 @@ const TopBar = ({ visible = true }) => {
       } else {
         mediaQuery.removeListener(handleChange);
       }
-
     };
-
   }, []);
 
 
@@ -223,70 +309,51 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   useEffect(() => {
-
     let raf = 0;
     let lastScrolled = false;
 
-
     const update = () => {
-
       raf = 0;
 
       const nextScrolled =
         window.scrollY > 20;
 
-
       if (
         nextScrolled !== lastScrolled
       ) {
+        lastScrolled = nextScrolled;
 
-        lastScrolled =
-          nextScrolled;
-
-        setScrolled(
-          nextScrolled
-        );
-
+        setScrolled(nextScrolled);
       }
     };
-
 
     const onScroll = () => {
-
       if (!raf) {
         raf =
-          requestAnimationFrame(
-            update
-          );
+          requestAnimationFrame(update);
       }
-
     };
-
 
     window.addEventListener(
       'scroll',
       onScroll,
-      { passive: true }
+      {
+        passive: true,
+      }
     );
-
 
     update();
 
-
     return () => {
-
       window.removeEventListener(
         'scroll',
         onScroll
       );
 
-
       if (raf) {
         cancelAnimationFrame(raf);
       }
-
     };
-
   }, []);
 
 
@@ -295,7 +362,6 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   useEffect(() => {
-
     const sections =
       NAV_ITEMS
         .map(({ id }) =>
@@ -303,64 +369,47 @@ const TopBar = ({ visible = true }) => {
         )
         .filter(Boolean);
 
-
     if (!sections.length) {
       return;
     }
 
-
     const visibility =
       new Map();
-
 
     const observer =
       new IntersectionObserver(
         (entries) => {
-
           entries.forEach(
             (entry) => {
-
               visibility.set(
                 entry.target.id,
                 entry.isIntersecting
                   ? entry.intersectionRatio
                   : 0
               );
-
             }
           );
 
-
           let active = 'home';
           let best = 0;
-
 
           for (
             const { id }
             of NAV_ITEMS
           ) {
-
             const ratio =
               visibility.get(id) || 0;
 
-
             if (ratio > best) {
-
               best = ratio;
-
               active = id;
-
             }
-
           }
-
 
           if (best > 0) {
             setActiveLink(active);
           }
-
         },
-
         {
           root: null,
 
@@ -378,16 +427,13 @@ const TopBar = ({ visible = true }) => {
         }
       );
 
-
     sections.forEach(
       (section) =>
         observer.observe(section)
     );
 
-
     return () =>
       observer.disconnect();
-
   }, []);
 
 
@@ -396,18 +442,15 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   useEffect(() => {
-
     document.body.style.overflow =
       sidebarOpen
         ? 'hidden'
         : '';
 
-
     return () => {
       document.body.style.overflow =
         '';
     };
-
   }, [sidebarOpen]);
 
 
@@ -416,33 +459,25 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   useEffect(() => {
-
     const onKey = (event) => {
-
       if (
         event.key === 'Escape'
       ) {
         setSidebarOpen(false);
       }
-
     };
-
 
     window.addEventListener(
       'keydown',
       onKey
     );
 
-
     return () => {
-
       window.removeEventListener(
         'keydown',
         onKey
       );
-
     };
-
   }, []);
 
 
@@ -451,47 +486,56 @@ const TopBar = ({ visible = true }) => {
   ================================================================ */
 
   const scrollTo =
-    useCallback((id) => {
+    useCallback(
+      (id) => {
+        const element =
+          document.getElementById(id);
 
-      const element =
-        document.getElementById(id);
+        if (element) {
+          const top =
+            element.getBoundingClientRect()
+              .top +
+            window.scrollY -
+            80;
 
+          window.scrollTo({
+            top,
+            behavior: 'smooth',
+          });
+        } else if (
+          location.pathname !== '/'
+        ) {
+          /*
+           * Navigation was requested from
+           * another route. Return to the
+           * portfolio first.
+           */
+          navigate('/', {
+            state: {
+              scrollTo: id,
+            },
+          });
+        }
 
-      if (element) {
-        const top =
-          element.getBoundingClientRect().top +
-          window.scrollY -
-          80;
-
-        window.scrollTo({
-          top,
-          behavior: 'smooth',
-        });
-      } else if (location.pathname !== '/') {
-        // Navigation was requested from another route. Return to the
-        // portfolio first; the destination section will be resolved after
-        // the portfolio route mounts.
-        navigate('/', { state: { scrollTo: id } });
-      }
-
-      setActiveLink(id);
-      setSidebarOpen(false);
-
-    }, [location.pathname, navigate]);
+        setActiveLink(id);
+        setSidebarOpen(false);
+      },
+      [
+        location.pathname,
+        navigate,
+      ]
+    );
 
 
   /* ================================================================
      COURAGE
   ================================================================ */
 
-const goToCourage =
-  useCallback(() => {
-
-    setSidebarOpen(false);
-
-    navigate('/courage');
-
-  }, [navigate]);
+  const goToCourage =
+    useCallback(() => {
+      setSidebarOpen(false);
+      navigate('/courage');
+    }, [navigate]);
 
 
   /* ================================================================
@@ -503,37 +547,62 @@ const goToCourage =
       {/* ============================================================
           TOP BAR
       ============================================================ */}
-<TopBarBar
-  $scrolled={scrolled}
-  data-scrolled={scrolled}
-  $visible={visible}
-  aria-hidden={!visible}
-  initial={false}
-  animate={{
-    y: visible ? 0 : -96,
-    opacity: visible ? 1 : 0,
-    scale: visible ? 1 : 0.985,
-  }}
-  transition={{
-    y: {
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1],
-    },
-    opacity: {
-      duration: 0.35,
-      ease: [0.22, 1, 0.36, 1],
-    },
-    scale: {
-      duration: 0.45,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }}
-  style={{
-    pointerEvents: visible ? 'auto' : 'none',
-  }}
->
+
+      <TopBarBar
+        $scrolled={scrolled}
+        data-scrolled={scrolled}
+        $visible={visible}
+        aria-hidden={!visible}
+
+        initial={false}
+
+        animate={{
+          y: visible ? 0 : -96,
+          opacity: visible ? 1 : 0,
+          scale: visible ? 1 : 0.985,
+        }}
+
+        transition={{
+          y: {
+            duration: 0.55,
+            ease: [
+              0.22,
+              1,
+              0.36,
+              1,
+            ],
+          },
+
+          opacity: {
+            duration: 0.35,
+            ease: [
+              0.22,
+              1,
+              0.36,
+              1,
+            ],
+          },
+
+          scale: {
+            duration: 0.45,
+            ease: [
+              0.22,
+              1,
+              0.36,
+              1,
+            ],
+          },
+        }}
+
+        style={{
+          pointerEvents: visible
+            ? 'auto'
+            : 'none',
+        }}
+      >
+
         {/* ========================================================
-            LOGO
+            LOGO / PROFILE
         ======================================================== */}
 
         <TopBarLogoWrap
@@ -542,15 +611,25 @@ const goToCourage =
           }
         >
 
+          {/* PFP */}
+
           <TopBarAvatar
             src={
               resumeData.assets
                 .profileImage
             }
-            alt={
-              resumeData.name
-            }
+            alt={resumeData.name}
           />
+
+
+          {/* ======================================================
+              INTERACTIVE EYES
+
+              Positioned directly beside the PFP.
+          ====================================================== */}
+
+
+          {/* NAME */}
 
           <TopBarLogoName
             initial={{
@@ -567,7 +646,9 @@ const goToCourage =
               delay: 0.4,
               duration: 0.5,
             }}
-          />
+          >
+            {/* {resumeData.shortName} */}
+          </TopBarLogoName>
 
         </TopBarLogoWrap>
 
@@ -580,15 +661,17 @@ const goToCourage =
 
           {NAV_ITEMS.map(
             ({ id, label }) => (
-
               <TopBarNavBtn
                 key={id}
+
                 $active={
                   activeLink === id
                 }
+
                 onClick={() =>
                   scrollTo(id)
                 }
+
                 data-spotlight="true"
               >
 
@@ -606,11 +689,11 @@ const goToCourage =
                   />
                 )}
 
-
                 <span
                   style={{
                     position:
                       'relative',
+
                     zIndex: 2,
                   }}
                 >
@@ -618,7 +701,6 @@ const goToCourage =
                 </span>
 
               </TopBarNavBtn>
-
             )
           )}
 
@@ -638,10 +720,10 @@ const goToCourage =
 
             whileTap={{
               scale: 0.88,
-              rotate:
-                isDark
-                  ? 20
-                  : -20,
+
+              rotate: isDark
+                ? 20
+                : -20,
             }}
 
             title={
@@ -650,12 +732,10 @@ const goToCourage =
                 : 'Dark mode'
             }
           >
-
             {isDark
               ? <SunIcon />
               : <MoonIcon />
             }
-
           </TopBarIconBtn>
 
 
@@ -678,14 +758,13 @@ const goToCourage =
 
           {/* ======================================================
               DESKTOP COURAGE ONLY
-
-              IMPORTANT:
-              This button is NOT rendered on mobile.
           ====================================================== */}
 
           {!isMobile && (
             <TopBarStarBtn
-              onClick={goToCourage}
+              onClick={
+                goToCourage
+              }
 
               aria-label="Courage"
               title="Courage"
@@ -710,6 +789,13 @@ const goToCourage =
 
 
       {/* ============================================================
+          TOPBAR EYE STYLES
+
+          Kept here so the existing styles.js does not need to change.
+      ============================================================ */}
+
+
+      {/* ============================================================
           MOBILE SIDEBAR
       ============================================================ */}
 
@@ -717,7 +803,6 @@ const goToCourage =
 
         {sidebarOpen && (
           <>
-
             {/* ======================================================
                 BACKDROP
             ====================================================== */}
@@ -768,6 +853,7 @@ const goToCourage =
                       resumeData.assets
                         .profileImage
                     }
+
                     alt={
                       resumeData.name
                     }
@@ -808,7 +894,6 @@ const goToCourage =
 
                     const isActive =
                       activeLink === id;
-
 
                     return (
                       <TopBarSideNavBtn
@@ -895,13 +980,7 @@ const goToCourage =
 
                 {/* =================================================
                     MOBILE COURAGE
-
-                    ONLY EXISTS INSIDE THE SIDEBAR.
-
-                    Since the desktop button above is rendered
-                    only when !isMobile, there is never a
-                    duplicate Courage button.
-                ================================================== */}
+                ================================================= */}
 
                 {isMobile && (
                   <motion.button
@@ -1018,7 +1097,6 @@ const goToCourage =
                         color="#72b7ff"
                       />
 
-
                       <span
                         style={{
                           fontSize:
@@ -1113,7 +1191,6 @@ const goToCourage =
                       : <MoonIcon />
                     }
 
-
                     <TopBarThemeLabel>
                       {
                         isDark
@@ -1121,7 +1198,6 @@ const goToCourage =
                           : 'Switch to Dark'
                       }
                     </TopBarThemeLabel>
-
 
                     <TopBarThemeChip>
                       {
@@ -1138,7 +1214,6 @@ const goToCourage =
               </TopBarSideFooter>
 
             </TopBarSidePanel>
-
           </>
         )}
 
@@ -1153,7 +1228,6 @@ const goToCourage =
 ================================================================ */
 
 const overlayVariants = {
-
   hidden: {
     opacity: 0,
   },
@@ -1191,7 +1265,6 @@ const overlayVariants = {
 
 
 const panelVariants = {
-
   hidden: {
     x: '100%',
   },
@@ -1223,7 +1296,6 @@ const panelVariants = {
 
 
 const itemVariants = {
-
   hidden: {
     opacity: 0,
     x: 18,

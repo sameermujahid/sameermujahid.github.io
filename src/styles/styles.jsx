@@ -694,7 +694,7 @@ export const HeroContent = styled.div`
   gap: 22px;
 
   box-sizing: border-box;
-
+  align-items: flex-start;
   @media (max-width: 1024px) {
     max-width: 560px;
   }
@@ -1144,7 +1144,7 @@ export const HeroImage = styled(motion.img)`
 
   object-fit: cover;
 
-  border: 2px solid ${({ theme }) => theme.glassBorder};
+  border: 5px solid ${({ theme }) => theme.glassBorder};
 
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.3),
