@@ -22,7 +22,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-
 import {
   TopBarBar,
   TopBarLogoWrap,
@@ -206,6 +205,7 @@ const CloseIcon = () => (
     stroke="currentColor"
     strokeWidth="2"
     strokeLinecap="round"
+    strokeLinejoin="round"
   >
     <line
       x1="18"
@@ -305,135 +305,178 @@ const TopBar = ({ visible = true }) => {
 
 
   /* ================================================================
-     SCROLL STATE
+     SCROLL STATE + ACTIVE NAVIGATION
+     
+     IMPORTANT:
+     The old IntersectionObserver has been removed.
+     
+     The active navigation is now calculated from the actual
+     document position of each section. This makes the navbar
+     update reliably while scrolling.
   ================================================================ */
 
   useEffect(() => {
     let raf = 0;
-    let lastScrolled = false;
 
-    const update = () => {
+    /*
+     * Distance from the top of the viewport at which a section
+     * becomes the active navigation item.
+     *
+     * Keep this close to the actual height of the top bar.
+     */
+    const HEADER_OFFSET = 110;
+
+
+    const updateScrollState = () => {
       raf = 0;
 
+      const scrollY = window.scrollY;
+
+
+      /* ------------------------------------------------------------
+         TOP BAR SCROLLED STATE
+      ------------------------------------------------------------ */
+
       const nextScrolled =
-        window.scrollY > 20;
+        scrollY > 20;
 
-      if (
-        nextScrolled !== lastScrolled
-      ) {
-        lastScrolled = nextScrolled;
+      setScrolled((previous) =>
+        previous === nextScrolled
+          ? previous
+          : nextScrolled
+      );
 
-        setScrolled(nextScrolled);
+
+      /* ------------------------------------------------------------
+         ACTIVE SECTION
+      ------------------------------------------------------------ */
+
+      const scrollPosition =
+        scrollY + HEADER_OFFSET;
+
+      let currentSection =
+        NAV_ITEMS[0]?.id || 'home';
+
+
+      /*
+       * NAV_ITEMS is already ordered according to the site's
+       * navigation structure.
+       *
+       * Find the last section whose top has been crossed.
+       */
+      for (const { id } of NAV_ITEMS) {
+        const section =
+          document.getElementById(id);
+
+        if (!section) {
+          continue;
+        }
+
+        const sectionTop =
+          section.getBoundingClientRect().top +
+          scrollY;
+
+        if (scrollPosition >= sectionTop) {
+          currentSection = id;
+        } else {
+          /*
+           * Since NAV_ITEMS is ordered, once we find a section
+           * below the current scroll position, we can stop.
+           */
+          break;
+        }
       }
+
+
+      /*
+       * Only update React state if the active section
+       * actually changed.
+       */
+      setActiveLink((previous) =>
+        previous === currentSection
+          ? previous
+          : currentSection
+      );
     };
 
-    const onScroll = () => {
+
+    /* ------------------------------------------------------------
+       SCROLL HANDLER
+    ------------------------------------------------------------ */
+
+    const handleScroll = () => {
+      /*
+       * requestAnimationFrame prevents the scroll handler
+       * from causing excessive React updates.
+       */
       if (!raf) {
-        raf =
-          requestAnimationFrame(update);
+        raf = requestAnimationFrame(
+          updateScrollState
+        );
       }
     };
+
+
+    /* ------------------------------------------------------------
+       RESIZE HANDLER
+    ------------------------------------------------------------ */
+
+    const handleResize = () => {
+      if (!raf) {
+        raf = requestAnimationFrame(
+          updateScrollState
+        );
+      }
+    };
+
+
+    /* ------------------------------------------------------------
+       EVENT LISTENERS
+    ------------------------------------------------------------ */
 
     window.addEventListener(
       'scroll',
-      onScroll,
+      handleScroll,
       {
         passive: true,
       }
     );
 
-    update();
+    window.addEventListener(
+      'resize',
+      handleResize,
+      {
+        passive: true,
+      }
+    );
+
+
+    /*
+     * Run immediately so the correct section is active
+     * when the page loads or refreshes while scrolled.
+     */
+    updateScrollState();
+
+
+    /* ------------------------------------------------------------
+       CLEANUP
+    ------------------------------------------------------------ */
 
     return () => {
       window.removeEventListener(
         'scroll',
-        onScroll
+        handleScroll
+      );
+
+      window.removeEventListener(
+        'resize',
+        handleResize
       );
 
       if (raf) {
         cancelAnimationFrame(raf);
       }
     };
-  }, []);
-
-
-  /* ================================================================
-     ACTIVE NAVIGATION
-  ================================================================ */
-
-  useEffect(() => {
-    const sections =
-      NAV_ITEMS
-        .map(({ id }) =>
-          document.getElementById(id)
-        )
-        .filter(Boolean);
-
-    if (!sections.length) {
-      return;
-    }
-
-    const visibility =
-      new Map();
-
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-          entries.forEach(
-            (entry) => {
-              visibility.set(
-                entry.target.id,
-                entry.isIntersecting
-                  ? entry.intersectionRatio
-                  : 0
-              );
-            }
-          );
-
-          let active = 'home';
-          let best = 0;
-
-          for (
-            const { id }
-            of NAV_ITEMS
-          ) {
-            const ratio =
-              visibility.get(id) || 0;
-
-            if (ratio > best) {
-              best = ratio;
-              active = id;
-            }
-          }
-
-          if (best > 0) {
-            setActiveLink(active);
-          }
-        },
-        {
-          root: null,
-
-          rootMargin:
-            '-18% 0px -58% 0px',
-
-          threshold: [
-            0,
-            0.15,
-            0.35,
-            0.55,
-            0.75,
-            1,
-          ],
-        }
-      );
-
-    sections.forEach(
-      (section) =>
-        observer.observe(section)
-    );
-
-    return () =>
-      observer.disconnect();
   }, []);
 
 
@@ -517,7 +560,15 @@ const TopBar = ({ visible = true }) => {
           });
         }
 
+        /*
+         * Immediately update the active item when
+         * the user clicks a navigation button.
+         *
+         * The scroll spy will then take over during
+         * the actual scrolling.
+         */
         setActiveLink(id);
+
         setSidebarOpen(false);
       },
       [
@@ -803,6 +854,7 @@ const TopBar = ({ visible = true }) => {
 
         {sidebarOpen && (
           <>
+
             {/* ======================================================
                 BACKDROP
             ====================================================== */}
