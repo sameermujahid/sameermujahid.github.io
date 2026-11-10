@@ -9,15 +9,8 @@
       content="width=device-width, initial-scale=1.0"
     />
 
-    <meta
-      name="theme-color"
-      content="#050505"
-    />
-
-    <meta
-      name="color-scheme"
-      content="dark"
-    />
+    <meta name="theme-color" content="#050505" />
+    <meta name="color-scheme" content="dark" />
 
     <link
       rel="icon"
@@ -27,26 +20,26 @@
 
     <title>Sameer Mujahid</title>
 
-    <!-- Google Tag Manager -->
+    <!-- Google Analytics 4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-06E2ZWX0FD"
+    ></script>
+
     <script>
-      (function(w,d,s,l,i){
-        w[l]=w[l]||[];
-        w[l].push({
-          'gtm.start': new Date().getTime(),
-          event:'gtm.js'
-        });
+      window.dataLayer = window.dataLayer || [];
 
-        var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),
-            dl=l!='dataLayer'?'&l='+l:'';
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-        j.async=true;
-        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      gtag('js', new Date());
 
-        f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-TJZJBJXR');
+      gtag('config', 'G-06E2ZWX0FD', {
+        send_page_view: true
+      });
     </script>
-    <!-- End Google Tag Manager -->
+    <!-- End Google Analytics 4 -->
 
     <style>
       html {
@@ -98,24 +91,11 @@
   </head>
 
   <body>
-
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-TJZJBJXR"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-      ></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <div id="root"></div>
 
     <script
       type="module"
       src="/src/main.jsx"
     ></script>
-
   </body>
 </html>
