@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -26,6 +27,27 @@
 
     <title>Sameer Mujahid</title>
 
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({
+          'gtm.start': new Date().getTime(),
+          event:'gtm.js'
+        });
+
+        var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),
+            dl=l!='dataLayer'?'&l='+l:'';
+
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-TJZJBJXR');
+    </script>
+    <!-- End Google Tag Manager -->
+
     <style>
       html {
         margin: 0;
@@ -45,28 +67,25 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-#root {
-  min-height: 100vh;
-  background: transparent;
-}
 
-.route-loader {
-  position: fixed;
-  inset: 0;
+      #root {
+        min-height: 100vh;
+        background: transparent;
+      }
 
-  z-index: 999999;
+      .route-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #050505;
+      }
 
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-
-  background: #050505;
-}
       .route-loader-glow {
         width: 140px;
         height: 140px;
@@ -79,11 +98,24 @@
   </head>
 
   <body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TJZJBJXR"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
 
     <script
       type="module"
       src="/src/main.jsx"
     ></script>
+
   </body>
 </html>
