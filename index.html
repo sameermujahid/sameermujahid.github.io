@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,22 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050505" />
     <meta name="color-scheme" content="dark" />
+
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
     <title>Sameer Mujahid</title>
 
-    <!-- Google tag (gtag.js) - GA4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-06E2ZWX0FD"></script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),
+            dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-MRWTWFHT');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Social Landing Tracking -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){ window.dataLayer.push(arguments); }
 
-      gtag('js', new Date());
-      gtag('config', 'G-06E2ZWX0FD');
-
-      // Record a tagged social-media landing visit.
-      // This is a website arrival event, not a click inside the social app.
       (function () {
         var params = new URLSearchParams(window.location.search);
+
         var source = params.get('utm_source');
         var medium = params.get('utm_medium');
         var campaign = params.get('utm_campaign');
@@ -28,7 +40,8 @@
         var sourcePlatform = params.get('utm_source_platform');
 
         if (source && medium && campaign) {
-          gtag('event', 'social_landing', {
+          window.dataLayer.push({
+            event: 'social_landing',
             social_source: source,
             social_medium: medium,
             social_campaign: campaign,
@@ -38,7 +51,7 @@
         }
       })();
     </script>
-    <!-- End Google tag -->
+    <!-- End Social Landing Tracking -->
 
     <style>
       html {
@@ -48,6 +61,7 @@
         background: #050505;
         color-scheme: dark;
       }
+
       body {
         margin: 0;
         padding: 0;
@@ -58,10 +72,12 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+
       #root {
         min-height: 100vh;
         background: transparent;
       }
+
       .route-loader {
         position: fixed;
         inset: 0;
@@ -74,6 +90,7 @@
         overflow: hidden;
         background: #050505;
       }
+
       .route-loader-glow {
         width: 140px;
         height: 140px;
@@ -84,8 +101,23 @@
       }
     </style>
   </head>
+
   <body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-MRWTWFHT"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
+
   </body>
 </html>
