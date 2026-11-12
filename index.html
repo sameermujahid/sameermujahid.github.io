@@ -11,47 +11,80 @@
 
     <title>Sameer Mujahid</title>
 
-    <!-- Google Tag Manager -->
-    <script>
-      (function(w,d,s,l,i){
-        w[l]=w[l]||[];
-        w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-        var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),
-            dl=l!='dataLayer'?'&l='+l:'';
-        j.async=true;
-        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-        f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-MRWTWFHT');
-    </script>
-    <!-- End Google Tag Manager -->
+    <!-- =====================================================
+         GOOGLE TAG MANAGER
+         Container ID: GTM-MRWTWFHT
+         ===================================================== -->
 
-    <!-- Social Landing Tracking -->
     <script>
       window.dataLayer = window.dataLayer || [];
 
+      (function (w, d, s, l, i) {
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js"
+        });
+
+        var f = d.getElementsByTagName(s)[0];
+        var j = d.createElement(s);
+        var dl = l !== "dataLayer" ? "&l=" + l : "";
+
+        j.async = true;
+        j.src =
+          "https://www.googletagmanager.com/gtm.js?id=" +
+          i +
+          dl;
+
+        f.parentNode.insertBefore(j, f);
+      })(
+        window,
+        document,
+        "script",
+        "dataLayer",
+        "GTM-MRWTWFHT"
+      );
+    </script>
+
+    <!-- =====================================================
+         SOCIAL CAMPAIGN LANDING TRACKING
+         GA4 Measurement ID is configured inside GTM.
+         ===================================================== -->
+
+    <script>
       (function () {
         var params = new URLSearchParams(window.location.search);
 
-        var source = params.get('utm_source');
-        var medium = params.get('utm_medium');
-        var campaign = params.get('utm_campaign');
-        var content = params.get('utm_content');
-        var sourcePlatform = params.get('utm_source_platform');
+        var source = params.get("utm_source");
+        var medium = params.get("utm_medium");
+        var campaign = params.get("utm_campaign");
+        var content = params.get("utm_content");
+        var sourcePlatform = params.get("utm_source_platform");
+        var term = params.get("utm_term");
 
+        // Only create a campaign event when all required
+        // UTM parameters are present.
         if (source && medium && campaign) {
           window.dataLayer.push({
-            event: 'social_landing',
+            event: "social_landing",
+
             social_source: source,
             social_medium: medium,
             social_campaign: campaign,
-            social_content: content || '(not set)',
-            social_source_platform: sourcePlatform || '(not set)'
+            social_content: content || "(not set)",
+            social_source_platform: sourcePlatform || "(not set)",
+            social_term: term || "(not set)",
+
+            landing_page: window.location.href,
+            page_path: window.location.pathname,
+            page_title: document.title
           });
         }
       })();
     </script>
-    <!-- End Social Landing Tracking -->
+
+    <!-- =====================================================
+         WEBSITE STYLES
+         ===================================================== -->
 
     <style>
       html {
@@ -103,8 +136,7 @@
   </head>
 
   <body>
-
-    <!-- Google Tag Manager (noscript) -->
+    <!-- Google Tag Manager noscript -->
     <noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-MRWTWFHT"
@@ -113,11 +145,9 @@
         style="display:none;visibility:hidden"
       ></iframe>
     </noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <div id="root"></div>
 
     <script type="module" src="/src/main.jsx"></script>
-
   </body>
 </html>
